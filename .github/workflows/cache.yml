@@ -1,0 +1,33 @@
+#
+# The purpose of this workflow is to cache the dependencies of the main branch so that it can speed up PRs.
+# When a PR is opened, it can only look for caches in its own branch (which doesn't exist yet) and the main branch.
+# https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows#restrictions-for-accessing-a-cache
+#
+
+name: cache
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10.11.0"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/iron"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile

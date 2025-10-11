@@ -1,0 +1,73 @@
+name: pr-check
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
+    branches:
+      - main
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check that PR title follows conventional commits using regex
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          echo "Your PR title is '$TITLE'"
+
+          regex="(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z[[:space:]]+\))?:[[:space:]].+"
+
+          if [[ $TITLE =~ $regex ]]; then
+            echo "PR title follows conventional commits"
+          else
+            echo "PR title does not follow conventional commits format"
+            echo "Prefix your PR title with a descriptor such as 'feat:' and then summarize your change"
+            echo "See the following link for more information: https://www.conventionalcommits.org/en/v1.0.0/"
+            exit 1
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10.11.0"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/iron"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # In an ideal world, we would have a build step that checks that the project can be built
+      # However, this is a time-consuming process and we have a limited number of minutes per month of GitHub Actions
+      # so we'll just check that the project passes linting and type checking
+      - name: Check that project passes linting and type checking
+        run: pnpm run check
+
+      # Knip, a dead code checker, can be enabled when the project is more mature
+      # - name: Check for dead code with knip
+      #   id: knip
+      #   continue-on-error: true
+      #   run: pnpm run knip
+
+      # - name: Warn if knip failed
+      #   if: steps.knip.outcome == 'failure'
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #   run: |
+      #     gh pr comment ${{ github.event.pull_request.number }} \
+      #       --body ":warning: \`pnpm run knip\` failed in CI. Please check for potential dead code or issues with the knip config."
