@@ -1,20 +1,6 @@
-import {
-  integer,
-  pgTable,
-  primaryKey,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 
-export const users = pgTable("user", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: text("name"),
-  email: text("email").unique(),
-  emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image"),
-});
+import { users } from "./user";
 
 export const accounts = pgTable(
   "account",
@@ -41,11 +27,3 @@ export const accounts = pgTable(
     },
   ],
 );
-
-export const sessions = pgTable("session", {
-  sessionToken: text("sessionToken").primaryKey(),
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
-});
