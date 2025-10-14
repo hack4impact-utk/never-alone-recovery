@@ -1,14 +1,13 @@
-import { pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 import { baseSchema } from "./base-schema";
-
-export const roleEnum = pgEnum("role", ["disabled", "staff", "admin"]);
+import { staffRoleEnum } from "./enum";
 
 export const users = pgTable("user", {
   ...baseSchema,
-  name: text("name"),
+  name: text("name").notNull(),
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image"),
-  role: roleEnum("role").default("disabled").notNull(),
+  image: text("image").notNull(),
+  role: staffRoleEnum("role").default("disabled").notNull(),
 });

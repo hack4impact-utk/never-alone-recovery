@@ -4,11 +4,11 @@ export const baseSchema = {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  createdDate: timestamp("createdDate").defaultNow().notNull(),
-  createdBy: text("createdBy"),
-  editedDate: timestamp("editedDate")
+  createdDate: timestamp("created_date").defaultNow().notNull(),
+  createdById: text("created_by"),
+  editedDate: timestamp("edited_date")
     .defaultNow()
     .notNull()
     .$onUpdate(() => new Date()),
-  editedBy: text("editedBy"),
+  editedById: text("edited_by"),
 };
