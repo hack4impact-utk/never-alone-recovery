@@ -1,26 +1,22 @@
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
 import { Session } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
 import { ReactNode } from "react";
 
-type HomeCardContentProps = {
+import { handleLogin } from "@/utils/auth/handle-login";
+import { handleLogout } from "@/utils/auth/handle-logout";
+
+type LoginCardContentProps = {
   session: Session | null;
   status: "loading" | "authenticated" | "unauthenticated";
+  callbackUrl: string | null;
 };
 
-const handleSignIn = (): void => {
-  void signIn("google");
-};
-
-const handleSignOut = (): void => {
-  void signOut();
-};
-
-export default function HomeCardContent({
+export default function LoginCardContent({
   session,
   status,
-}: HomeCardContentProps): ReactNode {
+  callbackUrl,
+}: LoginCardContentProps): ReactNode {
   if (status === "loading") {
     return (
       <Typography variant="h6" color="text.secondary">
@@ -53,7 +49,7 @@ export default function HomeCardContent({
             : "Unknown"}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
-          <Button variant="outlined" color="error" onClick={handleSignOut}>
+          <Button variant="outlined" color="error" onClick={handleLogout}>
             Sign Out
           </Button>
           <Link href="/example-table">
@@ -77,7 +73,11 @@ export default function HomeCardContent({
       <Typography color="text.secondary" mb={2}>
         Sign in to access your account information
       </Typography>
-      <Button variant="contained" size="large" onClick={handleSignIn}>
+      <Button
+        variant="contained"
+        size="large"
+        onClick={() => handleLogin(callbackUrl)}
+      >
         Sign In with Google
       </Button>
     </>

@@ -1,13 +1,17 @@
 "use client";
 
 import { Card, CardContent } from "@mui/material";
+import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { ReactNode } from "react";
 
-import HomeCardContent from "./home-card-content";
+import LoginCardContent from "./login-card-content";
 
-export default function HomeCard(): ReactNode {
+export default function LoginCard(): ReactNode {
+  const searchParams = useSearchParams();
   const { data: session, status } = useSession();
+
+  const callbackUrl = searchParams.get("callbackUrl");
 
   return (
     <Card
@@ -19,7 +23,11 @@ export default function HomeCard(): ReactNode {
       }}
     >
       <CardContent sx={{ p: 4, textAlign: "center" }}>
-        <HomeCardContent session={session} status={status} />
+        <LoginCardContent
+          session={session}
+          status={status}
+          callbackUrl={callbackUrl}
+        />
       </CardContent>
     </Card>
   );

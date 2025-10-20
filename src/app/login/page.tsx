@@ -1,7 +1,9 @@
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
 
-export default function HomePage(): ReactNode {
+import LoginCard from "@/components/login-card";
+
+export default function LoginPage(): ReactNode {
   return (
     <Box
       sx={{
@@ -12,7 +14,7 @@ export default function HomePage(): ReactNode {
         alignItems: "center",
       }}
     >
-      Home Page
+      <LoginCard />
     </Box>
   );
 }

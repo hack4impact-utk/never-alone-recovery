@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
 
-export default function HomePage(): ReactNode {
+export default function ClientDashboardPage(): ReactNode {
   return (
     <Box
       sx={{
@@ -12,7 +12,7 @@ export default function HomePage(): ReactNode {
         alignItems: "center",
       }}
     >
-      Home Page
+      Client Dashboard
     </Box>
   );
 }
