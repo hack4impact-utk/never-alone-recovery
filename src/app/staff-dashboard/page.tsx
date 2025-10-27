@@ -46,14 +46,12 @@ const rows = [
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@company.com",
-    role: "Manager",
   },
   {
     id: 2,
     firstName: "John",
     lastName: "Aoe",
     email: "john.doe@company.com",
-    role: "Manager",
   },
 ];
 
