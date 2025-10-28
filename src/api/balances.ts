@@ -28,9 +28,7 @@ export async function getAllClientBalances(): Promise<Result<Balance[]>> {
       .groupBy(clients.id)
       .orderBy(asc(clients.lastName));
 
-    console.log(balances);
-
-    return [balances, null];
+    return [balances ?? [], null];
   } catch (error) {
     return [null, handleError(error)];
   }

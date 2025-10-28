@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 import { getAllClientBalances } from "@/api/balances";
+import RentTable from "@/components/rent/rent-table";
 
 export default async function RentPage(): Promise<ReactNode> {
   const [balances, error] = await getAllClientBalances();
@@ -32,14 +33,7 @@ export default async function RentPage(): Promise<ReactNode> {
         alignItems: "center",
       }}
     >
-      {balances?.map(({ client, total }) => (
-        <Box key={client.id} sx={{ margin: 2, textAlign: "center" }}>
-          <Typography variant="h6">
-            {client.firstName} {client.lastName}
-          </Typography>
-          <Typography variant="body1">Balance: ${total}</Typography>
-        </Box>
-      ))}
+      <RentTable clientBalances={balances} />
     </Box>
   );
 }
