@@ -12,8 +12,8 @@ type Row = {
   id: string;
   firstName: string;
   lastName: string;
-  email: string;
-  role: string;
+  email: string | null;
+  role: "disabled" | "staff" | "admin";
 };
 
 const columns: GridColDef<Row>[] = [
@@ -25,7 +25,7 @@ const columns: GridColDef<Row>[] = [
     headerName: "Role",
     flex: 1,
     type: "singleSelect",
-    valueOptions: ["Admin", "Staff", "Disabled"],
+    valueOptions: ["admin", "staff", "disabled"],
     editable: true,
   },
 ];
@@ -35,7 +35,7 @@ function getRows(staff: User[]): Row[] {
     const nameParts = member.name.split(" ");
     const firstName = nameParts[0] || "";
     const lastName = nameParts.slice(1).join(" ") || "";
-    
+
     return {
       id: member.id,
       firstName,
