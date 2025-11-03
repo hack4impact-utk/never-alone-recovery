@@ -2,6 +2,7 @@
 import { Box, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ReactNode } from "react";
+
 import { User } from "@/types/schema";
 
 type StaffTableProps = {
