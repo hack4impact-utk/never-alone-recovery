@@ -1,90 +1,36 @@
-"use client";
-import { Box } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { Box, Typography } from "@mui/material";
 import { ReactNode } from "react";
+import { getAllStaff } from "@/api/staff";
+import StaffTable from "@/components/staff/staff-table";
 
-const columns = [
-  {
-    field: "firstName",
-    headerName: "First Name",
-    width: 150,
-    editable: false,
-    sortable: false,
-  },
+export default async function StaffDashboardPage(): Promise<ReactNode> {
+  const [staff, error] = await getAllStaff();
 
-  {
-    field: "lastName",
-    headerName: "Last Name",
-    width: 150,
-    editable: false,
-    sortable: false,
-  },
+  if (error !== null) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          height: "100vh",
+          marginTop: "10vh",
+        }}
+      >
+        <Typography variant="h6">{error}</Typography>
+      </Box>
+    );
+  }
 
-  {
-    field: "email",
-    headerName: "Email",
-    width: 150,
-    editable: false,
-    sortable: false,
-  },
-
-  {
-    field: "role",
-    headerName: "Role",
-    width: 150,
-    editable: true,
-    sortable: false,
-    type: "singleSelect",
-    valueOptions: ["Admin", "Staff", "Disabled"],
-  },
-];
-
-// sample for now
-const rows = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@company.com",
-  },
-  {
-    id: 2,
-    firstName: "John",
-    lastName: "Aoe",
-    email: "john.doe@company.com",
-  },
-];
-
-export default function StaffDashboardPage(): ReactNode {
   return (
     <Box
       sx={{
-        height: "100vh",
-        width: "100vw",
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "column",
         alignItems: "center",
       }}
     >
-      <Box sx={{ height: "80%", width: "90%", maxWidth: 1200 }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10,
-              },
-            },
-            sorting: {
-              sortModel: [{ field: "lastName", sort: "asc" }],
-            },
-          }}
-          pageSizeOptions={[5, 10, 25]}
-          checkboxSelection
-          disableRowSelectionOnClick
-        />
-      </Box>
+      <StaffTable staff={staff} />
     </Box>
   );
 }
