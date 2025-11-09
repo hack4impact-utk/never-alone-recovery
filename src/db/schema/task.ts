@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text } from "drizzle-orm/pg-core";
+import { boolean, pgTable, text } from "drizzle-orm/pg-core";
 
 import { baseSchema } from "./base-schema";
 import { clients } from "./client";
@@ -16,6 +16,7 @@ export const tasks = pgTable("task", {
     .notNull(),
   type: taskTypeEnum("type").notNull(),
   description: text("description"),
+  completed: boolean("completed").notNull().default(false),
 });
 
 export const taskRelations = relations(tasks, ({ one }) => ({
