@@ -1,9 +1,9 @@
 import db from "@/db";
+import { ClientTasks } from "@/types/client-tasks";
 import { Result } from "@/types/result";
-import { Client } from "@/types/schema";
 import handleError from "@/utils/handle-error";
 
-export async function getAllClientTasks(): Promise<Result<Client[]>> {
+export async function getAllClientTasks(): Promise<Result<ClientTasks[]>> {
   try {
     const clients = await db.query.clients.findMany({
       with: { tasks: true },

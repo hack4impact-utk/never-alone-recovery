@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 import { getAllClientTasks } from "@/api/tasks";
+import ClientTaskList from "@/components/tasks/client-task-list";
 
 export default async function TasksPage(): Promise<ReactNode> {
   const [clients, error] = await getAllClientTasks();
@@ -33,25 +34,7 @@ export default async function TasksPage(): Promise<ReactNode> {
         p: 2,
       }}
     >
-      <Box
-        component="pre"
-        sx={{
-          m: 0,
-          p: 2,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-          boxShadow: 1,
-          fontFamily: "monospace",
-          whiteSpace: "pre-wrap",
-          overflow: "auto",
-          maxHeight: "80vh",
-          width: "100%",
-          maxWidth: 800,
-          textAlign: "left",
-        }}
-      >
-        {JSON.stringify(clients, null, 2)}
-      </Box>
+      <ClientTaskList clientTasks={clients} />
     </Box>
   );
 }
