@@ -17,8 +17,9 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Insert project title here",
-  description: "Insert project description here",
+  title: "Never Alone Recovery",
+  description:
+    "Never Alone Recovery's Admin Dashboard for managing clients, tasks, and rent payments.",
 };
 
 type RootLayoutProps = {
