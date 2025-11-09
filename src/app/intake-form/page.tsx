@@ -1,18 +1,20 @@
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
 
+import DemographicForm from "@/components/intake-form/demographics";
+
 export default function IntakeFormPage(): ReactNode {
   return (
     <Box
       sx={{
-        height: "100vh",
-        width: "100vw",
+        minHeight: "100vh",
+        width: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
-      Intake Form
+      <DemographicForm />
     </Box>
   );
 }
