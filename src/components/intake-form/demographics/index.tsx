@@ -1,20 +1,35 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, FormControl, FormControlLabel, FormHelperText,FormLabel, Radio, RadioGroup,TextField, Typography  } from "@mui/material";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs';
+import { Add, Delete } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 import { useSnackbar } from "notistack";
 import { CSSProperties, ReactNode, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import {
+  Controller,
+  FieldErrors,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import { z } from "zod";
 
 const formRowStyle = {
   display: "flex",
   gap: 2,
-}
+};
 
 const formStyle: CSSProperties = {
   width: "90%",
@@ -23,35 +38,41 @@ const formStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
   gap: "16px",
-}
+};
 
 const demographicFormSchema = z.object({
   firstName: z.string().min(1, { message: "First Name is required" }),
   middleName: z.string().min(1, { message: "Middle Name is required" }),
   lastName: z.string().min(1, { message: "Last Name is required" }),
-  ssn: z.string().length(11),
-  dob: z.string(),
+  ssn: z.string().length(11, { message: "SSN is required" }),
+  dob: z.string().min(1, "Date of birth is required"),
   gender: z.enum(["male", "female"]),
-  tomis: z.string().regex(/^\d+$/, "TOMIS must be numeric").length(8, { message: "TOMIS is required" }),
+  tomis: z
+    .string()
+    .regex(/^\d+$/)
+    .length(8, { message: "TOMIS must be 8 digits" }),
   email: z.email({ message: "Please enter a valid email address" }),
-  message: z.string().min(1, { message: "Message is required" }),
   lastKnownAddress: z.string().min(1, { message: "Address is required" }),
   cleanTime: z.string().min(1, { message: "This field is required" }),
   drugOfChoice: z.string().min(1, { message: "This field is required" }),
-  priorRecoveryExperience: z.string().min(1, { message: "This field is required" }),
-  surgeries: z.string().min(1, { message: "This field is required"}),
-  allergies: z.string().min(1, { message: "This field is required"}),
-  medications: z.string().min(1, { message: "This field is required"}),
-  insurance: z.string().min(1, { message: "This field is required"}),
+  priorRecoveryExperience: z
+    .string()
+    .min(1, { message: "This field is required" }),
+  surgeries: z.string().min(1, { message: "This field is required" }),
+  allergies: z.string().min(1, { message: "This field is required" }),
+  medications: z.string().min(1, { message: "This field is required" }),
+  insurance: z.string().min(1, { message: "This field is required" }),
   receiveBenefits: z.enum(["Yes", "No"]),
   benefitsDesc: z.string(),
   isDisabled: z.enum(["Yes", "No"]),
   disabilityDesc: z.string(),
   receivesDisability: z.enum(["Yes", "No"]),
-  disabilitiesReceived: z.array(z.object({
-    reason: z.string(),
-    amount: z.number(),
-  })),
+  disabilitiesReceived: z.array(
+    z.object({
+      reason: z.string(),
+      amount: z.string(),
+    }),
+  ),
   receivesFoodStamps: z.enum(["Yes", "No"]),
   hasMentalHealthRecs: z.enum(["Yes", "No"]),
   mentalHealthRecs: z.string(),
@@ -80,11 +101,10 @@ export default function DemographicForm(): ReactNode {
       middleName: "",
       lastName: "",
       ssn: "",
-      dob: new Date().toISOString().split("T")[0],
-      gender: "male",
+      dob: "",
+      gender: "female",
       tomis: "",
       email: "",
-      message: "",
       lastKnownAddress: "",
       cleanTime: "",
       drugOfChoice: "",
@@ -98,7 +118,7 @@ export default function DemographicForm(): ReactNode {
       isDisabled: "No",
       disabilityDesc: "",
       receivesDisability: "No",
-      disabilitiesReceived: [],
+      disabilitiesReceived: [{ reason: "", amount: "" }],
       receivesFoodStamps: "No",
       hasMentalHealthRecs: "No",
       mentalHealthRecs: "",
@@ -106,7 +126,11 @@ export default function DemographicForm(): ReactNode {
       typeOfTreatment: "",
       howOften: "",
       locationOfTreatment: "",
-    }
+    },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "disabilitiesReceived",
   });
 
   const watchReceiveBenefits = watch("receiveBenefits");
@@ -119,23 +143,28 @@ export default function DemographicForm(): ReactNode {
     setIsLoading(true);
 
     // eslint-disable-next-line no-console
-    console.log(data);
+    console.log("Form Data:", data);
 
-    const successMessage = `Hellu!`
-
+    const successMessage = `Submitted successfully!`;
     enqueueSnackbar(successMessage, {
       variant: "success",
     });
-
     setIsLoading(false);
     setIsDisabled(false);
   };
 
+  const onError = (errors: FieldErrors<DemographicFormValues>): void => {
+    // eslint-disable-next-line no-console
+    console.log("Validation Errors:", errors);
+    enqueueSnackbar("Please fix the errors in the form.", {
+      variant: "error",
+    });
+  };
+
   return (
-    <form style={formStyle} onSubmit={handleSubmit(onSubmit)}>
+    <form style={formStyle} onSubmit={handleSubmit(onSubmit, onError)}>
       <Typography variant="h4">Demographics</Typography>
       <Box sx={formRowStyle}>
-        
         <Controller
           control={control}
           name="firstName"
@@ -149,7 +178,7 @@ export default function DemographicForm(): ReactNode {
             />
           )}
         />
-        
+
         <Controller
           control={control}
           name="middleName"
@@ -163,7 +192,7 @@ export default function DemographicForm(): ReactNode {
             />
           )}
         />
-        
+
         <Controller
           control={control}
           name="lastName"
@@ -201,7 +230,7 @@ export default function DemographicForm(): ReactNode {
               label="Date of Birth"
               value={field.value ? dayjs(field.value) : null}
               onChange={(newValue) => {
-                field.onChange(newValue ? newValue.toISOString() : '');
+                field.onChange(newValue ? newValue.toISOString() : "");
               }}
               slotProps={{
                 textField: {
@@ -209,7 +238,7 @@ export default function DemographicForm(): ReactNode {
                   error: !!errors.dob,
                   helperText: errors.dob?.message,
                   onBlur: field.onBlur,
-                }
+                },
               }}
             />
           )}
@@ -224,8 +253,16 @@ export default function DemographicForm(): ReactNode {
             <FormControl error={!!errors.gender}>
               <FormLabel>Gender</FormLabel>
               <RadioGroup {...field} row>
-                <FormControlLabel value="male" control={<Radio />} label="Male" />
-                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                <FormControlLabel
+                  value="male"
+                  control={<Radio />}
+                  label="Male"
+                />
+                <FormControlLabel
+                  value="female"
+                  control={<Radio />}
+                  label="Female"
+                />
               </RadioGroup>
               {errors.gender && (
                 <FormHelperText>{errors.gender.message}</FormHelperText>
@@ -234,7 +271,7 @@ export default function DemographicForm(): ReactNode {
           )}
         />
       </Box>
-      
+
       <Box sx={formRowStyle}>
         <Controller
           control={control}
@@ -399,13 +436,17 @@ export default function DemographicForm(): ReactNode {
           name="receiveBenefits"
           render={({ field }) => (
             <FormControl error={!!errors.receiveBenefits}>
-              <FormLabel>Do you currently receive any state or federal benefits?</FormLabel>
+              <FormLabel>
+                Do you currently receive any state or federal benefits?
+              </FormLabel>
               <RadioGroup {...field} row>
                 <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
                 <FormControlLabel value="No" control={<Radio />} label="No" />
               </RadioGroup>
               {errors.receiveBenefits && (
-                <FormHelperText>{errors.receiveBenefits.message}</FormHelperText>
+                <FormHelperText>
+                  {errors.receiveBenefits.message}
+                </FormHelperText>
               )}
             </FormControl>
           )}
@@ -460,7 +501,7 @@ export default function DemographicForm(): ReactNode {
               <TextField
                 {...field}
                 label="Please describe"
-                error={!!errors.disabilityDesc} 
+                error={!!errors.disabilityDesc}
                 helperText={errors.disabilityDesc?.message}
                 multiline
                 rows={3}
@@ -483,7 +524,9 @@ export default function DemographicForm(): ReactNode {
                 <FormControlLabel value="No" control={<Radio />} label="No" />
               </RadioGroup>
               {errors.receivesDisability && (
-                <FormHelperText>{errors.receivesDisability.message}</FormHelperText>
+                <FormHelperText>
+                  {errors.receivesDisability.message}
+                </FormHelperText>
               )}
             </FormControl>
           )}
@@ -491,23 +534,37 @@ export default function DemographicForm(): ReactNode {
       </Box>
 
       {watchReceivesDisability === "Yes" && (
-        <Box sx={formRowStyle}>
-          <Controller
-            control={control}
-            name="disabilityDesc"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Please describe"
-                error={!!errors.disabilityDesc} 
-                helperText={errors.disabilityDesc?.message}
-                multiline
-                rows={3}
-                fullWidth
+        <>
+          {fields.map((field, index) => (
+            <Box key={field.id} sx={formRowStyle}>
+              <Controller
+                control={control}
+                name={`disabilitiesReceived.${index}.reason`}
+                render={({ field }) => <TextField {...field} label="Reason" />}
               />
-            )}
-          />
-        </Box>
+              <Controller
+                control={control}
+                name={`disabilitiesReceived.${index}.amount`}
+                render={({ field }) => (
+                  <TextField {...field} label="Amount $" type="number" />
+                )}
+              />
+              {index > 0 && (
+                <Button onClick={() => remove(index)} endIcon={<Delete />}>
+                  Remove
+                </Button>
+              )}
+            </Box>
+          ))}
+          <Button
+            onClick={() => append({ reason: "", amount: "" })}
+            variant="contained"
+            endIcon={<Add />}
+            sx={{ alignSelf: "flex-start" }}
+          >
+            Add
+          </Button>
+        </>
       )}
 
       <Box sx={formRowStyle}>
@@ -522,7 +579,9 @@ export default function DemographicForm(): ReactNode {
                 <FormControlLabel value="No" control={<Radio />} label="No" />
               </RadioGroup>
               {errors.receivesFoodStamps && (
-                <FormHelperText>{errors.receivesFoodStamps.message}</FormHelperText>
+                <FormHelperText>
+                  {errors.receivesFoodStamps.message}
+                </FormHelperText>
               )}
             </FormControl>
           )}
@@ -535,13 +594,17 @@ export default function DemographicForm(): ReactNode {
           name="hasMentalHealthRecs"
           render={({ field }) => (
             <FormControl error={!!errors.hasMentalHealthRecs}>
-              <FormLabel>Do you have any mental health recommendations?</FormLabel>
+              <FormLabel>
+                Do you have any mental health recommendations?
+              </FormLabel>
               <RadioGroup {...field} row>
                 <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
                 <FormControlLabel value="No" control={<Radio />} label="No" />
               </RadioGroup>
               {errors.hasMentalHealthRecs && (
-                <FormHelperText>{errors.hasMentalHealthRecs.message}</FormHelperText>
+                <FormHelperText>
+                  {errors.hasMentalHealthRecs.message}
+                </FormHelperText>
               )}
             </FormControl>
           )}
@@ -574,13 +637,17 @@ export default function DemographicForm(): ReactNode {
           name="participatingInTreatment"
           render={({ field }) => (
             <FormControl error={!!errors.participatingInTreatment}>
-              <FormLabel>Are you currently participating in mental health treatment?</FormLabel>
+              <FormLabel>
+                Are you currently participating in mental health treatment?
+              </FormLabel>
               <RadioGroup {...field} row>
                 <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
                 <FormControlLabel value="No" control={<Radio />} label="No" />
               </RadioGroup>
               {errors.participatingInTreatment && (
-                <FormHelperText>{errors.participatingInTreatment.message}</FormHelperText>
+                <FormHelperText>
+                  {errors.participatingInTreatment.message}
+                </FormHelperText>
               )}
             </FormControl>
           )}
@@ -636,9 +703,11 @@ export default function DemographicForm(): ReactNode {
       <Button
         type="submit"
         variant="contained"
+        disabled={isLoading || isDisabled}
+        loading={isLoading}
       >
         Submit
       </Button>
     </form>
-  )
+  );
 }
