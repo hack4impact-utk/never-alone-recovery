@@ -28,7 +28,7 @@ const formStyle: CSSProperties = {
 const demographicFormSchema = z.object({
   firstName: z.string().min(1, { message: "First Name is required" }),
   middleName: z.string().min(1, { message: "Middle Name is required" }),
-  lastName: z.string().min(1, { message: "last Name is required" }),
+  lastName: z.string().min(1, { message: "Last Name is required" }),
   ssn: z.string().length(11),
   dob: z.string(),
   gender: z.enum(["male", "female"]),
@@ -39,6 +39,26 @@ const demographicFormSchema = z.object({
   cleanTime: z.string().min(1, { message: "This field is required" }),
   drugOfChoice: z.string().min(1, { message: "This field is required" }),
   priorRecoveryExperience: z.string().min(1, { message: "This field is required" }),
+  surgeries: z.string().min(1, { message: "This field is required"}),
+  allergies: z.string().min(1, { message: "This field is required"}),
+  medications: z.string().min(1, { message: "This field is required"}),
+  insurance: z.string().min(1, { message: "This field is required"}),
+  receiveBenefits: z.enum(["Yes", "No"]),
+  benefitsDesc: z.string(),
+  isDisabled: z.enum(["Yes", "No"]),
+  disabilityDesc: z.string(),
+  receivesDisability: z.enum(["Yes", "No"]),
+  disabilitiesReceived: z.array(z.object({
+    reason: z.string(),
+    amount: z.number(),
+  })),
+  receivesFoodStamps: z.enum(["Yes", "No"]),
+  hasMentalHealthRecs: z.enum(["Yes", "No"]),
+  mentalHealthRecs: z.string(),
+  participatingInTreatment: z.enum(["Yes", "No"]),
+  typeOfTreatment: z.string(),
+  howOften: z.string(),
+  locationOfTreatment: z.string(),
 });
 
 type DemographicFormValues = z.infer<typeof demographicFormSchema>;
@@ -50,6 +70,7 @@ export default function DemographicForm(): ReactNode {
 
   const {
     control,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<DemographicFormValues>({
@@ -68,8 +89,31 @@ export default function DemographicForm(): ReactNode {
       cleanTime: "",
       drugOfChoice: "",
       priorRecoveryExperience: "",
+      surgeries: "",
+      allergies: "",
+      medications: "",
+      insurance: "",
+      receiveBenefits: "No",
+      benefitsDesc: "",
+      isDisabled: "No",
+      disabilityDesc: "",
+      receivesDisability: "No",
+      disabilitiesReceived: [],
+      receivesFoodStamps: "No",
+      hasMentalHealthRecs: "No",
+      mentalHealthRecs: "",
+      participatingInTreatment: "No",
+      typeOfTreatment: "",
+      howOften: "",
+      locationOfTreatment: "",
     }
   });
+
+  const watchReceiveBenefits = watch("receiveBenefits");
+  const watchIsDisabled = watch("isDisabled");
+  const watchReceivesDisability = watch("receivesDisability");
+  const watchHasMentalHealthRecs = watch("hasMentalHealthRecs");
+  const watchParticipatingInTreatment = watch("participatingInTreatment");
 
   const onSubmit = (data: DemographicFormValues): void => {
     setIsLoading(true);
@@ -260,7 +304,7 @@ export default function DemographicForm(): ReactNode {
           render={({ field }) => (
             <TextField
               {...field}
-              label="Do you have any prior recovery experience?"
+              label="Drug of Choice"
               error={!!errors.drugOfChoice}
               helperText={errors.drugOfChoice?.message}
               fullWidth
@@ -288,7 +332,307 @@ export default function DemographicForm(): ReactNode {
       </Box>
 
       <Typography variant="h4">Medical History and Benefits</Typography>
-  
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="surgeries"
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Surgeries"
+              error={!!errors.surgeries}
+              helperText={errors.surgeries?.message}
+              fullWidth
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="allergies"
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Allergies"
+              error={!!errors.allergies}
+              helperText={errors.allergies?.message}
+              fullWidth
+            />
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="medications"
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Medications"
+              error={!!errors.medications}
+              helperText={errors.medications?.message}
+              fullWidth
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="insurance"
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Insurance"
+              error={!!errors.insurance}
+              helperText={errors.insurance?.message}
+              fullWidth
+            />
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="receiveBenefits"
+          render={({ field }) => (
+            <FormControl error={!!errors.receiveBenefits}>
+              <FormLabel>Do you currently receive any state or federal benefits?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.receiveBenefits && (
+                <FormHelperText>{errors.receiveBenefits.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchReceiveBenefits === "Yes" && (
+        <Box sx={formRowStyle}>
+          <Controller
+            control={control}
+            name="benefitsDesc"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="What do you receive?"
+                error={!!errors.benefitsDesc}
+                helperText={errors.benefitsDesc?.message}
+                multiline
+                rows={3}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="isDisabled"
+          render={({ field }) => (
+            <FormControl error={!!errors.isDisabled}>
+              <FormLabel>Are you disabled (mentally or physically)?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.isDisabled && (
+                <FormHelperText>{errors.isDisabled.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchIsDisabled === "Yes" && (
+        <Box sx={formRowStyle}>
+          <Controller
+            control={control}
+            name="disabilityDesc"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Please describe"
+                error={!!errors.disabilityDesc} 
+                helperText={errors.disabilityDesc?.message}
+                multiline
+                rows={3}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="receivesDisability"
+          render={({ field }) => (
+            <FormControl error={!!errors.receivesDisability}>
+              <FormLabel>Do you receive disability?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.receivesDisability && (
+                <FormHelperText>{errors.receivesDisability.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchReceivesDisability === "Yes" && (
+        <Box sx={formRowStyle}>
+          <Controller
+            control={control}
+            name="disabilityDesc"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Please describe"
+                error={!!errors.disabilityDesc} 
+                helperText={errors.disabilityDesc?.message}
+                multiline
+                rows={3}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="receivesFoodStamps"
+          render={({ field }) => (
+            <FormControl error={!!errors.receivesFoodStamps}>
+              <FormLabel>Do you receive food stamps?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.receivesFoodStamps && (
+                <FormHelperText>{errors.receivesFoodStamps.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="hasMentalHealthRecs"
+          render={({ field }) => (
+            <FormControl error={!!errors.hasMentalHealthRecs}>
+              <FormLabel>Do you have any mental health recommendations?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.hasMentalHealthRecs && (
+                <FormHelperText>{errors.hasMentalHealthRecs.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchHasMentalHealthRecs === "Yes" && (
+        <Box sx={formRowStyle}>
+          <Controller
+            control={control}
+            name="mentalHealthRecs"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Please explain"
+                error={!!errors.mentalHealthRecs}
+                helperText={errors.mentalHealthRecs?.message}
+                multiline
+                rows={3}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="participatingInTreatment"
+          render={({ field }) => (
+            <FormControl error={!!errors.participatingInTreatment}>
+              <FormLabel>Are you currently participating in mental health treatment?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.participatingInTreatment && (
+                <FormHelperText>{errors.participatingInTreatment.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchParticipatingInTreatment === "Yes" && (
+        <>
+          <Box sx={formRowStyle}>
+            <Controller
+              control={control}
+              name="typeOfTreatment"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Type of Treatment"
+                  error={!!errors.typeOfTreatment}
+                  helperText={errors.typeOfTreatment?.message}
+                  fullWidth
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="howOften"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="How Often"
+                  error={!!errors.howOften}
+                  helperText={errors.howOften?.message}
+                  fullWidth
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="locationOfTreatment"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Location of Treatment"
+                  error={!!errors.locationOfTreatment}
+                  helperText={errors.locationOfTreatment?.message}
+                  fullWidth
+                />
+              )}
+            />
+          </Box>
+        </>
+      )}
+
       <Button
         type="submit"
         variant="contained"
