@@ -32,13 +32,22 @@ const columns: GridColDef<Row>[] = [
         color = "success";
       }
 
-      return <Chip label={status} color={color} size="small" />;
+      return (
+        <Chip
+          label={status}
+          sx={{
+            backgroundColor: color,
+          }}
+          size="small"
+        />
+      );
     },
   },
-  { field: "action",
-    headerName: "Actions", 
+  {
+    field: "action",
+    headerName: "Actions",
     width: 180,
-    renderCell: (params) => (
+    renderCell: () => (
       <div>
         <Button variant="outlined" size="small" style={{ marginRight: 8 }}>
           Tasks
@@ -87,7 +96,7 @@ function getRows(clients: Client[], searchQuery: string): Row[] {
       if (statusB == "graduates" && statusA == "discharged") return -1; // b comes first
     }
 
-    return statusA < statusB ? -1 : 1; //sorting other statuses alphabetically if it doesn't apply to any of above 
+    return statusA < statusB ? -1 : 1; //sorting other statuses alphabetically if it doesn't apply to any of above
   });
 
   return sortedClients.map((client: Client) => ({
