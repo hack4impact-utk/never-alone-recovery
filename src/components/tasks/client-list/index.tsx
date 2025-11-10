@@ -1,18 +1,16 @@
 "use client";
 
-import ClearIcon from "@mui/icons-material/Clear";
-import Search from "@mui/icons-material/Search";
 import {
   Box,
-  IconButton,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
 } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 
 import { updateTask } from "@/api/tasks";
+import SearchBox from "@/components/common/search-box";
 import { ClientTasks } from "@/types/client-tasks";
 import { Task } from "@/types/schema";
 
@@ -141,37 +139,7 @@ export default function ClientList({
       <Box
         sx={{ display: "flex", justifyContent: "space-between", mb: "1rem" }}
       >
-        <Box display="flex" alignItems="center">
-          <TextField
-            id="search-bar"
-            className="text"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-            }}
-            placeholder="Search..."
-            size="small"
-            sx={{ width: "450px" }}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    {searchQuery && (
-                      <IconButton
-                        onClick={() => setSearchQuery("")}
-                        edge="end"
-                        size="small"
-                      >
-                        <ClearIcon />
-                      </IconButton>
-                    )}
-                  </Box>
-                ),
-              },
-            }}
-          />
-          <Search sx={{ fontSize: 35, ml: 1 }} color="primary" />
-        </Box>
+        <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <ToggleButtonGroup
           value={showCompletedTasks}
           color="primary"
@@ -192,6 +160,25 @@ export default function ClientList({
             onUndoTask={onUndoTask}
           />
         ))}
+
+        {filteredClientTasks.length === 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
+              mt: 4,
+            }}
+          >
+            <Typography variant="h6" color="textSecondary">
+              {showCompletedTasks
+                ? "No tasks have been completed yet"
+                : "All tasks are completed!"}
+            </Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );
