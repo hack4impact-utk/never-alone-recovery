@@ -9,22 +9,37 @@ import Typography from "@mui/material/Typography";
 import { JSX } from "react";
 
 import { ClientTasks } from "@/types/client-tasks";
+import { Task } from "@/types/schema";
 
 import TaskItem from "./task-item";
 
 type ClientTaskItemProps = {
   clientTask: ClientTasks;
+  completed: boolean;
 };
 
-const getChipText = (clientTask: ClientTasks): string => {
-  const taskCount = clientTask.tasks.length;
+const getChipText = (clientTask: ClientTasks, completed: boolean): string => {
+  const taskCount = clientTask.tasks.filter(
+    (task) => task.completed === completed,
+  ).length;
 
-  return `${taskCount}/${taskCount}`;
+  if (completed) {
+    return `${taskCount}/${clientTask.tasks.length} Completed`;
+  }
+
+  return `${taskCount} tasks remaining`;
+};
+
+const getClientTask = (clientTask: ClientTasks, completed: boolean): Task[] => {
+  return clientTask.tasks.filter((task) => task.completed === completed);
 };
 
 export default function ClientTaskItem({
   clientTask,
+  completed,
 }: ClientTaskItemProps): JSX.Element {
+  const filteredTasks = getClientTask(clientTask, completed);
+
   return (
     <Accordion sx={{ mb: "1rem" }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -33,15 +48,17 @@ export default function ClientTaskItem({
           spacing={2}
           alignItems="center"
           justifyContent="space-between"
+          width="100%"
+          sx={{ mr: "0.5rem" }}
         >
           <Typography>
-            {clientTask.firstName} {clientTask.lastName}
+            {clientTask.firstName} {clientTask.lastName} - {clientTask.email}
           </Typography>
-          <Chip label={getChipText(clientTask)} sx={{ ms: "1rem" }} />
+          <Chip label={getChipText(clientTask, completed)} />
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        {clientTask.tasks.map((task) => (
+        {filteredTasks.map((task) => (
           <TaskItem key={task.id} task={task} />
         ))}
       </AccordionDetails>

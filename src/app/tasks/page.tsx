@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 import { getAllClientTasks } from "@/api/tasks";
-import ClientTaskList from "@/components/tasks/client-task-list";
+import ClientList from "@/components/tasks/client-list";
 
 export default async function TasksPage(): Promise<ReactNode> {
   const [clients, error] = await getAllClientTasks();
@@ -34,7 +34,7 @@ export default async function TasksPage(): Promise<ReactNode> {
         p: 2,
       }}
     >
-      <ClientTaskList clientTasks={clients} />
+      <ClientList clientTasks={clients} />
     </Box>
   );
 }

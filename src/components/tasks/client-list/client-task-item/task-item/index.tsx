@@ -1,6 +1,7 @@
 "use client";
 
 import CheckIcon from "@mui/icons-material/Check";
+import ClearIcon from "@mui/icons-material/Clear";
 import { Card, IconButton, Stack, Typography } from "@mui/material";
 import { JSX } from "react";
 
@@ -21,9 +22,15 @@ export default function TaskItem({ task }: TaskItemProps): JSX.Element {
       >
         <Typography>{task.description}</Typography>
 
-        <IconButton color="success" aria-label="mark task as complete">
-          <CheckIcon sx={{ fontSize: "30px" }} />
-        </IconButton>
+        {task.completed ? (
+          <IconButton color="error">
+            <ClearIcon sx={{ fontSize: "30px" }} />
+          </IconButton>
+        ) : (
+          <IconButton color="success">
+            <CheckIcon sx={{ fontSize: "30px" }} />
+          </IconButton>
+        )}
       </Stack>
     </Card>
   );
