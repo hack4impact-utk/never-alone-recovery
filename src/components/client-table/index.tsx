@@ -1,7 +1,7 @@
 "use client";
 
 import Search from "@mui/icons-material/Search";
-import { Box, Chip, TextField, Typography } from "@mui/material";
+import { Box, Button, Chip, TextField, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { ReactNode, useState } from "react";
 
@@ -20,20 +20,34 @@ const columns: GridColDef<Row>[] = [
   {
     field: "status",
     headerName: "Status",
-    width: 100,
+    width: 150,
     flex: 1,
     renderCell: (params): React.ReactNode => {
       // custom chip based on status
       const status = params.value;
-      let color = "default";
-      if (status == "Residents") {
+      let color = "error";
+      if (status == "resident") {
         color = "warning";
-      } else if (status == "Graduates") {
+      } else if (status == "graduate") {
         color = "success";
       }
 
       return <Chip label={status} color={color} size="small" />;
     },
+  },
+  { field: "action",
+    headerName: "Actions", 
+    width: 180,
+    renderCell: (params) => (
+      <div>
+        <Button variant="outlined" size="small" style={{ marginRight: 8 }}>
+          Tasks
+        </Button>
+        <Button variant="outlined" size="small">
+          Info
+        </Button>
+      </div>
+    ),
   },
 ];
 
