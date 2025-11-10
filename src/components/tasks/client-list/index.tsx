@@ -9,9 +9,12 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 
+import { updateTask } from "@/api/tasks";
 import { ClientTasks } from "@/types/client-tasks";
+import { Task } from "@/types/schema";
 
 import ClientTaskItem from "./client-task-item";
 
@@ -37,10 +40,88 @@ const getFilteredClientTasks = (
 };
 
 export default function ClientList({
-  clientTasks,
+  clientTasks: initialClientTasks,
 }: ClientTaskListProps): ReactNode {
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [clientTasks, setClientTasks] = useState(initialClientTasks);
+
+  const onCompleteTask = async (
+    clientId: string,
+    task: Task,
+  ): Promise<void> => {
+    const [updatedTask, error] = await updateTask({
+      ...task,
+      completed: true,
+    });
+
+    if (error || !updatedTask) {
+      enqueueSnackbar(
+        `Failed to mark task "${task.description}" as completed. Please try again.`,
+        {
+          variant: "error",
+        },
+      );
+      return;
+    }
+
+    const successMessage = `Task "${updatedTask.description}" marked as completed!`;
+
+    enqueueSnackbar(successMessage, {
+      variant: "success",
+    });
+
+    setClientTasks((prevClientTasks) =>
+      prevClientTasks.map((client) => {
+        if (client.id === clientId) {
+          return {
+            ...client,
+            tasks: client.tasks.map((task) =>
+              task.id === updatedTask.id ? updatedTask : task,
+            ),
+          };
+        }
+        return client;
+      }),
+    );
+  };
+
+  const onUndoTask = async (clientId: string, task: Task): Promise<void> => {
+    const [updatedTask, error] = await updateTask({
+      ...task,
+      completed: false,
+    });
+
+    if (error || !updatedTask) {
+      enqueueSnackbar(
+        `Failed to mark task "${task.description}" as incomplete. Please try again.`,
+        {
+          variant: "error",
+        },
+      );
+      return;
+    }
+
+    const successMessage = `Task "${updatedTask.description}" marked as incomplete!`;
+
+    enqueueSnackbar(successMessage, {
+      variant: "success",
+    });
+
+    setClientTasks((prevClientTasks) =>
+      prevClientTasks.map((client) => {
+        if (client.id === clientId) {
+          return {
+            ...client,
+            tasks: client.tasks.map((task) =>
+              task.id === updatedTask.id ? updatedTask : task,
+            ),
+          };
+        }
+        return client;
+      }),
+    );
+  };
 
   const filteredClientTasks = getFilteredClientTasks(
     clientTasks,
@@ -102,17 +183,15 @@ export default function ClientList({
         </ToggleButtonGroup>
       </Box>
       <Box>
-        {filteredClientTasks
-          .filter((client) =>
-            client.tasks.some((task) => task.completed === showCompletedTasks),
-          )
-          .map((client) => (
-            <ClientTaskItem
-              key={client.id}
-              clientTask={client}
-              completed={showCompletedTasks}
-            />
-          ))}
+        {filteredClientTasks.map((client) => (
+          <ClientTaskItem
+            key={client.id}
+            clientTask={client}
+            completed={showCompletedTasks}
+            onCompleteTask={onCompleteTask}
+            onUndoTask={onUndoTask}
+          />
+        ))}
       </Box>
     </Box>
   );

@@ -16,6 +16,8 @@ import TaskItem from "./task-item";
 type ClientTaskItemProps = {
   clientTask: ClientTasks;
   completed: boolean;
+  onCompleteTask: (clientId: string, task: Task) => Promise<void>;
+  onUndoTask: (clientId: string, task: Task) => Promise<void>;
 };
 
 const getChipText = (clientTask: ClientTasks, completed: boolean): string => {
@@ -37,11 +39,13 @@ const getClientTask = (clientTask: ClientTasks, completed: boolean): Task[] => {
 export default function ClientTaskItem({
   clientTask,
   completed,
+  onCompleteTask,
+  onUndoTask,
 }: ClientTaskItemProps): JSX.Element {
   const filteredTasks = getClientTask(clientTask, completed);
 
   return (
-    <Accordion sx={{ mb: "1rem" }}>
+    <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Stack
           direction="row"
@@ -59,7 +63,13 @@ export default function ClientTaskItem({
       </AccordionSummary>
       <AccordionDetails>
         {filteredTasks.map((task) => (
-          <TaskItem key={task.id} task={task} />
+          <TaskItem
+            key={task.id}
+            task={task}
+            clientTask={clientTask}
+            onCompleteTask={onCompleteTask}
+            onUndoTask={onUndoTask}
+          />
         ))}
       </AccordionDetails>
     </Accordion>

@@ -5,13 +5,22 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { Card, IconButton, Stack, Typography } from "@mui/material";
 import { JSX } from "react";
 
+import { ClientTasks } from "@/types/client-tasks";
 import { Task } from "@/types/schema";
 
 type TaskItemProps = {
   task: Task;
+  clientTask: ClientTasks;
+  onCompleteTask: (clientId: string, task: Task) => Promise<void>;
+  onUndoTask: (clientId: string, task: Task) => Promise<void>;
 };
 
-export default function TaskItem({ task }: TaskItemProps): JSX.Element {
+export default function TaskItem({
+  task,
+  clientTask,
+  onCompleteTask,
+  onUndoTask,
+}: TaskItemProps): JSX.Element {
   return (
     <Card variant="outlined" sx={{ mb: "0.5rem", p: "0.5rem" }}>
       <Stack
@@ -23,11 +32,17 @@ export default function TaskItem({ task }: TaskItemProps): JSX.Element {
         <Typography>{task.description}</Typography>
 
         {task.completed ? (
-          <IconButton color="error">
+          <IconButton
+            color="error"
+            onClick={() => onUndoTask(clientTask.id, task)}
+          >
             <ClearIcon sx={{ fontSize: "30px" }} />
           </IconButton>
         ) : (
-          <IconButton color="success">
+          <IconButton
+            color="success"
+            onClick={() => onCompleteTask(clientTask.id, task)}
+          >
             <CheckIcon sx={{ fontSize: "30px" }} />
           </IconButton>
         )}
