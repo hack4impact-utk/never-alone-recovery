@@ -20,7 +20,7 @@ export async function getAllClientTasks(): Promise<Result<ClientTasks[]>> {
   }
 }
 
-export async function updateTask(task: Task): Promise<Result<Task>> {
+async function updateTask(task: Task): Promise<Result<Task>> {
   try {
     const updatedTasks = await db
       .update(tasks)
@@ -38,4 +38,12 @@ export async function updateTask(task: Task): Promise<Result<Task>> {
   } catch (error) {
     return [null, handleError(error)];
   }
+}
+
+export async function markTaskAsCompleted(task: Task): Promise<Result<Task>> {
+  return updateTask({ ...task, completed: true });
+}
+
+export async function markTaskAsIncomplete(task: Task): Promise<Result<Task>> {
+  return updateTask({ ...task, completed: false });
 }

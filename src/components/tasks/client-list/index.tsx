@@ -9,7 +9,7 @@ import {
 import { enqueueSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 
-import { updateTask } from "@/api/tasks";
+import { markTaskAsCompleted, markTaskAsIncomplete } from "@/api/tasks";
 import SearchBox from "@/components/common/search-box";
 import { ClientTasks } from "@/types/client-tasks";
 import { Task } from "@/types/schema";
@@ -48,10 +48,7 @@ export default function ClientList({
     clientId: string,
     task: Task,
   ): Promise<void> => {
-    const [updatedTask, error] = await updateTask({
-      ...task,
-      completed: true,
-    });
+    const [updatedTask, error] = await markTaskAsCompleted(task);
 
     if (error || !updatedTask) {
       enqueueSnackbar(
@@ -85,10 +82,7 @@ export default function ClientList({
   };
 
   const onUndoTask = async (clientId: string, task: Task): Promise<void> => {
-    const [updatedTask, error] = await updateTask({
-      ...task,
-      completed: false,
-    });
+    const [updatedTask, error] = await markTaskAsIncomplete(task);
 
     if (error || !updatedTask) {
       enqueueSnackbar(
