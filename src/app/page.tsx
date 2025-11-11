@@ -1,20 +1,21 @@
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import BadgeIcon from "@mui/icons-material/Badge";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import GroupIcon from "@mui/icons-material/Group";
 import PeopleIcon from "@mui/icons-material/People";
 import SecurityIcon from "@mui/icons-material/Security";
 import {
   Avatar,
   Box,
   Card,
-  CardActionArea,
   CardContent,
   Container,
   Grid,
   Typography,
 } from "@mui/material";
 import React, { ReactNode } from "react";
+
+const ICON_FONT_SIZE = 48;
 
 type Tile = {
   id: string;
@@ -28,124 +29,94 @@ const tiles: Tile[] = [
     id: "tasks",
     title: "Tasks",
     href: "/tasks",
-    icon: <CheckCircleOutlineIcon />,
+    icon: <CheckCircleOutlineIcon sx={{ fontSize: ICON_FONT_SIZE }} />,
   },
-  { id: "rent", title: "Rent", href: "/rent", icon: <AttachMoneyIcon /> },
+  {
+    id: "rent",
+    title: "Rent",
+    href: "/rent",
+    icon: <AttachMoneyIcon sx={{ fontSize: ICON_FONT_SIZE }} />,
+  },
   {
     id: "intake",
     title: "Intake Form",
     href: "/intake-form",
-    icon: <AssignmentIcon />,
+    icon: <AssignmentIcon sx={{ fontSize: ICON_FONT_SIZE }} />,
   },
-  { id: "audits", title: "Audits", href: "/audit", icon: <SecurityIcon /> },
+  {
+    id: "audits",
+    title: "Audits",
+    href: "/audit",
+    icon: <SecurityIcon sx={{ fontSize: ICON_FONT_SIZE }} />,
+  },
   {
     id: "client",
     title: "Client Dashboard",
     href: "/client-dashboard",
-    icon: <PeopleIcon />,
+    icon: <PeopleIcon sx={{ fontSize: ICON_FONT_SIZE }} />,
   },
   {
     id: "staff",
     title: "Staff Dashboard",
     href: "/staff-dashboard",
-    icon: <GroupIcon />,
+    icon: <BadgeIcon sx={{ fontSize: ICON_FONT_SIZE }} />,
   },
 ];
 
 export default function HomePage(): ReactNode {
   return (
     <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
-      <Typography
-        variant="h4"
-        component="h1"
-        align="center"
-        gutterBottom
-        sx={{ fontWeight: 700, mb: 4, color: "text.primary" }}
-      >
-        Home Page
-      </Typography>
-
-      <Grid container spacing={3} alignItems="stretch">
-        {tiles.map((t) => (
-          <Grid key={t.id} size={{ xs: 12, sm: 4 }}>
-            {/* <div> */}
-            <div>
+      <Grid container spacing={3} columns={{ xs: 4, sm: 8, md: 12 }}>
+        {tiles.map((tile) => (
+          <Grid key={tile.id} size={{ xs: 12, sm: 4 }}>
+            <a href={tile.href} style={{ textDecoration: "none" }}>
               <Card
                 sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
                   borderRadius: 2,
                   boxShadow: 3,
                 }}
               >
-                <CardActionArea
-                  component="a"
-                  href={t.href || "#"}
+                <Box
                   sx={{
-                    flexGrow: 1,
+                    height: 120,
                     display: "flex",
-                    flexDirection: "column",
-                    width: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    bgcolor: "black",
+                    color: "white",
                   }}
                 >
-                  <Box
+                  <Avatar
                     sx={{
-                      width: "100%",
-                      height: 80,
-                      bgcolor: "primary.light",
-                      position: "relative",
-                      borderTopLeftRadius: 8,
-                      borderTopRightRadius: 8,
+                      bgcolor: "white",
+                      color: "black",
+                      p: 2,
+                      width: 64,
+                      height: 64,
                     }}
                   >
-                    <Avatar
-                      sx={{
-                        width: 64,
-                        height: 64,
-                        bgcolor: "primary.main",
-                        color: "white",
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        boxShadow: 4,
-                        border: "3px solid white",
-                      }}
-                    >
-                      {t.icon}
-                    </Avatar>
-                  </Box>
+                    {tile.icon}
+                  </Avatar>
+                </Box>
 
-                  <CardContent
+                <CardContent
+                  sx={{
+                    textAlign: "center",
+                    bgcolor: "white",
+                  }}
+                >
+                  <Typography
+                    variant="h5"
+                    component="div"
                     sx={{
-                      mt: 4,
-                      textAlign: "center",
-                      flexGrow: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "100%",
-                      paddingBottom: "24px !important",
+                      fontWeight: "bold",
                     }}
                   >
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        fontWeight: 600,
-                        color: "text.secondary",
-                        wordBreak: "break-word",
-                        width: "100%",
-                      }}
-                    >
-                      {t.title}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
+                    {tile.title}
+                  </Typography>
+                </CardContent>
               </Card>
-            </div>
+            </a>
           </Grid>
         ))}
       </Grid>
