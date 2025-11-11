@@ -10,19 +10,15 @@ type AuditTableProps = {
   audits: Audit[];
 };
 
-// 🟢 Color mapping for each type
-const typeColors: Record<
-  string,
-  "default" | "primary" | "secondary" | "success" | "error" | "warning" | "info"
-> = {
-  rent_payment: "success",
-  rent_charge: "warning",
-  client_discharge: "error",
-  client_enrollment: "info",
-  client_graduation: "primary",
-  client_staff_changed: "default",
-  client_task_completed: "success",
-  staff_role_changed: "warning",
+const typeColors: Record<string, string> = {
+  rent_payment: "#1d9e16",
+  rent_charge: "#d11730",
+  client_discharge: "#c42fa9",
+  client_enrollment: "#f28200",
+  client_graduation: "#007bd8",
+  client_staff_changed: "#595958",
+  client_task_completed: "#782ac2",
+  staff_role_changed: "#96572f",
 };
 
 const columns: GridColDef<Audit>[] = [
@@ -65,13 +61,18 @@ const columns: GridColDef<Audit>[] = [
   { field: "message", headerName: "Message", flex: 2 },
 ];
 
-// 🎨 Render a Chip with color based on the type
 function getAuditTypeCell(
   params: GridRenderCellParams<Audit, string>,
 ): ReactNode {
   const type = params.value ?? "N/A";
   const color = typeColors[type] ?? "default";
-  return <Chip label={type} color={color} variant="outlined" />;
+  return (
+    <Chip
+      label={type}
+      variant="outlined"
+      sx={{ color, borderColor: color, fontWeight: 500 }}
+    />
+  );
 }
 
 function getRows(audits: Audit[]): Audit[] {
