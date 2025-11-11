@@ -1,4 +1,4 @@
-# 2025-nextjs-template
+# Never Alone Recovery
 
 <h1 align="center">
   <br>
