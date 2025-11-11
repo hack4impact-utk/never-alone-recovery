@@ -45,14 +45,23 @@ export default function ResponsiveAppBar(): ReactNode {
               mr: 2,
               flexGrow: 1,
               display: { xs: "flex", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+              // fontFamily: "monospace",
+              // fontWeight: 700,
+              // letterSpacing: ".3rem",
+              // color: "inherit",
+              // textDecoration: "none",
             }}
           >
-            NAR LOGO
+            <Box
+              component="img"
+              src="./favicon.ico" // ← make sure this path matches your file’s location
+              alt="NAR Logo"
+              sx={{
+                height: 40,
+                width: 40,
+                mr: 1,
+              }}
+            />
           </Typography>
 
           {session && (
