@@ -5,10 +5,28 @@ import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 import React, { ReactNode } from "react";
 
-import { Audit } from "@/types/audit";
+import { AuditWithClientAndStaff } from "@/types/audit-with-client-and-staff";
 
 type AuditTableProps = {
-  audits: Audit[];
+  audits: AuditWithClientAndStaff[];
+};
+
+type Row = {
+  id: string;
+  createdDate: Date;
+  staffName: string | null;
+  clientName: string | null;
+  type:
+    | "rent_payment"
+    | "rent_charge"
+    | "client_discharge"
+    | "client_enrollment"
+    | "client_graduation"
+    | "client_staff_changed"
+    | "client_task_completed"
+    | "staff_role_changed"
+    | null;
+  message: string | null;
 };
 
 const typeColors: Record<string, string> = {
@@ -22,7 +40,7 @@ const typeColors: Record<string, string> = {
   staff_role_changed: "#96572f",
 };
 
-const columns: GridColDef<Audit>[] = [
+const columns: GridColDef<Row>[] = [
   {
     field: "createdDate",
     headerName: "Date",
@@ -54,7 +72,7 @@ const columns: GridColDef<Audit>[] = [
 ];
 
 function getAuditTypeCell(
-  params: GridRenderCellParams<Audit, string>,
+  params: GridRenderCellParams<Row, string>,
 ): ReactNode {
   const type = params.value ?? "N/A";
   const color = typeColors[type] ?? "default";
@@ -67,13 +85,15 @@ function getAuditTypeCell(
   );
 }
 
-function getRows(audits: Audit[]): Audit[] {
+function getRows(audits: AuditWithClientAndStaff[]): Row[] {
   return audits.map((audit) => {
     return {
       id: audit.id,
       createdDate: audit.createdDate,
-      staffName: audit.staffName,
-      clientName: audit.clientName,
+      staffName: audit.staff ? audit.staff.name : "N/A",
+      clientName: audit.client
+        ? audit.client.firstName + " " + audit.client.lastName
+        : "N/A",
       type: audit.type,
       message: audit.message,
     };
