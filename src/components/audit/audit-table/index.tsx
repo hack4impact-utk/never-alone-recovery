@@ -2,6 +2,7 @@
 
 import { Box, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import dayjs from "dayjs";
 import React, { ReactNode } from "react";
 
 import { Audit } from "@/types/audit";
@@ -27,16 +28,7 @@ const columns: GridColDef<Audit>[] = [
     headerName: "Date",
     flex: 1,
     valueFormatter: (params): string => {
-      const date = new Date(params);
-      let hours = date.getHours();
-      const minutes = String(date.getMinutes()).padStart(2, "0");
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      const year = date.getFullYear();
-      const ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12 || 12;
-      const hourStr = String(hours).padStart(2, "0");
-      return `${hourStr}:${minutes} ${ampm} ${month}-${day}-${year}`;
+      return dayjs(params).format("HH:MM A MM-DD-YYYY");
     },
   },
   { field: "staffName", headerName: "Staff", flex: 1 },
