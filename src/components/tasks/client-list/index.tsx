@@ -9,7 +9,10 @@ import {
 import { enqueueSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 
-import { markTaskAsCompleted, markTaskAsIncomplete } from "@/api/tasks";
+import {
+  markTaskAsCompleted,
+  markTaskAsIncomplete,
+} from "@/api/tasks/public-mutations";
 import SearchBox from "@/components/common/search-box";
 import { ClientTasks } from "@/types/client-tasks";
 import { Task } from "@/types/schema";

@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
-import { getAllClientTasks } from "@/api/tasks";
+import { getAllClientTasks } from "@/api/tasks/queries";
 import ClientList from "@/components/tasks/client-list";
 
 export default async function TasksPage(): Promise<ReactNode> {
