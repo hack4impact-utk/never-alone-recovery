@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text } from "drizzle-orm/pg-core";
 
 import { baseSchema } from "./base-schema";
@@ -12,3 +13,14 @@ export const audits = pgTable("audit", {
   type: auditTypeEnum("type"),
   message: text("message"),
 });
+
+export const auditRelations = relations(audits, ({ one }) => ({
+  staff: one(users, {
+    fields: [audits.staffId],
+    references: [users.id],
+  }),
+  client: one(clients, {
+    fields: [audits.clientId],
+    references: [clients.id],
+  }),
+}));
