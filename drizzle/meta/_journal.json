@@ -8,6 +8,13 @@
       "when": 1760468642450,
       "tag": "0000_narrow_dark_beast",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1762727364684,
+      "tag": "0001_wandering_thing",
+      "breakpoints": true
     }
   ]
 }
