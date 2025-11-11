@@ -4,31 +4,13 @@ import { Box, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ReactNode } from "react";
 
-import { Audit } from "@/types/schema";
+import { Audit } from "@/types/audit";
 
 type AuditTableProps = {
   audits: Audit[];
 };
 
-type Row = {
-  id: string;
-  createdDate: Date;
-  staff: string | null;
-  client: string | null;
-  type:
-    | "rent_payment"
-    | "rent_charge"
-    | "client_discharge"
-    | "client_enrollment"
-    | "client_graduation"
-    | "client_staff_changed"
-    | "client_task_completed"
-    | "staff_role_changed"
-    | null;
-  message: string | null;
-};
-
-const columns: GridColDef<Row>[] = [
+const columns: GridColDef<Audit>[] = [
   {
     field: "createdDate",
     headerName: "Date",
@@ -46,8 +28,8 @@ const columns: GridColDef<Row>[] = [
       return `${hourStr}:${minutes} ${ampm} ${month}-${day}-${year}`;
     },
   },
-  { field: "staff", headerName: "Staff", flex: 1 },
-  { field: "client", headerName: "Client", flex: 1 },
+  { field: "staffName", headerName: "Staff", flex: 1 },
+  { field: "clientName", headerName: "Client", flex: 1 },
   {
     field: "type",
     headerName: "Type",
@@ -67,15 +49,13 @@ const columns: GridColDef<Row>[] = [
   { field: "message", headerName: "Message", flex: 2 },
 ];
 
-function getRows(audits: Audit[]): Row[] {
+function getRows(audits: Audit[]): Audit[] {
   return audits.map((audit) => {
-    // Get the names of the staff and client here using their IDs
-
     return {
       id: audit.id,
       createdDate: audit.createdDate,
-      staff: audit.staffId,
-      client: audit.clientId,
+      staffName: audit.staffName,
+      clientName: audit.clientName,
       type: audit.type,
       message: audit.message,
     };
@@ -94,9 +74,6 @@ export default function AuditTable({ audits }: AuditTableProps): ReactNode {
         rows={filteredRows}
         columns={columns}
         disableRowSelectionOnClick
-        initialState={{
-          sorting: { sortModel: [{ field: "createdDate", sort: "desc" }] },
-        }}
       />
     </Box>
   );
