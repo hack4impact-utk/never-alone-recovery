@@ -1,13 +1,28 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { ReactNode } from "react";
+import { Box, Chip, Typography } from "@mui/material";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import React, { ReactNode } from "react";
 
 import { Audit } from "@/types/audit";
 
 type AuditTableProps = {
   audits: Audit[];
+};
+
+// 🟢 Color mapping for each type
+const typeColors: Record<
+  string,
+  "default" | "primary" | "secondary" | "success" | "error" | "warning" | "info"
+> = {
+  rent_payment: "success",
+  rent_charge: "warning",
+  client_discharge: "error",
+  client_enrollment: "info",
+  client_graduation: "primary",
+  client_staff_changed: "default",
+  client_task_completed: "success",
+  staff_role_changed: "warning",
 };
 
 const columns: GridColDef<Audit>[] = [
@@ -45,9 +60,19 @@ const columns: GridColDef<Audit>[] = [
       "client_task_completed",
       "staff_role_changed",
     ],
+    renderCell: getAuditTypeCell,
   },
   { field: "message", headerName: "Message", flex: 2 },
 ];
+
+// 🎨 Render a Chip with color based on the type
+function getAuditTypeCell(
+  params: GridRenderCellParams<Audit, string>,
+): ReactNode {
+  const type = params.value ?? "N/A";
+  const color = typeColors[type] ?? "default";
+  return <Chip label={type} color={color} variant="outlined" />;
+}
 
 function getRows(audits: Audit[]): Audit[] {
   return audits.map((audit) => {
