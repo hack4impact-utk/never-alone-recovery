@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import React, { ReactNode } from "react";
 
 import { AuditWithClientAndStaff } from "@/types/audit-with-client-and-staff";
+import { AuditType } from "@/types/enums";
 
 type AuditTableProps = {
   audits: AuditWithClientAndStaff[];
@@ -16,16 +17,7 @@ type Row = {
   createdDate: Date;
   staffName: string | null;
   clientName: string | null;
-  type:
-    | "rent_payment"
-    | "rent_charge"
-    | "client_discharge"
-    | "client_enrollment"
-    | "client_graduation"
-    | "client_staff_changed"
-    | "client_task_completed"
-    | "staff_role_changed"
-    | null;
+  type: AuditType;
   message: string | null;
 };
 
@@ -46,7 +38,7 @@ const columns: GridColDef<Row>[] = [
     headerName: "Date",
     flex: 1,
     valueFormatter: (params): string => {
-      return dayjs(params).format("HH:MM A MM-DD-YYYY");
+      return dayjs(params).format("HH:mm A MM-DD-YYYY");
     },
   },
   { field: "staffName", headerName: "Staff", flex: 1 },
@@ -56,23 +48,14 @@ const columns: GridColDef<Row>[] = [
     headerName: "Type",
     flex: 1,
     type: "singleSelect",
-    valueOptions: [
-      "rent_payment",
-      "rent_charge",
-      "client_discharge",
-      "client_enrollment",
-      "client_graduation",
-      "client_staff_changed",
-      "client_task_completed",
-      "staff_role_changed",
-    ],
+    valueOptions: Object.keys(typeColors),
     renderCell: getAuditTypeCell,
   },
   { field: "message", headerName: "Message", flex: 2 },
 ];
 
 function getAuditTypeCell(
-  params: GridRenderCellParams<Row, string>,
+  params: GridRenderCellParams<Row, AuditType>,
 ): ReactNode {
   const type = params.value ?? "N/A";
   const color = typeColors[type] ?? "default";
@@ -94,7 +77,7 @@ function getRows(audits: AuditWithClientAndStaff[]): Row[] {
       clientName: audit.client
         ? audit.client.firstName + " " + audit.client.lastName
         : "N/A",
-      type: audit.type,
+      type: audit.type as AuditType,
       message: audit.message,
     };
   });
