@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm/relations";
 
 import { audits } from "./audit";
 import { baseSchema } from "./base-schema";
