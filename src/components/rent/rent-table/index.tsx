@@ -3,8 +3,9 @@
 import EditIcon from "@mui/icons-material/Edit";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
+import SearchBox from "@/components/common/search-box";
 import { Balance } from "@/types/balance";
 
 type RentTableProps = {
@@ -67,20 +68,29 @@ function getActionButtons(): ReactNode {
   );
 }
 
-function getRows(clientBalances: Balance[]): Row[] {
-  return clientBalances.map((balance) => ({
+function getRows(clientBalances: Balance[], searchQuery: string): Row[] {
+  const rows = clientBalances.map((balance) => ({
     id: balance.client.id,
     firstName: balance.client.firstName,
     lastName: balance.client.lastName,
     email: balance.client.email,
     total: balance.total,
   }));
+
+  return rows.filter((row) => {
+    return (
+      row.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
 }
 
 export default function RentTable({
   clientBalances,
 }: RentTableProps): ReactNode {
-  const filteredRows = getRows(clientBalances);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredRows = getRows(clientBalances, searchQuery);
 
   return (
     <Box
@@ -94,6 +104,9 @@ export default function RentTable({
       <Typography align="center" variant="h6">
         Rent
       </Typography>
+      <Box display="flex" alignItems="center" sx={{ py: 2 }}>
+        <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      </Box>
       <DataGrid
         rows={filteredRows}
         columns={columns}

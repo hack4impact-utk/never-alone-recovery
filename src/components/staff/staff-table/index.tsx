@@ -1,8 +1,9 @@
 "use client";
 import { Box, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
+import SearchBox from "@/components/common/search-box";
 import { User } from "@/types/schema";
 
 type StaffTableProps = {
@@ -31,8 +32,8 @@ const columns: GridColDef<Row>[] = [
   },
 ];
 
-function getRows(staff: User[]): Row[] {
-  return staff.map((member) => {
+function getRows(staff: User[], searchQuery: string): Row[] {
+  const rows = staff.map((member) => {
     const nameParts = member.name.split(" ");
     const firstName = nameParts[0] || "";
     const lastName = nameParts.slice(1).join(" ") || "";
@@ -45,10 +46,18 @@ function getRows(staff: User[]): Row[] {
       role: member.role,
     };
   });
-}
 
+  return rows.filter((row) => {
+    return (
+      row.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (row.email && row.email.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+  });
+}
 export default function StaffTable({ staff }: StaffTableProps): ReactNode {
-  const rows = getRows(staff);
+  const [searchQuery, setSearchQuery] = useState("");
+  const rows = getRows(staff, searchQuery);
 
   return (
     <Box
@@ -62,6 +71,9 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
       <Typography align="center" variant="h6">
         Staff Dashboard
       </Typography>
+      <Box display="flex" alignItems="center" sx={{ py: 2 }}>
+        <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      </Box>
       <DataGrid rows={rows} columns={columns} disableRowSelectionOnClick />
     </Box>
   );

@@ -26,8 +26,10 @@ export default async function StaffDashboardPage(): Promise<ReactNode> {
   return (
     <Box
       sx={{
+        height: "100vh",
+        width: "100vw",
         display: "flex",
-        flexDirection: "column",
+        justifyContent: "center",
         alignItems: "center",
       }}
     >

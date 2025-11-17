@@ -1,11 +1,12 @@
 "use client";
 
-import Search from "@mui/icons-material/Search";
-import { Box, Button, Chip, TextField, Typography } from "@mui/material";
+import { Box, Button, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { ReactNode, useState } from "react";
 
 import { Client } from "@/types/schema";
+
+import SearchBox from "../common/search-box";
 
 type ClientTableProps = {
   clients: Client[];
@@ -121,16 +122,10 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
         }}
       >
         <Box display="flex" alignItems="center" sx={{ py: 2 }}>
-          <TextField
-            id="search-bar"
-            className="text"
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-            }}
-            placeholder="Search..."
-            size="small"
+          <SearchBox
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
           />
-          <Search sx={{ fontSize: 28, m: 1 }} color="primary" />
         </Box>
         <DataGrid
           rows={filteredRows}
