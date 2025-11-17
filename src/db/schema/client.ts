@@ -1,6 +1,7 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm/relations";
 
+import { audits } from "./audit";
 import { baseSchema } from "./base-schema";
 import { clientStatusEnum } from "./enum";
 import { intakeForms } from "./intake-form";
@@ -31,4 +32,5 @@ export const clientRelations = relations(clients, ({ one, many }) => ({
     references: [intakeForms.id],
   }),
   tasks: many(tasks),
+  audits: many(audits),
 }));
