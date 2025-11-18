@@ -14,6 +14,7 @@ import { handleLogout } from "@/utils/auth/handle-logout";
 
 export default function ProfilePicture(): ReactNode {
   const [userMenu, setUserMenu] = useState<boolean>(false);
+  const { data: session } = useSession();
 
   const handleCloseUserMenu = (): void => {
     setUserMenu(false);
@@ -22,42 +23,39 @@ export default function ProfilePicture(): ReactNode {
   const toggleUserMenu = (): void => {
     setUserMenu(!userMenu);
   };
-  const { data: session } = useSession();
 
   return (
-    session && (
-      <Box>
-        <Tooltip title="Open settings" placement="left-end">
-          <IconButton onClick={toggleUserMenu}>
-            <Avatar
-              alt={session.user?.name ?? "User"}
-              src={session.user?.image ?? ""}
-            />
-          </IconButton>
-        </Tooltip>
-        <Menu
-          sx={{ mt: "45px" }}
-          id="menu-appbar"
-          open={userMenu}
-          onClose={handleCloseUserMenu}
-          aria-controls="logout"
-          disableScrollLock
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
+    <Box>
+      <Tooltip title="Open settings" placement="left-end">
+        <IconButton onClick={toggleUserMenu}>
+          <Avatar
+            alt={session?.user?.name ?? "User"}
+            src={session?.user?.image ?? ""}
+          />
+        </IconButton>
+      </Tooltip>
+      <Menu
+        sx={{ mt: "45px" }}
+        id="menu-appbar"
+        open={userMenu}
+        onClose={handleCloseUserMenu}
+        aria-controls="logout"
+        disableScrollLock
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <MenuItem
+          id="logout"
+          onClick={() => {
+            handleCloseUserMenu();
+            handleLogout();
           }}
         >
-          <MenuItem
-            id="logout"
-            onClick={() => {
-              handleCloseUserMenu();
-              handleLogout();
-            }}
-          >
-            <Typography sx={{ textAlign: "center" }}>Logout</Typography>
-          </MenuItem>
-        </Menu>
-      </Box>
-    )
+          <Typography sx={{ textAlign: "center" }}>Logout</Typography>
+        </MenuItem>
+      </Menu>
+    </Box>
   );
 }
