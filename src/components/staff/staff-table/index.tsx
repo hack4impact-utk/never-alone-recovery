@@ -1,7 +1,7 @@
 "use client";
 import { Box, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
 import { User } from "@/types/schema";
@@ -58,34 +58,44 @@ function getRows(staff: User[], searchQuery: string): Row[] {
 export default function StaffTable({ staff }: StaffTableProps): ReactNode {
   const [searchQuery, setSearchQuery] = useState("");
   const rows = getRows(staff, searchQuery);
+  const [displayDatagrid, setDisplayDatagrid] = useState(false);
+
+  useEffect(() => {
+    setDisplayDatagrid(true);
+  }, []);
 
   return (
-    <Box
-      sx={{
-        height: "75vh",
-        width: "75vw",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Typography align="center" variant="h5" sx={{ mt: 2 }}>
-        Staff Dashboard
-      </Typography>
-      <Box display="flex" alignItems="center" sx={{ py: 2 }}>
-        <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      </Box>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        disableRowSelectionOnClick
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 8,
-            },
-          },
+    displayDatagrid && (
+      <Box
+        sx={{
+          height: "75vh",
+          width: "75vw",
+          display: "flex",
+          flexDirection: "column",
         }}
-      />
-    </Box>
+      >
+        <Typography align="center" variant="h5" sx={{ mt: 2 }}>
+          Staff Dashboard
+        </Typography>
+        <Box display="flex" alignItems="center" sx={{ py: 2 }}>
+          <SearchBox
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        </Box>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          disableRowSelectionOnClick
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 8,
+              },
+            },
+          }}
+        />
+      </Box>
+    )
   );
 }
