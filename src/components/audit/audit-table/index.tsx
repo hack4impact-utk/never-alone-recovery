@@ -3,8 +3,9 @@
 import { Box, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import dayjs from "dayjs";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 
+import SearchBox from "@/components/common/search-box";
 import { AuditWithClientAndStaff } from "@/types/audit-with-client-and-staff";
 import { AuditType } from "@/types/enums";
 
@@ -68,8 +69,11 @@ function getAuditTypeCell(
   );
 }
 
-function getRows(audits: AuditWithClientAndStaff[]): Row[] {
-  return audits.map((audit) => {
+function getRows(
+  audits: AuditWithClientAndStaff[],
+  searchQuery: string,
+): Row[] {
+  const rows = audits.map((audit) => {
     return {
       id: audit.id,
       createdDate: audit.createdDate,
@@ -81,20 +85,49 @@ function getRows(audits: AuditWithClientAndStaff[]): Row[] {
       message: audit.message,
     };
   });
+
+  const query = searchQuery.toLowerCase();
+
+  return rows.filter((audit) => {
+    return (
+      audit.staffName.toLowerCase().includes(query) ||
+      audit.clientName.toLowerCase().includes(query) ||
+      audit.type.toLowerCase().includes(query) ||
+      (audit.message && audit.message.toLowerCase().includes(query))
+    );
+  });
 }
 
 export default function AuditTable({ audits }: AuditTableProps): ReactNode {
-  const filteredRows = getRows(audits);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredRows = getRows(audits, searchQuery);
 
   return (
-    <Box sx={{ height: "75vh", width: "75vw" }}>
+    <Box
+      sx={{
+        height: "75vh",
+        width: "75vw",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Typography align="center" variant="h6">
         Activity
       </Typography>
+      <Box display="flex" alignItems="center" sx={{ py: 2 }}>
+        <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      </Box>
       <DataGrid
         rows={filteredRows}
         columns={columns}
         disableRowSelectionOnClick
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 8,
+            },
+          },
+        }}
       />
     </Box>
   );

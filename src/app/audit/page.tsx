@@ -26,11 +26,11 @@ export default async function AuditPage(): Promise<ReactNode> {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
         height: "100vh",
-        marginTop: "10vh",
+        width: "100vw",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <AuditTable audits={allAudits} />
