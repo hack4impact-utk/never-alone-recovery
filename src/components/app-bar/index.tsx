@@ -5,11 +5,18 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { ReactNode } from "react";
 
 import ProfilePicture from "./profile-picture";
 
 export default function ResponsiveAppBar(): ReactNode {
+  const { data: session } = useSession();
+
+  if (!session) {
+    return null;
+  }
+
   return (
     <AppBar
       position="static"
