@@ -10,7 +10,7 @@ import { ReactNode } from "react";
 
 import ProfilePicture from "./profile-picture";
 
-export default function ResponsiveAppBar(): ReactNode {
+export default function Header(): ReactNode {
   const { data: session } = useSession();
 
   if (!session) {
@@ -19,7 +19,7 @@ export default function ResponsiveAppBar(): ReactNode {
 
   return (
     <AppBar
-      position="static"
+      position="sticky"
       style={{ background: "white", width: "100%" }}
       sx={{
         boxShadow: 3,

@@ -10,7 +10,7 @@ import NextAuthProvider from "@/providers/next-auth-provider";
 import NotistackProvider from "@/providers/notistack-provider";
 import theme from "@/styles/theme";
 
-import AppBar from "../components/app-bar";
+import Header from "../components/header";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -39,7 +39,7 @@ export default function RootLayout({ children }: RootLayoutProps): ReactNode {
               <DateLocalizationProvider>
                 <NextAuthProvider>
                   <CssBaseline />
-                  <AppBar />
+                  <Header />
                   {children}
                 </NextAuthProvider>
               </DateLocalizationProvider>
