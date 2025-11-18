@@ -111,6 +111,13 @@ export default function RentTable({
         rows={filteredRows}
         columns={columns}
         disableRowSelectionOnClick
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 8,
+            },
+          },
+        }}
       />
     </Box>
   );

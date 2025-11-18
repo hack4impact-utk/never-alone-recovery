@@ -111,38 +111,32 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
   const filteredRows = getRows(clients, searchQuery);
 
   return (
-    <Box sx={{ height: "75vh", width: "75vw" }}>
+    <Box
+      sx={{
+        height: "75vh",
+        width: "75vw",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Typography align="center" variant="h6">
         Clients
       </Typography>
-      <Box
-        sx={{
-          width: "100%",
-          marginInline: "auto",
-        }}
-      >
-        <Box display="flex" alignItems="center" sx={{ py: 2 }}>
-          <SearchBox
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
-        </Box>
-        <DataGrid
-          rows={filteredRows}
-          columns={columns}
-          disableRowSelectionOnClick
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 8,
-              },
-            },
-          }}
-          sx={{
-            height: "500px",
-          }}
-        />
+      <Box display="flex" alignItems="center" sx={{ py: 2 }}>
+        <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       </Box>
+      <DataGrid
+        rows={filteredRows}
+        columns={columns}
+        disableRowSelectionOnClick
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 8,
+            },
+          },
+        }}
+      />
     </Box>
   );
 }

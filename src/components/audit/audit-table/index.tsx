@@ -103,7 +103,14 @@ export default function AuditTable({ audits }: AuditTableProps): ReactNode {
   const filteredRows = getRows(audits, searchQuery);
 
   return (
-    <Box sx={{ height: "75vh", width: "75vw" }}>
+    <Box
+      sx={{
+        height: "75vh",
+        width: "75vw",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Typography align="center" variant="h6">
         Activity
       </Typography>
@@ -114,6 +121,13 @@ export default function AuditTable({ audits }: AuditTableProps): ReactNode {
         rows={filteredRows}
         columns={columns}
         disableRowSelectionOnClick
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 8,
+            },
+          },
+        }}
       />
     </Box>
   );
