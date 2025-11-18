@@ -41,6 +41,7 @@ export default function ProfilePicture(): ReactNode {
           open={userMenu}
           onClose={handleCloseUserMenu}
           aria-controls="logout"
+          disableScrollLock
           anchorOrigin={{
             vertical: "top",
             horizontal: "right",
