@@ -14,8 +14,6 @@ export default async function ExampleTablePage(): Promise<ReactNode> {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          height: "100vh",
-          marginTop: "10vh",
         }}
       >
         <Typography variant="h6">{error}</Typography>
@@ -29,8 +27,6 @@ export default async function ExampleTablePage(): Promise<ReactNode> {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height: "100vh",
-        marginTop: "10vh",
       }}
     >
       <ExampleTable users={allUsers} />
