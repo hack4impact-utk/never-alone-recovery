@@ -9,6 +9,7 @@ import DateLocalizationProvider from "@/providers/date-localization-provider";
 import NextAuthProvider from "@/providers/next-auth-provider";
 import NotistackProvider from "@/providers/notistack-provider";
 import theme from "@/styles/theme";
+
 import AppBar from "../components/app-bar";
 
 const roboto = Roboto({
