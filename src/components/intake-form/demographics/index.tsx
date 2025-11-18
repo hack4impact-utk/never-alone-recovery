@@ -163,7 +163,10 @@ export default function DemographicForm(): ReactNode {
 
   return (
     <form style={formStyle} onSubmit={handleSubmit(onSubmit, onError)}>
-      <Typography variant="h4">Demographics</Typography>
+      <Typography align="center" variant="h5" sx={{ mt: 2 }}>
+        Intake Form
+      </Typography>
+      <Typography variant="h5">Demographics</Typography>
       <Box sx={formRowStyle}>
         <Controller
           control={control}
@@ -368,7 +371,7 @@ export default function DemographicForm(): ReactNode {
         />
       </Box>
 
-      <Typography variant="h4">Medical History and Benefits</Typography>
+      <Typography variant="h5">Medical History and Benefits</Typography>
 
       <Box sx={formRowStyle}>
         <Controller

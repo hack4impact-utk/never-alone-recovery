@@ -101,7 +101,7 @@ export default function RentTable({
         flexDirection: "column",
       }}
     >
-      <Typography align="center" variant="h6">
+      <Typography align="center" variant="h5" sx={{ mt: 2 }}>
         Rent
       </Typography>
       <Box display="flex" alignItems="center" sx={{ py: 2 }}>

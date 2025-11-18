@@ -111,8 +111,8 @@ export default function AuditTable({ audits }: AuditTableProps): ReactNode {
         flexDirection: "column",
       }}
     >
-      <Typography align="center" variant="h6">
-        Activity
+      <Typography align="center" variant="h5" sx={{ mt: 2 }}>
+        Audit Log
       </Typography>
       <Box display="flex" alignItems="center" sx={{ py: 2 }}>
         <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />

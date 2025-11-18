@@ -119,8 +119,8 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
         flexDirection: "column",
       }}
     >
-      <Typography align="center" variant="h6">
-        Clients
+      <Typography align="center" variant="h5" sx={{ mt: 2 }}>
+        Client Dashboard
       </Typography>
       <Box display="flex" alignItems="center" sx={{ py: 2 }}>
         <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
