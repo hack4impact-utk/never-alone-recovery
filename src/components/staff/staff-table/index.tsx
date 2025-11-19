@@ -68,7 +68,7 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
         flexDirection: "column",
       }}
     >
-      <Typography align="center" variant="h6">
+      <Typography align="center" variant="h5" sx={{ mt: 2 }}>
         Staff Dashboard
       </Typography>
       <Box display="flex" alignItems="center" sx={{ py: 2 }}>

@@ -133,9 +133,10 @@ export default function ClientList({
         flexDirection: "column",
       }}
     >
-      <Box
-        sx={{ display: "flex", justifyContent: "space-between", mb: "1rem" }}
-      >
+      <Typography align="center" variant="h5" sx={{ mt: 2 }}>
+        Client Tasks
+      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between", my: 2 }}>
         <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <ToggleButtonGroup
           value={showCompletedTasks}

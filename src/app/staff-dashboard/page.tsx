@@ -14,8 +14,6 @@ export default async function StaffDashboardPage(): Promise<ReactNode> {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          height: "100vh",
-          marginTop: "10vh",
         }}
       >
         <Typography variant="h6">{error}</Typography>
@@ -26,8 +24,6 @@ export default async function StaffDashboardPage(): Promise<ReactNode> {
   return (
     <Box
       sx={{
-        height: "100vh",
-        width: "100vw",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
