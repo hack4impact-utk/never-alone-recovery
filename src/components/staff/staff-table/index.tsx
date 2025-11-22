@@ -1,10 +1,12 @@
 "use client";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { ReactNode, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
 import { User } from "@/types/schema";
+
+import EditStaffForm from "./edit-staff-form";
 
 type StaffTableProps = {
   staff: User[];
@@ -16,6 +18,21 @@ type Row = {
   email: string | null;
   role: "disabled" | "staff" | "admin";
 };
+
+// I am going to make a helper function here for the chip color
+function getRoleColor(role: string): "default" | "primary" | "info" {
+  switch (role) {
+    case "admin": {
+      return "primary";
+    } // blue
+    case "staff": {
+      return "info";
+    } // light blue
+    default: {
+      return "default";
+    } // grey
+  }
+}
 
 function getRows(staff: User[], searchQuery: string): Row[] {
   const rows = staff.map((member) => {
@@ -36,7 +53,12 @@ function getRows(staff: User[], searchQuery: string): Row[] {
 }
 export default function StaffTable({ staff }: StaffTableProps): ReactNode {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [selectedUser, setSelectedUser] = useState<Row | null>(null);
   const rows = getRows(staff, searchQuery);
+  const handleCloseForm = () => {
+    setSelectedUser(null);
+  };
 
   const columns: GridColDef<Row>[] = [
     {
@@ -57,11 +79,19 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
       field: "role",
       headerName: "Role",
       flex: 1,
-      type: "singleSelect",
       align: "center",
       headerAlign: "center",
-      valueOptions: ["admin", "staff", "disabled"],
-      editable: true,
+      renderCell: (params: GridRenderCellParams<Row>) => {
+        return (
+          <Chip
+            label={params.value}
+            color={getRoleColor(params.value as string)}
+            variant="filled"
+            size="small"
+            sx={{ textTransform: "capitalize " }}
+          />
+        );
+      },
     },
     {
       field: "action",
@@ -75,9 +105,9 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
           e.stopPropagation(); // prevents click from selecting the entire row
 
           // react hook form will open here
-          console.log("Editing Test for now:", params.row.firstName);
+          setSelectedUser(params.row);
         };
-        return(
+        return (
           <Button
             variant="contained"
             color="primary"
@@ -117,6 +147,11 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
             },
           },
         }}
+      />
+      <EditStaffForm
+        open={!!selectedUser}
+        user={selectedUser}
+        onClose={handleCloseForm}
       />
     </Box>
   );
