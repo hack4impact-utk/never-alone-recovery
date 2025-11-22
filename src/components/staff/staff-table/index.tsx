@@ -56,7 +56,7 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
 
   const [selectedUser, setSelectedUser] = useState<Row | null>(null);
   const rows = getRows(staff, searchQuery);
-  const handleCloseForm = () => {
+  const handleCloseForm = (): void => {
     setSelectedUser(null);
   };
 
@@ -81,7 +81,7 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
       flex: 1,
       align: "center",
       headerAlign: "center",
-      renderCell: (params: GridRenderCellParams<Row>) => {
+      renderCell: (params: GridRenderCellParams<Row>): ReactNode => {
         return (
           <Chip
             label={params.value}
@@ -100,8 +100,8 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
       sortable: false,
       align: "center",
       headerAlign: "center",
-      renderCell: (params: GridRenderCellParams<Row>) => {
-        const handleEditClick = (e: React.MouseEvent) => {
+      renderCell: (params: GridRenderCellParams<Row>): ReactNode => {
+        const handleEditClick = (e: React.MouseEvent): void => {
           e.stopPropagation(); // prevents click from selecting the entire row
 
           // react hook form will open here

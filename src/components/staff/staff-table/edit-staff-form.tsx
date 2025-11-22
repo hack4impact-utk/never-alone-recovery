@@ -15,7 +15,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 export type StaffRow = {
@@ -39,7 +39,7 @@ export default function EditStaffForm({
   open,
   onClose,
   user,
-}: EditStaffFormProps) {
+}: EditStaffFormProps): ReactNode {
   const { control, handleSubmit, reset } = useForm<EditStaffFormValues>({
     defaultValues: {
       role: user?.role || "staff",
@@ -52,9 +52,10 @@ export default function EditStaffForm({
     }
   }, [user, reset]);
 
-  const onSubmit = (data: EditStaffFormValues) => {
+  const onSubmit = (data: EditStaffFormValues): void => {
     if (!user) return;
 
+    // eslint-disable-next-line no-console
     console.log("Form Submitted:", {
       userId: user.id,
       originalName: user.name,
