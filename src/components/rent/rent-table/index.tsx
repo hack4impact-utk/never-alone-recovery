@@ -51,7 +51,6 @@ export default function RentTable({
 
   const filteredRows = getRows(clientBalances, searchQuery);
 
-  // ⭐ Define columns here so you can pass handleEditClick
   const columns: GridColDef<Row>[] = [
     { field: "firstName", headerName: "First Name", flex: 1 },
     { field: "lastName", headerName: "Last Name", flex: 1 },
@@ -122,13 +121,7 @@ export default function RentTable({
           open={editOpen}
           onClose={handleEditClose}
           onSuccess={() => setSnackbarOpen(true)}
-          client={{
-            id: selectedRow.id,
-            firstName: selectedRow.firstName,
-            lastName: selectedRow.lastName,
-            email: selectedRow.email,
-            total: selectedRow.total,
-          }}
+          client={selectedRow}
         />
       )}
       <Snackbar
