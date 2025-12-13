@@ -1,18 +1,31 @@
 "use client";
 
+import { Client } from "@/types/schema";
 import { Box, Button, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import React, { ReactNode, useState } from "react";
-
-import { Client } from "@/types/schema";
-
+import React, { ReactNode, useState, useState } from "react";
 import SearchBox from "../common/search-box";
+import ClientModal from "./client-modal";
 
 type ClientTableProps = {
   clients: Client[];
 };
 
-type Row = Pick<Client, "firstName" | "lastName" | "email" | "status">;
+// type Row = Pick<Client, "firstName" | "lastName" | "email" | "status">;
+type Row = Client;
+
+const [isModalVisible, setIsModalVisible] = useState(false);
+const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+
+const handleShowModal = (client: Client): void => {
+  setSelectedClient(client);
+  setIsModalVisible(true);
+};
+
+const handleCloseModal = (): void => {
+  setIsModalVisible(false);
+  setSelectedClient(null);
+};
 
 const columns: GridColDef<Row>[] = [
   { field: "firstName", headerName: "First Name", width: 50, flex: 1 },
@@ -48,9 +61,14 @@ const columns: GridColDef<Row>[] = [
     field: "action",
     headerName: "Actions",
     width: 180,
-    renderCell: () => (
+    renderCell: (params) => (
       <div>
-        <Button variant="outlined" size="small" style={{ marginRight: 8 }}>
+        <Button
+          onClick={() => handleShowModal(params.row)}
+          variant="outlined"
+          size="small"
+          style={{ marginRight: 8 }}
+        >
           Tasks
         </Button>
         <Button variant="outlined" size="small">
@@ -136,6 +154,11 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
             },
           },
         }}
+      />
+      <ClientModal
+        isOpen={isModalVisible}
+        onClose={handleCloseModal}
+        client={selectedClient}
       />
     </Box>
   );
