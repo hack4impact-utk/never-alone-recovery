@@ -49,7 +49,7 @@ const demographicFormSchema = z.object({
   gender: z.enum(["male", "female"]),
   tomis: z
     .string()
-    .regex(/^\d+$/)
+    .regex(/^\d+$/, { message: "TOMIS must contain only digits" })
     .length(8, { message: "TOMIS must be 8 digits" }),
   email: z.email({ message: "Please enter a valid email address" }),
   lastKnownAddress: z.string().min(1, { message: "Address is required" }),
@@ -80,6 +80,51 @@ const demographicFormSchema = z.object({
   typeOfTreatment: z.string(),
   howOften: z.string(),
   locationOfTreatment: z.string(),
+  maritalStatus: z.enum(["Single", "Married", "Divorced"]),
+  hasChildren: z.enum(["Yes", "No"]),
+  numberOfChildren: z.string(),
+  isPregnant: z.enum(["Yes", "No"]),
+  currentEmployment: z.string().min(1, { message: "This field is required" }),
+  employmentContactInfo: z
+    .string()
+    .min(1, { message: "This field is required" }),
+  employmentStartDate: z.string().min(1, { message: "Start date is required" }),
+  employmentEndDate: z.string().min(1, { message: "End date is required" }),
+  servedInMilitary: z.enum(["Yes", "No"]),
+  militaryBranch: z.enum([
+    "Army",
+    "Navy",
+    "Air Force",
+    "Marines",
+    "Coast Guard",
+  ]),
+  militaryStartDate: z.string(),
+  militaryEndDate: z.string(),
+  militaryDischarge: z.string(),
+  hasHighSchoolDiploma: z.enum(["Yes", "No"]),
+  hasGED: z.enum(["Yes", "No"]),
+  hasCollegeDegree: z.enum(["Yes", "No"]),
+  hasDriversLicense: z.enum(["Yes", "No"]),
+  driversLicenseNumber: z
+    .string()
+    .regex(/^[A-Z0-9]+$/i, {
+      message: "Driver's license must contain only letters and numbers",
+    })
+    .min(1),
+  dlIssueDate: z.string(),
+  dlExpDate: z.string(),
+  convictedOfDUI: z.enum(["Yes", "No"]),
+  duiYear: z.string(),
+  convictedOfSexOffense: z.enum(["Yes", "No"]),
+  registeredSexOffender: z.enum(["Yes", "No"]),
+  sexOffenseNature: z.string(),
+  convictedOfFelony: z.enum(["Yes", "No"]),
+  felonyCharges: z.string(),
+  onProbationOrParole: z.enum(["Yes", "No"]),
+  officerContactInfo: z.string(),
+  inRecoveryCourt: z.enum(["Yes", "No"]),
+  caseManagerContactInfo: z.string(),
+  ongoingLegalIssues: z.string().min(1, { message: "This field is required" }),
 });
 
 type DemographicFormValues = z.infer<typeof demographicFormSchema>;
@@ -126,6 +171,38 @@ export default function DemographicForm(): ReactNode {
       typeOfTreatment: "",
       howOften: "",
       locationOfTreatment: "",
+      maritalStatus: "Single",
+      hasChildren: "No",
+      numberOfChildren: "",
+      isPregnant: "No",
+      currentEmployment: "",
+      employmentContactInfo: "",
+      employmentStartDate: "",
+      employmentEndDate: "",
+      servedInMilitary: "No",
+      militaryBranch: "Army",
+      militaryStartDate: "",
+      militaryEndDate: "",
+      militaryDischarge: "",
+      hasHighSchoolDiploma: "No",
+      hasGED: "No",
+      hasCollegeDegree: "No",
+      hasDriversLicense: "No",
+      driversLicenseNumber: "12345",
+      dlIssueDate: "",
+      dlExpDate: "",
+      convictedOfDUI: "No",
+      duiYear: "",
+      convictedOfSexOffense: "No",
+      registeredSexOffender: "No",
+      sexOffenseNature: "",
+      convictedOfFelony: "No",
+      felonyCharges: "",
+      onProbationOrParole: "No",
+      officerContactInfo: "",
+      inRecoveryCourt: "No",
+      caseManagerContactInfo: "",
+      ongoingLegalIssues: "",
     },
   });
   const { fields, append, remove } = useFieldArray({
@@ -138,6 +215,15 @@ export default function DemographicForm(): ReactNode {
   const watchReceivesDisability = watch("receivesDisability");
   const watchHasMentalHealthRecs = watch("hasMentalHealthRecs");
   const watchParticipatingInTreatment = watch("participatingInTreatment");
+  const watchHasChildren = watch("hasChildren");
+  const watchServedInMilitary = watch("servedInMilitary");
+  const watchHasDriversLicense = watch("hasDriversLicense");
+  const watchConvictedOfDUI = watch("convictedOfDUI");
+  const watchConvictedOfSexOffense = watch("convictedOfSexOffense");
+  const watchRegisteredSexOffender = watch("registeredSexOffender");
+  const watchConvictedOfFelony = watch("convictedOfFelony");
+  const watchOnProbationOrParole = watch("onProbationOrParole");
+  const watchInRecoveryCourt = watch("inRecoveryCourt");
 
   const onSubmit = (data: DemographicFormValues): void => {
     setIsLoading(true);
@@ -702,6 +788,699 @@ export default function DemographicForm(): ReactNode {
           </Box>
         </>
       )}
+
+      <Typography variant="h5" sx={{ mt: 2 }}>
+        Other Info
+      </Typography>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="maritalStatus"
+          render={({ field }) => (
+            <FormControl error={!!errors.maritalStatus}>
+              <FormLabel>Current Marital Status?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel
+                  value="Single"
+                  control={<Radio />}
+                  label="Single"
+                />
+                <FormControlLabel
+                  value="Married"
+                  control={<Radio />}
+                  label="Married"
+                />
+                <FormControlLabel
+                  value="Divorced"
+                  control={<Radio />}
+                  label="Divorced"
+                />
+              </RadioGroup>
+              {errors.maritalStatus && (
+                <FormHelperText>{errors.maritalStatus.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="hasChildren"
+          render={({ field }) => (
+            <FormControl error={!!errors.hasChildren}>
+              <FormLabel>Do you have any Children?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.hasChildren && (
+                <FormHelperText>{errors.hasChildren.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchHasChildren === "Yes" && (
+        <Box sx={formRowStyle}>
+          <Controller
+            control={control}
+            name="numberOfChildren"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="If so, how many?"
+                type="number"
+                error={!!errors.numberOfChildren}
+                helperText={errors.numberOfChildren?.message}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="isPregnant"
+          render={({ field }) => (
+            <FormControl error={!!errors.isPregnant}>
+              <FormLabel>Pregnant or think you might be?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.isPregnant && (
+                <FormHelperText>{errors.isPregnant.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="currentEmployment"
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Current Employment"
+              error={!!errors.currentEmployment}
+              helperText={errors.currentEmployment?.message}
+              fullWidth
+            />
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="employmentContactInfo"
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Contact Information"
+              error={!!errors.employmentContactInfo}
+              helperText={errors.employmentContactInfo?.message}
+              fullWidth
+            />
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="employmentStartDate"
+          render={({ field }) => (
+            <DatePicker
+              label="Start date for employment"
+              value={field.value ? dayjs(field.value) : null}
+              onChange={(newValue) => {
+                field.onChange(newValue ? newValue.toISOString() : "");
+              }}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: !!errors.employmentStartDate,
+                  helperText: errors.employmentStartDate?.message,
+                  onBlur: field.onBlur,
+                },
+              }}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="employmentEndDate"
+          render={({ field }) => (
+            <DatePicker
+              label="End date for employment"
+              value={field.value ? dayjs(field.value) : null}
+              onChange={(newValue) => {
+                field.onChange(newValue ? newValue.toISOString() : "");
+              }}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: !!errors.employmentEndDate,
+                  helperText: errors.employmentEndDate?.message,
+                  onBlur: field.onBlur,
+                },
+              }}
+            />
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="servedInMilitary"
+          render={({ field }) => (
+            <FormControl error={!!errors.servedInMilitary}>
+              <FormLabel>Have you ever served in the Military?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.servedInMilitary && (
+                <FormHelperText>
+                  {errors.servedInMilitary.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchServedInMilitary === "Yes" && (
+        <>
+          <Box sx={formRowStyle}>
+            <Controller
+              control={control}
+              name="militaryBranch"
+              render={({ field }) => (
+                <FormControl error={!!errors.militaryBranch} fullWidth>
+                  <FormLabel>Branch</FormLabel>
+                  <RadioGroup {...field} row>
+                    <FormControlLabel
+                      value="Army"
+                      control={<Radio />}
+                      label="Army"
+                    />
+                    <FormControlLabel
+                      value="Navy"
+                      control={<Radio />}
+                      label="Navy"
+                    />
+                    <FormControlLabel
+                      value="Air Force"
+                      control={<Radio />}
+                      label="Air Force"
+                    />
+                    <FormControlLabel
+                      value="Marines"
+                      control={<Radio />}
+                      label="Marines"
+                    />
+                    <FormControlLabel
+                      value="Coast Guard"
+                      control={<Radio />}
+                      label="Coast Guard"
+                    />
+                  </RadioGroup>
+                  {errors.militaryBranch && (
+                    <FormHelperText>
+                      {errors.militaryBranch.message}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              )}
+            />
+          </Box>
+
+          <Box sx={formRowStyle}>
+            <Controller
+              control={control}
+              name="militaryStartDate"
+              render={({ field }) => (
+                <DatePicker
+                  label="Start date for service"
+                  value={field.value ? dayjs(field.value) : null}
+                  onChange={(newValue) => {
+                    field.onChange(newValue ? newValue.toISOString() : "");
+                  }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      error: !!errors.militaryStartDate,
+                      helperText: errors.militaryStartDate?.message,
+                      onBlur: field.onBlur,
+                    },
+                  }}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="militaryEndDate"
+              render={({ field }) => (
+                <DatePicker
+                  label="End date for service"
+                  value={field.value ? dayjs(field.value) : null}
+                  onChange={(newValue) => {
+                    field.onChange(newValue ? newValue.toISOString() : "");
+                  }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      error: !!errors.militaryEndDate,
+                      helperText: errors.militaryEndDate?.message,
+                      onBlur: field.onBlur,
+                    },
+                  }}
+                />
+              )}
+            />
+          </Box>
+
+          <Box sx={formRowStyle}>
+            <Controller
+              control={control}
+              name="militaryDischarge"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Discharge"
+                  error={!!errors.militaryDischarge}
+                  helperText={errors.militaryDischarge?.message}
+                  fullWidth
+                />
+              )}
+            />
+          </Box>
+        </>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="hasHighSchoolDiploma"
+          render={({ field }) => (
+            <FormControl error={!!errors.hasHighSchoolDiploma}>
+              <FormLabel>Highschool Diploma</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.hasHighSchoolDiploma && (
+                <FormHelperText>
+                  {errors.hasHighSchoolDiploma.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="hasGED"
+          render={({ field }) => (
+            <FormControl error={!!errors.hasGED}>
+              <FormLabel>GED</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.hasGED && (
+                <FormHelperText>{errors.hasGED.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="hasCollegeDegree"
+          render={({ field }) => (
+            <FormControl error={!!errors.hasCollegeDegree}>
+              <FormLabel>College Degree</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.hasCollegeDegree && (
+                <FormHelperText>
+                  {errors.hasCollegeDegree.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="hasDriversLicense"
+          render={({ field }) => (
+            <FormControl error={!!errors.hasDriversLicense}>
+              <FormLabel>Driver's License</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.hasDriversLicense && (
+                <FormHelperText>
+                  {errors.hasDriversLicense.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchHasDriversLicense === "Yes" && (
+        <>
+          <Box sx={formRowStyle}>
+            <Controller
+              control={control}
+              name="driversLicenseNumber"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="DL#"
+                  error={!!errors.driversLicenseNumber}
+                  helperText={errors.driversLicenseNumber?.message}
+                  fullWidth
+                />
+              )}
+            />
+          </Box>
+
+          <Box sx={formRowStyle}>
+            <Controller
+              control={control}
+              name="dlIssueDate"
+              render={({ field }) => (
+                <DatePicker
+                  label="Issue Date"
+                  value={field.value ? dayjs(field.value) : null}
+                  onChange={(newValue) => {
+                    field.onChange(newValue ? newValue.toISOString() : "");
+                  }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      error: !!errors.dlIssueDate,
+                      helperText: errors.dlIssueDate?.message,
+                      onBlur: field.onBlur,
+                    },
+                  }}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="dlExpDate"
+              render={({ field }) => (
+                <DatePicker
+                  label="Exp. Date"
+                  value={field.value ? dayjs(field.value) : null}
+                  onChange={(newValue) => {
+                    field.onChange(newValue ? newValue.toISOString() : "");
+                  }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      error: !!errors.dlExpDate,
+                      helperText: errors.dlExpDate?.message,
+                      onBlur: field.onBlur,
+                    },
+                  }}
+                />
+              )}
+            />
+          </Box>
+        </>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="convictedOfDUI"
+          render={({ field }) => (
+            <FormControl error={!!errors.convictedOfDUI}>
+              <FormLabel>
+                Have you ever been convicted of a DUI, DWI, or any other related
+                crime?
+              </FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.convictedOfDUI && (
+                <FormHelperText>{errors.convictedOfDUI.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchConvictedOfDUI === "Yes" && (
+        <Box sx={formRowStyle}>
+          <Controller
+            control={control}
+            name="duiYear"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="If yes, what year?"
+                error={!!errors.duiYear}
+                helperText={errors.duiYear?.message}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="convictedOfSexOffense"
+          render={({ field }) => (
+            <FormControl error={!!errors.convictedOfSexOffense}>
+              <FormLabel>
+                Have you ever been convicted of a sex offense?
+              </FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.convictedOfSexOffense && (
+                <FormHelperText>
+                  {errors.convictedOfSexOffense.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="registeredSexOffender"
+          render={({ field }) => (
+            <FormControl error={!!errors.registeredSexOffender}>
+              <FormLabel>Are you a registered sex offender?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.registeredSexOffender && (
+                <FormHelperText>
+                  {errors.registeredSexOffender.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {(watchConvictedOfSexOffense === "Yes" ||
+        watchRegisteredSexOffender === "Yes") && (
+        <Box sx={formRowStyle}>
+          <Controller
+            control={control}
+            name="sexOffenseNature"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="If so, what was the nature of your crime?"
+                error={!!errors.sexOffenseNature}
+                helperText={errors.sexOffenseNature?.message}
+                multiline
+                rows={3}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="convictedOfFelony"
+          render={({ field }) => (
+            <FormControl error={!!errors.convictedOfFelony}>
+              <FormLabel>Have you ever been convicted of a felony?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.convictedOfFelony && (
+                <FormHelperText>
+                  {errors.convictedOfFelony.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchConvictedOfFelony === "Yes" && (
+        <Box sx={formRowStyle}>
+          <Controller
+            control={control}
+            name="felonyCharges"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Please list your charge(s)"
+                error={!!errors.felonyCharges}
+                helperText={errors.felonyCharges?.message}
+                multiline
+                rows={3}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="onProbationOrParole"
+          render={({ field }) => (
+            <FormControl error={!!errors.onProbationOrParole}>
+              <FormLabel>On probation or parole?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.onProbationOrParole && (
+                <FormHelperText>
+                  {errors.onProbationOrParole.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchOnProbationOrParole === "Yes" && (
+        <Box sx={formRowStyle}>
+          <Controller
+            control={control}
+            name="officerContactInfo"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Officer name and contact information"
+                error={!!errors.officerContactInfo}
+                helperText={errors.officerContactInfo?.message}
+                multiline
+                rows={3}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="inRecoveryCourt"
+          render={({ field }) => (
+            <FormControl error={!!errors.inRecoveryCourt}>
+              <FormLabel>In Recovery Court/Drug Court, or DRC?</FormLabel>
+              <RadioGroup {...field} row>
+                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+              {errors.inRecoveryCourt && (
+                <FormHelperText>
+                  {errors.inRecoveryCourt.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
+
+      {watchInRecoveryCourt === "Yes" && (
+        <Box sx={formRowStyle}>
+          <Controller
+            control={control}
+            name="caseManagerContactInfo"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Case manager name and contact information"
+                error={!!errors.caseManagerContactInfo}
+                helperText={errors.caseManagerContactInfo?.message}
+                multiline
+                rows={3}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      )}
+
+      <Box sx={formRowStyle}>
+        <Controller
+          control={control}
+          name="ongoingLegalIssues"
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Describe any current on-going legal issues (e.g., DCS, future court dates, warrants, etc.)"
+              error={!!errors.ongoingLegalIssues}
+              helperText={errors.ongoingLegalIssues?.message}
+              multiline
+              rows={4}
+              fullWidth
+            />
+          )}
+        />
+      </Box>
 
       <Button
         type="submit"
