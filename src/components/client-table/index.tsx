@@ -1,9 +1,11 @@
 "use client";
 
-import { Client } from "@/types/schema";
 import { Box, Button, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { ReactNode, useState } from "react";
+
+import { Client } from "@/types/schema";
+
 import SearchBox from "../common/search-box";
 import ClientModal from "./client-modal";
 
