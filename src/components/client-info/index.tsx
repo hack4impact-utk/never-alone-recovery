@@ -1,9 +1,12 @@
 "use client";
 
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 import { Client } from "@/types/schema";
+
+import Discharge from "./discharge-modal";
+import Graduate from "./graduate-modal";
 
 type Props = {
   open: boolean;
@@ -16,37 +19,59 @@ export default function ClientInfo({
   onClose,
   client,
 }: Props): ReactNode {
+  const [openGraduate, setOpenGraduate] = useState(false);
+  const [openDischarge, setOpenDischarge] = useState(false);
   return (
-    <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          bgcolor: "white",
-          p: 4,
-          borderRadius: 2,
-        }}
-      >
+    <>
+      <Modal open={open} onClose={onClose}>
         <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
+          sx={{
+            width: "min(90vw, 300px)",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "white",
+            p: 4,
+            borderRadius: 2,
+          }}
         >
-          <Typography variant="h6" align="center">
-            Client Information
-          </Typography>
+          <Box display="flex" flexDirection="column">
+            <Typography variant="h6" align="center">
+              Client Information
+            </Typography>
 
-          <Button sx={{ mt: 3 }} variant="outlined" onClick={onClose}>
-            Discharge
-          </Button>
-          <Button sx={{ mt: 1 }} variant="outlined" onClick={onClose}>
-            Graduate
-          </Button>
+            <Button
+              sx={{ mt: 3 }}
+              variant="outlined"
+              onClick={() => {
+                setOpenDischarge(true);
+              }}
+            >
+              Discharge
+            </Button>
+            <Button
+              sx={{ mt: 1 }}
+              variant="outlined"
+              onClick={() => {
+                setOpenGraduate(true);
+              }}
+            >
+              Graduate
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Modal>
+      </Modal>
+      <Graduate
+        open={openGraduate}
+        onClose={() => setOpenGraduate(false)}
+        client={client}
+      />
+      <Discharge
+        open={openDischarge}
+        onClose={() => setOpenDischarge(false)}
+        client={client}
+      />
+    </>
   );
 }
