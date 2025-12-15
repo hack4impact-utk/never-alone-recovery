@@ -1,5 +1,10 @@
 "use client";
 
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { IconButton } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 
 import { Client } from "@/types/schema";
@@ -26,7 +31,7 @@ export default function ClientModal({
   const [tasks, setTasks] = useState<TaskBlueprint[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  useEffect((): (() => void) | void => {
     if (!isOpen || !client) return;
 
     let cancelled = false;
@@ -37,7 +42,7 @@ export default function ClientModal({
         const [data, error] = await getClientTasks(client.id);
 
         if (error) {
-          console.error("Failed to load tasks:", error);
+          console.error(error);
           return;
         }
 
@@ -45,9 +50,7 @@ export default function ClientModal({
           setTasks(data);
         }
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     };
 
@@ -59,6 +62,26 @@ export default function ClientModal({
   }, [isOpen, client?.id]);
 
   if (!isOpen || !client) return null;
+
+  const columns: GridColDef<TaskBlueprint>[] = [
+    { field: "type", headerName: "Task", flex: 1 },
+    { field: "description", headerName: "Description", flex: 2 },
+    {
+      field: "action",
+      headerName: "Actions",
+      width: 120,
+      renderCell: () => (
+        <div>
+          <IconButton size="small" color="info">
+            <EditIcon />
+          </IconButton>
+          <IconButton size="small" color="error">
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div
@@ -86,39 +109,54 @@ export default function ClientModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2>
-          {client.firstName} {client.lastName}'s Weekly Tasks
-        </h2>
-
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center", // vertically center
+            justifyContent: "space-between", // pushes elements to edges
+            marginBottom: "16px",
+          }}
+        >
+          <h2>
+            {client.firstName} {client.lastName}'s Weekly Tasks
+          </h2>
+          <IconButton
+            onClick={onClose}
+            style={{
+              marginTop: "16px",
+              borderRadius: "4px",
+              border: "none",
+              color: "black",
+              cursor: "pointer",
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </div>
         {loading ? (
           <p>Loading tasks…</p>
         ) : tasks.length === 0 ? (
           <p>No tasks found.</p>
         ) : (
-          <ul>
-            {tasks.map((task) => (
-              <li key={task.id}>
-                <strong>{task.type}</strong>
-                {task.description && ` — ${task.description}`}
-              </li>
-            ))}
-          </ul>
+          <div style={{ height: 400, width: "100%", marginTop: "16px" }}>
+            <DataGrid
+              rows={tasks.map((task) => ({
+                id: task.id,
+                type: task.type,
+                description: task.description ?? "",
+              }))}
+              columns={columns}
+              disableRowSelectionOnClick
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+            />
+          </div>
         )}
-
-        <button
-          onClick={onClose}
-          style={{
-            marginTop: "16px",
-            padding: "8px 16px",
-            borderRadius: "4px",
-            border: "none",
-            backgroundColor: "#1976d2",
-            color: "#fff",
-            cursor: "pointer",
-          }}
-        >
-          Close
-        </button>
       </div>
     </div>
   );
