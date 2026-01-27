@@ -5,7 +5,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   FormControlLabel,
   FormLabel,
   Radio,
@@ -15,8 +14,9 @@ import {
 } from "@mui/material";
 import { ReactNode, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { User } from "@/types/schema";
+
 import { StaffRole } from "@/types/enums";
+import { User } from "@/types/schema";
 
 type EditStaffFormValues = {
   role: StaffRole;

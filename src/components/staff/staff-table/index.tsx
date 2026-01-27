@@ -4,10 +4,10 @@ import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { ReactNode, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
+import { StaffRole } from "@/types/enums";
 import { User } from "@/types/schema";
 
 import EditStaffForm from "./edit-staff-form";
-import { StaffRole } from "@/types/enums";
 
 type StaffTableProps = {
   staff: User[];
