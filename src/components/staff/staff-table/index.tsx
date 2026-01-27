@@ -1,10 +1,13 @@
 "use client";
-import { Box, Typography } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Box, Chip, Typography } from "@mui/material";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { ReactNode, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
+import { StaffRole } from "@/types/enums";
 import { User } from "@/types/schema";
+
+import EditStaffForm from "./edit-staff-form";
 
 type StaffTableProps = {
   staff: User[];
@@ -12,52 +15,87 @@ type StaffTableProps = {
 
 type Row = {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string | null;
-  role: "disabled" | "staff" | "admin";
+  role: StaffRole;
+  user: User;
 };
 
-const columns: GridColDef<Row>[] = [
-  { field: "firstName", headerName: "First Name", flex: 1 },
-  { field: "lastName", headerName: "Last Name", flex: 1 },
-  { field: "email", headerName: "Email", flex: 1 },
-  {
-    field: "role",
-    headerName: "Role",
-    flex: 1,
-    type: "singleSelect",
-    valueOptions: ["admin", "staff", "disabled"],
-    editable: true,
-  },
-];
+function getRoleColor(role: StaffRole): "default" | "primary" | "info" {
+  switch (role) {
+    case "admin": {
+      return "primary";
+    }
+    case "staff": {
+      return "info";
+    }
+    default: {
+      return "default";
+    }
+  }
+}
 
 function getRows(staff: User[], searchQuery: string): Row[] {
   const rows = staff.map((member) => {
-    const nameParts = member.name.split(" ");
-    const firstName = nameParts[0] || "";
-    const lastName = nameParts.slice(1).join(" ") || "";
-
     return {
       id: member.id,
-      firstName,
-      lastName,
+      name: member.name,
       email: member.email,
       role: member.role,
+      user: member,
     };
   });
 
   return rows.filter((row) => {
     return (
-      row.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      row.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (row.email && row.email.toLowerCase().includes(searchQuery.toLowerCase()))
+      row.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.email?.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
 }
 export default function StaffTable({ staff }: StaffTableProps): ReactNode {
   const [searchQuery, setSearchQuery] = useState("");
+
   const rows = getRows(staff, searchQuery);
+
+  const columns: GridColDef<Row>[] = [
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 2,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      flex: 2,
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      flex: 1,
+      renderCell: (params: GridRenderCellParams<Row>): ReactNode => {
+        return (
+          <Chip
+            label={params.value}
+            color={getRoleColor(params.value)}
+            variant="filled"
+            size="small"
+            sx={{ textTransform: "capitalize" }}
+          />
+        );
+      },
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      sortable: false,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params: GridRenderCellParams<Row>): ReactNode => {
+        return <EditStaffForm user={params.row.user} />;
+      },
+    },
+  ];
 
   return (
     <Box
