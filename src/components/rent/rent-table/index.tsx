@@ -6,10 +6,10 @@ import { ReactNode, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
 import { Balance } from "@/types/balance";
-
-import EditBalanceForm from "./edit-balance-form";
 import { currencyColor } from "@/utils/money/currency-color";
 import { formatCurrency } from "@/utils/money/format-currency";
+
+import EditBalanceForm from "./edit-balance-form";
 
 type RentTableProps = {
   clientBalances: Balance[];

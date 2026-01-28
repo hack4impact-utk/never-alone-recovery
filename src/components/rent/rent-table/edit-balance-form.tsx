@@ -1,3 +1,4 @@
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
   Button,
@@ -21,10 +22,10 @@ import {
 } from "@mui/material";
 import { ReactNode, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import EditIcon from "@mui/icons-material/Edit";
+
 import { Balance } from "@/types/balance";
-import { formatCurrency } from "@/utils/money/format-currency";
 import { currencyColor } from "@/utils/money/currency-color";
+import { formatCurrency } from "@/utils/money/format-currency";
 
 type EditBalanceFormValues = {
   amount: number;
