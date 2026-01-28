@@ -13,23 +13,9 @@ type ClientTableProps = {
   clients: Client[];
 };
 
+type Row = Client;
+
 export default function ClientTable({ clients }: ClientTableProps): ReactNode {
-  // type Row = Pick<Client, "firstName" | "lastName" | "email" | "status">;
-  type Row = Client;
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-
-  const handleShowModal = (client: Client): void => {
-    setSelectedClient(client);
-    setIsModalVisible(true);
-  };
-
-  const handleCloseModal = (): void => {
-    setIsModalVisible(false);
-    setSelectedClient(null);
-  };
-
   const columns: GridColDef<Row>[] = [
     { field: "firstName", headerName: "First Name", width: 50, flex: 1 },
     { field: "lastName", headerName: "Last Name", width: 50, flex: 1 },
@@ -66,14 +52,8 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
       width: 180,
       renderCell: (params) => (
         <div>
-          <Button
-            onClick={() => handleShowModal(params.row)}
-            variant="outlined"
-            size="small"
-            style={{ marginRight: 8 }}
-          >
-            Tasks
-          </Button>
+          <ClientModal client={params.row} />
+
           <Button variant="outlined" size="small">
             Info
           </Button>
@@ -156,11 +136,6 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
             },
           },
         }}
-      />
-      <ClientModal
-        isOpen={isModalVisible}
-        onClose={handleCloseModal}
-        client={selectedClient}
       />
     </Box>
   );
