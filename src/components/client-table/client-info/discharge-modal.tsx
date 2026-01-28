@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -12,7 +11,6 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
-  Modal,
   Radio,
   RadioGroup,
   TextField,
@@ -53,11 +51,11 @@ export default function Discharge({ client }: DischargeProps): ReactNode {
     },
   });
 
-  const handleOpen = () => {
+  const handleOpen = (): void => {
     setIsOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setIsOpen(false);
   };
 
