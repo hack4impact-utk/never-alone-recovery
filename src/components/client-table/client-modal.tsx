@@ -67,7 +67,7 @@ export default function ClientModal({ client }: ClientModalProps): ReactNode {
     },
   ];
 
-  const handleOpen = async () => {
+  const handleOpen = async (): Promise<void> => {
     setIsOpen(true);
 
     setLoading(true);
