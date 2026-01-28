@@ -19,11 +19,11 @@ type GraduateProps = {
 export default function Graduate({ client }: GraduateProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOpen = () => {
+  const handleOpen = () : void => {
     setIsOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = () : void => {
     setIsOpen(false);
   };
 

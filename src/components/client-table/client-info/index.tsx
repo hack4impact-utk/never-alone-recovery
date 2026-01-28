@@ -1,5 +1,6 @@
 "use client";
 
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
   Button,
@@ -7,10 +8,8 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  Modal,
 } from "@mui/material";
 import { ReactNode, useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
 
 import { Client } from "@/types/schema";
 
@@ -24,11 +23,11 @@ type ClientInfoProps = {
 export default function ClientInfo({ client }: ClientInfoProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOpen = () => {
+  const handleOpen = (): void => {
     setIsOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setIsOpen(false);
   };
 
