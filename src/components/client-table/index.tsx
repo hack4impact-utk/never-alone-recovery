@@ -63,11 +63,8 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
   ];
 
   function getRows(clients: Client[], searchQuery: string): Row[] {
-    // filter client by Resident, Graduates, Discharged
-    // then filter by alphabetical last name
     const lowerQuery = searchQuery.toLowerCase();
 
-    //filters based on searchquery
     const filteredClients = clients.filter((client: Client) => {
       return (
         client.firstName.toLowerCase().includes(lowerQuery) ||
@@ -76,34 +73,21 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
       );
     });
 
-    // sorting by last name alphabetically
+    const roleOrder = {
+      resident: 1,
+      graduated: 2,
+      discharged: 3,
+    };
+
     const sortedClients = filteredClients.sort((a, b) => {
-      const statusA = a.status.toLowerCase();
-      const statusB = b.status.toLowerCase();
-
-      const nameA = a.lastName.toLowerCase();
-      const nameB = b.lastName.toLowerCase();
-      if (statusA == statusB) {
-        if (nameA < nameB) {
-          return -1;
-        } else if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      } else {
-        if (statusA == "residents") return -1; // a should come first
-        if (statusB == "residents") return 1; //b comes first
-
-        if (statusA == "graduates" && statusB == "discharged") return 1; // a comes first
-        if (statusB == "graduates" && statusA == "discharged") return -1; // b comes first
+      if (roleOrder[a.status] !== roleOrder[b.status]) {
+        return roleOrder[a.status] - roleOrder[b.status];
       }
 
-      return statusA < statusB ? -1 : 1; //sorting other statuses alphabetically if it doesn't apply to any of above
+      return a.lastName.localeCompare(b.lastName);
     });
 
-    return sortedClients.map((client: Client) => ({
-      ...client,
-    }));
+    return sortedClients;
   }
 
   const [searchQuery, setSearchQuery] = useState("");
