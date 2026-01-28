@@ -1,12 +1,13 @@
 "use client";
 
-import { Box, Button, Chip, Typography } from "@mui/material";
+import { Box, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { ReactNode, useState } from "react";
 
 import { Client } from "@/types/schema";
 
 import SearchBox from "../common/search-box";
+import ClientInfo from "./client-info";
 import ClientModal from "./client-modal";
 
 type ClientTableProps = {
@@ -16,52 +17,6 @@ type ClientTableProps = {
 type Row = Client;
 
 export default function ClientTable({ clients }: ClientTableProps): ReactNode {
-  const columns: GridColDef<Row>[] = [
-    { field: "firstName", headerName: "First Name", width: 50, flex: 1 },
-    { field: "lastName", headerName: "Last Name", width: 50, flex: 1 },
-    { field: "email", headerName: "Email", width: 200, flex: 1 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 150,
-      flex: 1,
-      renderCell: (params): React.ReactNode => {
-        // custom chip based on status
-        const status = params.value;
-        let color = "error";
-        if (status == "resident") {
-          color = "warning";
-        } else if (status == "graduate") {
-          color = "success";
-        }
-
-        return (
-          <Chip
-            label={status}
-            sx={{
-              backgroundColor: color,
-            }}
-            size="small"
-          />
-        );
-      },
-    },
-    {
-      field: "action",
-      headerName: "Actions",
-      width: 180,
-      renderCell: (params) => (
-        <div>
-          <ClientModal client={params.row} />
-
-          <Button variant="outlined" size="small">
-            Info
-          </Button>
-        </div>
-      ),
-    },
-  ];
-
   function getRows(clients: Client[], searchQuery: string): Row[] {
     const lowerQuery = searchQuery.toLowerCase();
 
@@ -94,33 +49,81 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
 
   const filteredRows = getRows(clients, searchQuery);
 
+  const columns: GridColDef<Row>[] = [
+    { field: "firstName", headerName: "First Name", width: 50, flex: 1 },
+    { field: "lastName", headerName: "Last Name", width: 50, flex: 1 },
+    { field: "email", headerName: "Email", width: 200, flex: 1 },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 150,
+      flex: 1,
+      renderCell: (params): React.ReactNode => {
+        const status = params.value;
+        let color = "error";
+        if (status == "resident") {
+          color = "warning";
+        } else if (status == "graduate") {
+          color = "success";
+        }
+
+        return (
+          <Chip
+            label={status}
+            sx={{
+              backgroundColor: color,
+            }}
+            size="small"
+          />
+        );
+      },
+    },
+    {
+      field: "action",
+      headerName: "Actions",
+      width: 180,
+      renderCell: (params) => (
+        <div>
+          <ClientModal client={params.row} />
+
+          <ClientInfo client={params.row} />
+        </div>
+      ),
+    },
+  ];
+
   return (
-    <Box
-      sx={{
-        height: "75vh",
-        width: "75vw",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Typography align="center" variant="h5" sx={{ mt: 2 }}>
-        Client Dashboard
-      </Typography>
-      <Box display="flex" alignItems="center" sx={{ py: 2 }}>
-        <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      </Box>
-      <DataGrid
-        rows={filteredRows}
-        columns={columns}
-        disableRowSelectionOnClick
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 8,
-            },
-          },
+    <>
+      <Box
+        sx={{
+          height: "75vh",
+          width: "75vw",
+          display: "flex",
+          flexDirection: "column",
         }}
-      />
-    </Box>
+      >
+        <Typography align="center" variant="h5" sx={{ mt: 2 }}>
+          Client Dashboard
+        </Typography>
+        <Box display="flex" alignItems="center" sx={{ py: 2 }}>
+          <SearchBox
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        </Box>
+        <DataGrid
+          rows={filteredRows}
+          columns={columns}
+          disableRowSelectionOnClick
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 8,
+              },
+            },
+          }}
+        />
+      </Box>
+    </>
   );
 }
