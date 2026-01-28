@@ -1,7 +1,6 @@
 "use server";
 
-import { sql } from "drizzle-orm";
-
+import { eq, asc } from "drizzle-orm";
 import db from "@/db";
 import { tasks } from "@/db/schema";
 import { Result } from "@/types/result";
@@ -13,9 +12,10 @@ export async function getClientTasks(
 ): Promise<Result<Task[]>> {
   try {
     const clientTasks = await db.query.tasks.findMany({
-      where: sql`${tasks.clientId} = ${clientId}`, // SQL expression filter
-      orderBy: [tasks.description],
+      where: eq(tasks.clientId, clientId),
+      orderBy: [asc(tasks.description)],
     });
+
     return [clientTasks, null];
   } catch (error) {
     return [null, handleError(error)];
