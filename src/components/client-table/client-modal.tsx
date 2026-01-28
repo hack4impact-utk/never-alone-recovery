@@ -13,25 +13,17 @@ import {
   IconButton,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 
-import { Client } from "@/types/schema";
+import { Client, TaskBlueprint } from "@/types/schema";
 
-import { getClientTasks } from "./client-modal.actions.server";
+import { getClientTasksBlueprints } from "@/api/tasks-blueprints/queries";
 
 export type ClientModalProps = {
   client: Client;
 };
 
-type TaskBlueprint = {
-  id: string;
-  type: string;
-  description: string | null;
-};
-
-export default function ClientModal({
-  client,
-}: ClientModalProps): React.JSX.Element | null {
+export default function ClientModal({ client }: ClientModalProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const [tasks, setTasks] = useState<TaskBlueprint[]>([]);
   const [loading, setLoading] = useState(false);
@@ -81,7 +73,7 @@ export default function ClientModal({
 
     setLoading(true);
 
-    const [data, error] = await getClientTasks(client.id);
+    const [data, error] = await getClientTasksBlueprints(client.id);
 
     if (error) {
       console.error(error);
@@ -121,11 +113,7 @@ export default function ClientModal({
             ) : (
               <div style={{ height: 400, width: "100%", marginTop: "16px" }}>
                 <DataGrid
-                  rows={tasks.map((task) => ({
-                    id: task.id,
-                    type: task.type,
-                    description: task.description ?? "",
-                  }))}
+                  rows={tasks}
                   columns={columns}
                   disableRowSelectionOnClick
                   initialState={{

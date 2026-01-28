@@ -1,6 +1,12 @@
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
-import { audits, rentTransactions, tasks, users } from "@/db/schema";
+import {
+  audits,
+  rentTransactions,
+  tasks,
+  users,
+  taskBlueprints,
+} from "@/db/schema";
 import { clients } from "@/db/schema/client";
 import { intakeForms } from "@/db/schema/intake-form";
 
@@ -21,3 +27,6 @@ export type NewTask = InferInsertModel<typeof tasks>;
 
 export type User = InferSelectModel<typeof users>;
 export type NewUser = InferInsertModel<typeof users>;
+
+export type TaskBlueprint = InferSelectModel<typeof taskBlueprints>;
+export type NewTaskBlueprint = InferInsertModel<typeof taskBlueprints>;
