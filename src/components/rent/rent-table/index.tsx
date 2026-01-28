@@ -1,21 +1,15 @@
 "use client";
 
-import EditIcon from "@mui/icons-material/Edit";
-import {
-  Alert,
-  Box,
-  IconButton,
-  Snackbar,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { Box, Typography } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ReactNode, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
 import { Balance } from "@/types/balance";
 
 import EditBalanceForm from "./edit-balance-form";
+import { currencyColor } from "@/utils/money/currency-color";
+import { formatCurrency } from "@/utils/money/format-currency";
 
 type RentTableProps = {
   clientBalances: Balance[];
@@ -27,27 +21,32 @@ type Row = {
   firstName: string;
   lastName: string;
   email: string;
+  balance: Balance;
 };
+
+function getRows(clientBalances: Balance[], searchQuery: string): Row[] {
+  const rows = clientBalances.map((balance) => ({
+    id: balance.client.id,
+    firstName: balance.client.firstName,
+    lastName: balance.client.lastName,
+    email: balance.client.email,
+    total: balance.total,
+    balance: balance,
+  }));
+
+  return rows.filter((row) => {
+    return (
+      row.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+}
 
 export default function RentTable({
   clientBalances,
 }: RentTableProps): ReactNode {
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [selectedRow, setSelectedRow] = useState<Row | null>(null);
-  const [editOpen, setEditOpen] = useState(false);
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-
-  const handleEditClick = (row: Row): void => {
-    setSelectedRow(row);
-    setEditOpen(true);
-  };
-
-  const handleEditClose = (): void => {
-    setEditOpen(false);
-    setSelectedRow(null);
-  };
 
   const filteredRows = getRows(clientBalances, searchQuery);
 
@@ -61,7 +60,11 @@ export default function RentTable({
       flex: 0.5,
       type: "number",
       display: "flex",
-      renderCell: formattedBalanceCell,
+      renderCell: (params) => (
+        <Typography color={currencyColor(params.row.total)}>
+          {formatCurrency(params.row.total)}
+        </Typography>
+      ),
     },
     {
       field: "actions",
@@ -71,13 +74,7 @@ export default function RentTable({
       width: 75,
       align: "center",
       display: "flex",
-      renderCell: (params) => (
-        <Tooltip title="Edit Balance">
-          <IconButton onClick={() => handleEditClick(params.row)}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-      ),
+      renderCell: (params) => <EditBalanceForm balance={params.row.balance} />,
     },
   ];
 
@@ -115,58 +112,6 @@ export default function RentTable({
           }}
         />
       </Box>
-
-      {selectedRow && (
-        <EditBalanceForm
-          open={editOpen}
-          onClose={handleEditClose}
-          onSuccess={() => setSnackbarOpen(true)}
-          client={selectedRow}
-        />
-      )}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={() => setSnackbarOpen(false)} severity="success">
-          Successfully updated balance!
-        </Alert>
-      </Snackbar>
     </>
   );
-}
-
-function formattedBalanceCell(
-  params: GridRenderCellParams<Row, number>,
-): ReactNode {
-  const rentBalance = Number.parseFloat(String(params.row.total));
-
-  return (
-    <Typography color={rentBalance < 0 ? "red" : "green"}>
-      {rentBalance.toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-      })}
-    </Typography>
-  );
-}
-
-function getRows(clientBalances: Balance[], searchQuery: string): Row[] {
-  const rows = clientBalances.map((balance) => ({
-    id: balance.client.id,
-    firstName: balance.client.firstName,
-    lastName: balance.client.lastName,
-    email: balance.client.email,
-    total: balance.total,
-  }));
-
-  return rows.filter((row) => {
-    return (
-      row.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      row.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      row.email.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  });
 }
