@@ -1,55 +1,66 @@
 "use client";
 
-import { Box, Button, Modal, Typography } from "@mui/material";
-import { ReactNode } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
+import { ReactNode, useState } from "react";
 
 import { Client } from "@/types/schema";
 
-type Props = {
-  open: boolean;
-  onClose: () => void;
-  client: Client | null;
+type GraduateProps = {
+  client: Client;
 };
 
-export default function Graduate({ open, onClose, client }: Props): ReactNode {
-  return (
-    <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          bgcolor: "white",
-          p: 4,
-          borderRadius: 2,
-        }}
-      >
-        <Box display="flex" flexDirection="column">
-          <Typography variant="h6" align="center">
-            Client Graduation Form
-          </Typography>
+export default function Graduate({ client }: GraduateProps): ReactNode {
+  const [isOpen, setIsOpen] = useState(false);
 
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <Button variant="outlined" onClick={handleOpen} sx={{ width: "100%" }}>
+        Graduate
+      </Button>
+      <Dialog open={isOpen} fullWidth maxWidth="sm">
+        <DialogTitle variant="h5" sx={{ p: 2, textAlign: "center" }}>
+          Client Graduation Form
+        </DialogTitle>
+        <DialogContent sx={{ py: 0, px: 2 }}>
           <Typography>
             Are you sure that you want to graduate {client?.firstName}{" "}
             {client?.lastName}?
           </Typography>
-          <Button sx={{ mt: 3 }} variant="outlined" onClick={onClose}>
+        </DialogContent>
+        <DialogActions sx={{ p: 2, justifyContent: "space-between" }}>
+          <Button
+            variant="outlined"
+            onClick={handleClose}
+            sx={{ width: "50%" }}
+          >
             Cancel
           </Button>
           <Button
-            sx={{ mt: 1 }}
-            variant="outlined"
-            onClick={() => {
-              // eslint-disable-next-line no-console
-              console.log("Submitted");
-              onClose();
-            }}
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ width: "50%" }}
+            onClick={handleClose}
           >
-            Submit
+            Confirm
           </Button>
-        </Box>
-      </Box>
-    </Modal>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

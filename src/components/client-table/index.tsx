@@ -17,52 +17,6 @@ type ClientTableProps = {
 type Row = Client;
 
 export default function ClientTable({ clients }: ClientTableProps): ReactNode {
-  const columns: GridColDef<Row>[] = [
-    { field: "firstName", headerName: "First Name", width: 50, flex: 1 },
-    { field: "lastName", headerName: "Last Name", width: 50, flex: 1 },
-    { field: "email", headerName: "Email", width: 200, flex: 1 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 150,
-      flex: 1,
-      renderCell: (params): React.ReactNode => {
-        // custom chip based on status
-        const status = params.value;
-        let color = "error";
-        if (status == "resident") {
-          color = "warning";
-        } else if (status == "graduate") {
-          color = "success";
-        }
-
-        return (
-          <Chip
-            label={status}
-            sx={{
-              backgroundColor: color,
-            }}
-            size="small"
-          />
-        );
-      },
-    },
-    {
-      field: "action",
-      headerName: "Actions",
-      width: 180,
-      renderCell: (params) => (
-        <div>
-          <ClientModal client={params.row} />
-
-          <Button variant="outlined" size="small">
-            Info
-          </Button>
-        </div>
-      ),
-    },
-  ];
-
   function getRows(clients: Client[], searchQuery: string): Row[] {
     const lowerQuery = searchQuery.toLowerCase();
 
@@ -92,8 +46,6 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
   }
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [openInfo, setOpenInfo] = useState(false);
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
   const filteredRows = getRows(clients, searchQuery);
 
@@ -107,7 +59,6 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
       width: 150,
       flex: 1,
       renderCell: (params): React.ReactNode => {
-        // custom chip based on status
         const status = params.value;
         let color = "error";
         if (status == "resident") {
@@ -133,19 +84,9 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
       width: 180,
       renderCell: (params) => (
         <div>
-          <Button variant="outlined" size="small" style={{ marginRight: 8 }}>
-            Tasks
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => {
-              setSelectedClient(params.row as Client);
-              setOpenInfo(true);
-            }}
-          >
-            Info
-          </Button>
+          <ClientModal client={params.row} />
+
+          <ClientInfo client={params.row} />
         </div>
       ),
     },
@@ -183,12 +124,6 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
           }}
         />
       </Box>
-
-      <ClientInfo
-        open={openInfo}
-        onClose={() => setOpenInfo(false)}
-        client={selectedClient}
-      />
     </>
   );
 }

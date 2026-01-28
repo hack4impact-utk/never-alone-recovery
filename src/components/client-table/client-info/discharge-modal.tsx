@@ -4,6 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -21,10 +25,8 @@ import { z } from "zod";
 
 import { Client } from "@/types/schema";
 
-type Props = {
-  open: boolean;
-  onClose: () => void;
-  client: Client | null;
+type DischargeProps = {
+  client: Client;
 };
 
 const clientInfoSchema = z.object({
@@ -34,10 +36,9 @@ const clientInfoSchema = z.object({
 
 type ClientInfoValues = z.infer<typeof clientInfoSchema>;
 
-export default function Discharge({ open, onClose, client }: Props): ReactNode {
+export default function Discharge({ client }: DischargeProps): ReactNode {
+  const [isOpen, setIsOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
 
   const {
     control,
@@ -52,9 +53,15 @@ export default function Discharge({ open, onClose, client }: Props): ReactNode {
     },
   });
 
-  const onSubmit = (data: ClientInfoValues): void => {
-    setIsLoading(true);
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
 
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const onSubmit = (data: ClientInfoValues): void => {
     // eslint-disable-next-line no-console
     console.log("Form Data:", data);
 
@@ -63,10 +70,8 @@ export default function Discharge({ open, onClose, client }: Props): ReactNode {
       variant: "success",
     });
 
-    setIsLoading(false);
-    setIsDisabled(false);
     reset();
-    onClose();
+    handleClose();
   };
 
   const onError = (errors: FieldErrors<ClientInfoValues>): void => {
@@ -78,94 +83,89 @@ export default function Discharge({ open, onClose, client }: Props): ReactNode {
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={() => {
-        reset();
-        onClose();
-      }}
-    >
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          bgcolor: "white",
-          p: 4,
-          borderRadius: 2,
-        }}
-      >
-        <Box display="flex" flexDirection="column">
-          <Typography variant="h6" align="center">
+    <>
+      <Button variant="outlined" sx={{ width: "100%" }} onClick={handleOpen}>
+        Discharge
+      </Button>
+
+      <Dialog open={isOpen} fullWidth maxWidth="sm">
+        <form onSubmit={handleSubmit(onSubmit, onError)}>
+          <DialogTitle variant="h5" sx={{ p: 2, textAlign: "center" }}>
             Client Discharge Form
-          </Typography>
+          </DialogTitle>
+          <DialogContent
+            sx={{
+              py: 0,
+              px: 2,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <Typography variant="subtitle1">
+              Client: {client?.firstName} {client?.lastName}
+            </Typography>
+            <Controller
+              control={control}
+              name="reason"
+              render={({ field }) => (
+                <FormControl error={!!errors.reason}>
+                  <FormLabel>Reason for Discharge</FormLabel>
 
-          <form onSubmit={handleSubmit(onSubmit, onError)}>
-            <Box
-              sx={{
-                width: "min(90vw, 700px)",
-                display: "grid",
-                gap: 1.5,
-                gridTemplateColumns: "1fr",
-                padding: 3,
-              }}
+                  <RadioGroup {...field}>
+                    <FormControlLabel
+                      value="AMA"
+                      control={<Radio />}
+                      label="AMA"
+                    />
+                    <FormControlLabel
+                      value="Dismissed"
+                      control={<Radio />}
+                      label="Dismissed"
+                    />
+                  </RadioGroup>
+                  {errors.reason && (
+                    <FormHelperText>{errors.reason.message}</FormHelperText>
+                  )}
+                </FormControl>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="description"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Description"
+                  error={!!errors.description}
+                  helperText={errors.description?.message}
+                  multiline
+                  rows={3}
+                />
+              )}
+            />
+          </DialogContent>
+          <DialogActions sx={{ p: 2, justifyContent: "space-between" }}>
+            <Button
+              variant="outlined"
+              onClick={handleClose}
+              sx={{ width: "50%" }}
             >
-              <Typography variant="subtitle1">
-                Client: {client?.firstName} {client?.lastName}
-              </Typography>
-              <Controller
-                control={control}
-                name="reason"
-                render={({ field }) => (
-                  <FormControl error={!!errors.reason}>
-                    <FormLabel>Reason for Discharge</FormLabel>
-
-                    <RadioGroup {...field}>
-                      <FormControlLabel
-                        value="AMA"
-                        control={<Radio />}
-                        label="AMA"
-                      />
-                      <FormControlLabel
-                        value="Dismissed"
-                        control={<Radio />}
-                        label="Dismissed"
-                      />
-                    </RadioGroup>
-                    {errors.reason && (
-                      <FormHelperText>{errors.reason.message}</FormHelperText>
-                    )}
-                  </FormControl>
-                )}
-              />
-
-              <Controller
-                control={control}
-                name="description"
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Description"
-                    error={!!errors.description}
-                    helperText={errors.description?.message}
-                    multiline
-                    rows={3}
-                  />
-                )}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={isLoading || isDisabled}
-                loading={isLoading}
-              >
-                Submit
-              </Button>
-            </Box>
-          </form>
-        </Box>
-      </Box>
-    </Modal>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ width: "50%" }}
+              onClick={handleClose}
+            >
+              Confirm
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </>
   );
 }
