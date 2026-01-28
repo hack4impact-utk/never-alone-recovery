@@ -15,9 +15,8 @@ import {
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { ReactNode, useState } from "react";
 
-import { Client, TaskBlueprint } from "@/types/schema";
-
 import { getClientTasksBlueprints } from "@/api/tasks-blueprints/queries";
+import { Client, TaskBlueprint } from "@/types/schema";
 
 export type ClientModalProps = {
   client: Client;

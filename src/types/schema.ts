@@ -3,9 +3,9 @@ import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import {
   audits,
   rentTransactions,
+  taskBlueprints,
   tasks,
   users,
-  taskBlueprints,
 } from "@/db/schema";
 import { clients } from "@/db/schema/client";
 import { intakeForms } from "@/db/schema/intake-form";
