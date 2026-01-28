@@ -6,7 +6,7 @@ import React, { ReactNode, useState } from "react";
 
 import { Client } from "@/types/schema";
 
-import ClientInfo from "../client-info";
+import ClientInfo from "./client-info";
 import SearchBox from "../common/search-box";
 import ClientModal from "./client-modal";
 
