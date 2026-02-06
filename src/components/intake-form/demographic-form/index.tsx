@@ -1,8 +1,10 @@
 "use client";
 
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ReactNode } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
+
+import ControlledTextField from "@/components/common/search-box/forms/controlled-fields/controlled-text-field";
 
 import { IntakeFormValues } from "../intake-form-schema";
 
@@ -14,48 +16,29 @@ export default function DemographicForm(): ReactNode {
 
   return (
     <Box>
-      <Typography variant="h5">Demographics</Typography>
+      <Typography variant="h4" sx={{ textAlign: "center", marginY: "1rem" }}>
+        Demographics
+      </Typography>
       <Box>
-        <Controller
+        <ControlledTextField
           control={control}
+          errors={errors.demographic?.firstName}
+          label="First Name"
           name="demographic.firstName"
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="First Name"
-              error={!!errors.demographic?.firstName}
-              helperText={errors.demographic?.firstName?.message}
-              fullWidth
-            />
-          )}
         />
 
-        <Controller
+        <ControlledTextField
           control={control}
+          errors={errors.demographic?.middleName}
+          label="Middle Name"
           name="demographic.middleName"
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Middle Name"
-              error={!!errors.demographic?.middleName}
-              helperText={errors.demographic?.middleName?.message}
-              fullWidth
-            />
-          )}
         />
 
-        <Controller
+        <ControlledTextField
           control={control}
+          errors={errors.demographic?.lastName}
+          label="Last Name"
           name="demographic.lastName"
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Last Name"
-              error={!!errors.demographic?.lastName}
-              helperText={errors.demographic?.lastName?.message}
-              fullWidth
-            />
-          )}
         />
       </Box>
     </Box>
