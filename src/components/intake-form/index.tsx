@@ -40,7 +40,7 @@ export default function IntakeForm(): ReactNode {
     mode: "onChange",
   });
   const { handleSubmit, trigger } = methods;
-  const [step, setStep] = useState(intakeFormSteps[1]);
+  const [step, setStep] = useState(intakeFormSteps[0]);
 
   const onSubmit = (data: IntakeFormValues): void => {
     // eslint-disable-next-line no-console
