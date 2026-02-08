@@ -104,7 +104,7 @@ export default function IntakeForm(): ReactNode {
             <Button
               type="submit"
               variant="contained"
-              onClick={() => handleSubmit(onSubmit, onError)()}
+              onClick={handleSubmit(onSubmit, onError)}
               sx={{ marginLeft: "auto" }}
             >
               Submit

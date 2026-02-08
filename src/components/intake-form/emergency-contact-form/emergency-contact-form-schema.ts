@@ -10,7 +10,7 @@ export const emergencyContactFormSchema = z.object({
     .string()
     .min(1, { message: "Phone Number is required" }),
   person1Address: z.string().min(1, { message: "Address is required" }),
-  person2FirstName: z.string().min(2, { message: "First Name is required" }),
+  person2FirstName: z.string().min(1, { message: "First Name is required" }),
   person2LastName: z.string().min(1, { message: "Last Name is required" }),
   person2Relationship: z
     .string()
