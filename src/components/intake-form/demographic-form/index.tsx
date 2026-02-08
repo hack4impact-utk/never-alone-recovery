@@ -17,7 +17,7 @@ export default function DemographicForm(): ReactNode {
   } = useFormContext<IntakeFormValues>();
 
   return (
-    <Box sx={{ padding: 2, mb: 4 }}>
+    <Box>
       <Typography variant="h5" sx={{ mb: 2, textAlign: "center" }}>
         Demographics
       </Typography>

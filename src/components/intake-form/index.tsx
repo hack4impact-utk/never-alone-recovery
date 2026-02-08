@@ -40,7 +40,7 @@ export default function IntakeForm(): ReactNode {
     mode: "onChange",
   });
   const { handleSubmit, trigger } = methods;
-  const [step, setStep] = useState(intakeFormSteps[0]);
+  const [step, setStep] = useState(intakeFormSteps[1]);
 
   const onSubmit = (data: IntakeFormValues): void => {
     // eslint-disable-next-line no-console
@@ -80,9 +80,9 @@ export default function IntakeForm(): ReactNode {
   };
 
   return (
-    <Box sx={{ width: "50%" }}>
+    <Box sx={{ width: "50%", padding: 4 }}>
       <FormProvider {...methods}>
-        <Box>{step.form}</Box>
+        <Box sx={{ padding: 2 }}>{step.form}</Box>
 
         <Box sx={{ display: "flex", width: "100%" }}>
           {showBackButton && (
