@@ -32,7 +32,7 @@ export default function ControlledRadioButtons({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormControl error={!!errors}>
+        <FormControl error={!!errors} sx={{ marginBottom: "1rem" }}>
           <FormLabel>{label}</FormLabel>
           <RadioGroup {...field} row>
             {options.map((option) => (

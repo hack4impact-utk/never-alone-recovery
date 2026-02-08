@@ -10,6 +10,8 @@ type ControlledTextFieldProps = {
   errors?: FieldError;
   label: string;
   name: string;
+  multiline?: boolean;
+  rows?: number;
 };
 
 export default function ControlledTextField({
@@ -17,6 +19,8 @@ export default function ControlledTextField({
   errors,
   label,
   name,
+  multiline = false,
+  rows = 1,
 }: ControlledTextFieldProps): ReactNode {
   return (
     <Controller
@@ -28,8 +32,10 @@ export default function ControlledTextField({
           label={label}
           error={!!errors}
           helperText={errors?.message}
+          multiline={multiline}
+          rows={rows}
           fullWidth
-          sx={{ marginBottom: "1rem", maxWidth: "350px", display: "block" }}
+          sx={{ marginBottom: "1rem" }}
         />
       )}
     />

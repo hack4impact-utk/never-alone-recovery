@@ -25,6 +25,7 @@ export default function ControlledDatePicker({
       name={name}
       render={({ field }) => (
         <DatePicker
+          sx={{ marginBottom: "1rem" }}
           label={label}
           value={dayjs(field.value)}
           slotProps={{
