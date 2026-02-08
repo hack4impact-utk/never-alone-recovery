@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
 
-import DemographicForm from "@/components/intake-form/demographics";
+import IntakeForm from "@/components/intake-form";
 
 export default function IntakeFormPage(): ReactNode {
   return (
@@ -12,7 +12,7 @@ export default function IntakeFormPage(): ReactNode {
         alignItems: "center",
       }}
     >
-      <DemographicForm />
+      <IntakeForm />
     </Box>
   );
 }
