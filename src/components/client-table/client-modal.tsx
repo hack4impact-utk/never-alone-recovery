@@ -36,6 +36,7 @@ export default function ClientModal({ client }: ClientModalProps): ReactNode {
       sortable: false,
       disableReorder: true,
       disableColumnMenu: true,
+      editable: true,
     },
     {
       field: "description",
@@ -45,6 +46,7 @@ export default function ClientModal({ client }: ClientModalProps): ReactNode {
       sortable: false,
       disableReorder: true,
       disableColumnMenu: true,
+      editable: true,
     },
     {
       field: "action",
