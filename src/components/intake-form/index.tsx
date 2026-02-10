@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button } from "@mui/material";
+import { useRouter } from "next/dist/client/components/navigation";
 import { useSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 import { FieldErrors, FormProvider, useForm } from "react-hook-form";
@@ -38,6 +39,7 @@ const intakeFormSteps: IntakeFormStep[] = [
 ];
 
 export default function IntakeForm(): ReactNode {
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const methods = useForm<IntakeFormValues>({
     resolver: zodResolver(intakeFormSchema),
@@ -55,6 +57,8 @@ export default function IntakeForm(): ReactNode {
     enqueueSnackbar(successMessage, {
       variant: "success",
     });
+
+    router.push("/");
   };
 
   const onError = (errors: FieldErrors<IntakeFormValues>): void => {

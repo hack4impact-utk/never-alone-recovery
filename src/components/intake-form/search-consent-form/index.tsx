@@ -1,6 +1,6 @@
 "use client";
 
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import dayjs from "dayjs";
 import { PDFDocument } from "pdf-lib";
 import { ReactNode, useEffect, useState } from "react";
@@ -136,6 +136,32 @@ export default function SearchConsentForm(): ReactNode {
     void generatePdf();
   }, [staffSignature, residentSignature]);
 
+  const downloadPdf = async (): Promise<void> => {
+    const pdf = await fetchPdf(pdfUrl);
+
+    const pdfBytes = await pdf.save();
+
+    const file = new Blob([new Uint8Array(pdfBytes)], {
+      type: "application/pdf",
+    });
+
+    const fileURL = URL.createObjectURL(file);
+
+    const firstName = getValues("demographic").firstName;
+    const lastName = getValues("demographic").lastName;
+    const fullName = `${firstName} ${lastName}`;
+
+    const link = document.createElement("a");
+    link.href = fileURL;
+    link.download = `${fullName} - Search Consent Form.pdf`;
+
+    document.body.append(link);
+    link.click();
+
+    link.remove();
+    URL.revokeObjectURL(fileURL);
+  };
+
   return (
     <Box sx={{ width: "100%", height: "750px", padding: 4 }}>
       <DocumentDisplay pdfUrl={pdfUrl} />
@@ -158,6 +184,13 @@ export default function SearchConsentForm(): ReactNode {
           title="Staff Signature"
           description="Staff Member: Please provide your signature below:"
         />
+        <Button
+          variant="contained"
+          onClick={downloadPdf}
+          sx={{ alignSelf: "center" }}
+        >
+          Download
+        </Button>
       </Box>
     </Box>
   );
