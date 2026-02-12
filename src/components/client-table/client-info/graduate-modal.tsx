@@ -8,8 +8,10 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 
+import { graduateClient } from "@/api/client/public-mutations";
 import { Client } from "@/types/schema";
 
 type GraduateProps = {
@@ -25,6 +27,27 @@ export default function Graduate({ client }: GraduateProps): ReactNode {
 
   const handleClose = (): void => {
     setIsOpen(false);
+  };
+
+  const handleSubmit = async (): Promise<void> => {
+    const [updatedClient, error] = await graduateClient(client);
+
+    if (error || !updatedClient) {
+      enqueueSnackbar(
+        `Failed to graduate "${client.firstName} ${client.lastName}". Please try again.`,
+        {
+          variant: "error",
+        },
+      );
+      return;
+    }
+
+    const successMessage = `"${updatedClient.firstName} ${updatedClient.lastName}" marked as graduated.`;
+
+    enqueueSnackbar(successMessage, {
+      variant: "success",
+    });
+    handleClose();
   };
 
   return (
@@ -55,7 +78,7 @@ export default function Graduate({ client }: GraduateProps): ReactNode {
             variant="contained"
             color="primary"
             sx={{ width: "50%" }}
-            onClick={handleClose}
+            onClick={handleSubmit}
           >
             Confirm
           </Button>
