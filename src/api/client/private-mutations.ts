@@ -6,8 +6,7 @@ import { Result } from "@/types/result";
 import { Client } from "@/types/schema";
 import handleError from "@/utils/handle-error";
 
-
-export async function updateClient(client:Client): Promise<Result<Client>>{
+export async function updateClient(client: Client): Promise<Result<Client>> {
   try {
     const updatedClients = await db
       .update(clients)
