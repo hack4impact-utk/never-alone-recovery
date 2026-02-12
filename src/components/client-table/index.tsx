@@ -17,6 +17,8 @@ type ClientTableProps = {
 type Row = Client;
 
 export default function ClientTable({ clients }: ClientTableProps): ReactNode {
+  const [clientList, setClientList] = useState<Client[]>(clients);
+
   function getRows(clients: Client[], searchQuery: string): Row[] {
     const lowerQuery = searchQuery.toLowerCase();
 
@@ -47,7 +49,7 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredRows = getRows(clients, searchQuery);
+  const filteredRows = getRows(clientList, searchQuery);
 
   const columns: GridColDef<Row>[] = [
     { field: "firstName", headerName: "First Name", width: 50, flex: 1 },
@@ -63,7 +65,7 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
         let color = "error";
         if (status == "resident") {
           color = "warning";
-        } else if (status == "graduate") {
+        } else if (status == "graduated") {
           color = "success";
         }
 
@@ -86,7 +88,7 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
         <div>
           <ClientModal client={params.row} />
 
-          <ClientInfo client={params.row} />
+          <ClientInfo client={params.row} setClientList={setClientList} />
         </div>
       ),
     },

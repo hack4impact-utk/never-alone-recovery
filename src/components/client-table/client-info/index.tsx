@@ -18,9 +18,13 @@ import Graduate from "./graduate-modal";
 
 type ClientInfoProps = {
   client: Client;
+  setClientList: React.Dispatch<React.SetStateAction<Client[]>>;
 };
 
-export default function ClientInfo({ client }: ClientInfoProps): ReactNode {
+export default function ClientInfo({
+  client,
+  setClientList,
+}: ClientInfoProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = (): void => {
@@ -49,8 +53,8 @@ export default function ClientInfo({ client }: ClientInfoProps): ReactNode {
         </DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
-            <Graduate client={client} />
-            <Discharge client={client} />
+            <Graduate client={client} setClientList={setClientList} />
+            <Discharge client={client} setClientList={setClientList} />
           </Box>
         </DialogContent>
       </Dialog>
