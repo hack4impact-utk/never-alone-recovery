@@ -26,6 +26,7 @@ import { Client } from "@/types/schema";
 
 type DischargeProps = {
   client: Client;
+  setClientList: React.Dispatch<React.SetStateAction<Client[]>>;
 };
 
 const clientInfoSchema = z.object({
@@ -38,7 +39,10 @@ const clientInfoSchema = z.object({
 
 type ClientInfoValues = z.infer<typeof clientInfoSchema>;
 
-export default function Discharge({ client }: DischargeProps): ReactNode {
+export default function Discharge({
+  client,
+  setClientList,
+}: DischargeProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -84,7 +88,17 @@ export default function Discharge({ client }: DischargeProps): ReactNode {
     enqueueSnackbar(successMessage, {
       variant: "success",
     });
-
+    setClientList((prevClientList) =>
+      prevClientList.map((allClients) => {
+        if (allClients.id === client.id) {
+          return {
+            ...allClients,
+            status: "discharged",
+          };
+        }
+        return allClients;
+      }),
+    );
     reset();
     handleClose();
   };
