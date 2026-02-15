@@ -71,22 +71,7 @@ export default function ClientTable({
       flex: 1,
       renderCell: (params): React.ReactNode => {
         const status = params.value;
-        let color = "error";
-        if (status == "resident") {
-          color = "warning";
-        } else if (status == "graduated") {
-          color = "success";
-        }
-
-        return (
-          <Chip
-            label={status}
-            sx={{
-              backgroundColor: color,
-            }}
-            size="small"
-          />
-        );
+        return <Chip label={status} size="small" />;
       },
     },
     {
