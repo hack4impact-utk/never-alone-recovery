@@ -11,13 +11,18 @@ import ClientInfo from "./client-info";
 import ClientModal from "./client-modal";
 
 type ClientTableProps = {
-  clients: Client[];
+  initialClients: Client[];
 };
 
 type Row = Client;
 
-export default function ClientTable({ clients }: ClientTableProps): ReactNode {
-  function getRows(clients: Client[], searchQuery: string): Row[] {
+export default function ClientTable({
+  initialClients,
+}: ClientTableProps): ReactNode {
+  const [clients, setClients] = useState(initialClients);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const getRows = (): Row[] => {
     const lowerQuery = searchQuery.toLowerCase();
 
     const filteredClients = clients.filter((client: Client) => {
@@ -43,11 +48,17 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
     });
 
     return sortedClients;
-  }
+  };
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const filteredRows = getRows();
 
-  const filteredRows = getRows(clients, searchQuery);
+  const updateClients = (updatedClient: Client): void => {
+    setClients((prevClients) =>
+      prevClients.map((client) =>
+        client.id === updatedClient.id ? updatedClient : client,
+      ),
+    );
+  };
 
   const columns: GridColDef<Row>[] = [
     { field: "firstName", headerName: "First Name", width: 50, flex: 1 },
@@ -60,22 +71,7 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
       flex: 1,
       renderCell: (params): React.ReactNode => {
         const status = params.value;
-        let color = "error";
-        if (status == "resident") {
-          color = "warning";
-        } else if (status == "graduate") {
-          color = "success";
-        }
-
-        return (
-          <Chip
-            label={status}
-            sx={{
-              backgroundColor: color,
-            }}
-            size="small"
-          />
-        );
+        return <Chip label={status} size="small" />;
       },
     },
     {
@@ -86,7 +82,11 @@ export default function ClientTable({ clients }: ClientTableProps): ReactNode {
         <div>
           <ClientModal client={params.row} />
 
-          <ClientInfo client={params.row} />
+          <ClientInfo
+            client={params.row}
+            onDischarge={updateClients}
+            onGraduate={updateClients}
+          />
         </div>
       ),
     },

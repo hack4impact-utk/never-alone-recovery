@@ -21,20 +21,28 @@ import { ReactNode, useState } from "react";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { dischargeClient } from "@/api/client/public-mutations";
 import { Client } from "@/types/schema";
 
 type DischargeProps = {
   client: Client;
+  onDischarge: (client: Client) => void;
 };
 
 const clientInfoSchema = z.object({
-  reason: z.enum(["AMA", "Dismissed"]),
+  reason: z
+    .string()
+    .min(1, { message: "Reason is required" })
+    .refine((val) => ["AMA", "Dismissed"].includes(val)),
   description: z.string().min(1, { message: "Description is required" }),
 });
 
 type ClientInfoValues = z.infer<typeof clientInfoSchema>;
 
-export default function Discharge({ client }: DischargeProps): ReactNode {
+export default function Discharge({
+  client,
+  onDischarge,
+}: DischargeProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -46,7 +54,7 @@ export default function Discharge({ client }: DischargeProps): ReactNode {
   } = useForm<ClientInfoValues>({
     resolver: zodResolver(clientInfoSchema),
     defaultValues: {
-      reason: "AMA",
+      reason: "",
       description: "",
     },
   });
@@ -59,16 +67,27 @@ export default function Discharge({ client }: DischargeProps): ReactNode {
     setIsOpen(false);
   };
 
-  const onSubmit = (data: ClientInfoValues): void => {
-    // eslint-disable-next-line no-console
-    console.log("Form Data:", data);
+  const onSubmit = async (): Promise<void> => {
+    const [updatedClient, error] = await dischargeClient(client);
 
-    const successMessage = `Submitted successfully!`;
+    if (error || !updatedClient) {
+      enqueueSnackbar(
+        `Failed to discharge "${client.firstName} ${client.lastName}". Please try again.`,
+        {
+          variant: "error",
+        },
+      );
+      return;
+    }
+
+    const successMessage = `"${updatedClient.firstName} ${updatedClient.lastName}" marked as discharged.`;
+
     enqueueSnackbar(successMessage, {
       variant: "success",
     });
 
-    reset();
+    onDischarge(updatedClient);
+
     handleClose();
   };
 
@@ -147,7 +166,10 @@ export default function Discharge({ client }: DischargeProps): ReactNode {
           <DialogActions sx={{ p: 2, justifyContent: "space-between" }}>
             <Button
               variant="outlined"
-              onClick={handleClose}
+              onClick={() => {
+                reset();
+                handleClose();
+              }}
               sx={{ width: "50%" }}
             >
               Cancel
@@ -157,7 +179,6 @@ export default function Discharge({ client }: DischargeProps): ReactNode {
               variant="contained"
               color="primary"
               sx={{ width: "50%" }}
-              onClick={handleClose}
             >
               Confirm
             </Button>
