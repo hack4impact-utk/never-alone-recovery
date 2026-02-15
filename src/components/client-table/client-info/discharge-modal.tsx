@@ -26,7 +26,7 @@ import { Client } from "@/types/schema";
 
 type DischargeProps = {
   client: Client;
-  setClientList: React.Dispatch<React.SetStateAction<Client[]>>;
+  onDischarge: (client: Client) => void;
 };
 
 const clientInfoSchema = z.object({
@@ -41,7 +41,7 @@ type ClientInfoValues = z.infer<typeof clientInfoSchema>;
 
 export default function Discharge({
   client,
-  setClientList,
+  onDischarge,
 }: DischargeProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -67,10 +67,7 @@ export default function Discharge({
     setIsOpen(false);
   };
 
-  const onSubmit = async (data: ClientInfoValues): Promise<void> => {
-    // eslint-disable-next-line no-console
-    console.log("Form Data:", data);
-
+  const onSubmit = async (): Promise<void> => {
     const [updatedClient, error] = await dischargeClient(client);
 
     if (error || !updatedClient) {
@@ -88,18 +85,9 @@ export default function Discharge({
     enqueueSnackbar(successMessage, {
       variant: "success",
     });
-    setClientList((prevClientList) =>
-      prevClientList.map((allClients) => {
-        if (allClients.id === client.id) {
-          return {
-            ...allClients,
-            status: "discharged",
-          };
-        }
-        return allClients;
-      }),
-    );
-    reset();
+
+    onDischarge(updatedClient);
+
     handleClose();
   };
 

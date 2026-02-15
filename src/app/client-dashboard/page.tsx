@@ -29,7 +29,7 @@ export default async function ClientTablePage(): Promise<ReactNode> {
         alignItems: "center",
       }}
     >
-      <ClientTable clients={allClients} />
+      <ClientTable initialClients={allClients} />
     </Box>
   );
 }

@@ -16,12 +16,12 @@ import { Client } from "@/types/schema";
 
 type GraduateProps = {
   client: Client;
-  setClientList: React.Dispatch<React.SetStateAction<Client[]>>;
+  onGraduate: (client: Client) => void;
 };
 
 export default function Graduate({
   client,
-  setClientList,
+  onGraduate,
 }: GraduateProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -52,17 +52,7 @@ export default function Graduate({
       variant: "success",
     });
 
-    setClientList((prevClientList) =>
-      prevClientList.map((allClients) => {
-        if (allClients.id === client.id) {
-          return {
-            ...allClients,
-            status: "graduated",
-          };
-        }
-        return allClients;
-      }),
-    );
+    onGraduate(updatedClient);
 
     handleClose();
   };
