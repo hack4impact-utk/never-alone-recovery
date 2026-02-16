@@ -79,7 +79,16 @@ export default function ClientTable({
       headerName: "Actions",
       width: 180,
       renderCell: (params) => (
-        <div>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
           <TasksModal client={params.row} />
 
           <ClientInfo
