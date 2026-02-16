@@ -12,8 +12,6 @@ export const clientStatusEnum = pgEnum("client_status", [
   "graduated",
 ]);
 
-export const taskTypeEnum = pgEnum("task_type", ["drug_test", "meeting"]);
-
 export const auditTypeEnum = pgEnum("audit_type", [
   "rent_payment",
   "rent_charge",
