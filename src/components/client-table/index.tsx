@@ -8,7 +8,7 @@ import { Client } from "@/types/schema";
 
 import SearchBox from "../common/search-box";
 import ClientInfo from "./client-info";
-import ClientModal from "./client-modal";
+import TasksModal from "./tasks-modal";
 
 type ClientTableProps = {
   initialClients: Client[];
@@ -80,7 +80,7 @@ export default function ClientTable({
       width: 180,
       renderCell: (params) => (
         <div>
-          <ClientModal client={params.row} />
+          <TasksModal client={params.row} />
 
           <ClientInfo
             client={params.row}

@@ -1,17 +1,7 @@
 "use client";
 
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-} from "@mui/material";
+import { Box, CircularProgress, IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useSnackbar } from "notistack";
 import React, { ReactNode, useState } from "react";
@@ -19,21 +9,20 @@ import React, { ReactNode, useState } from "react";
 import { deleteTaskBlueprint } from "@/api/tasks-blueprints/private-mutations";
 import { addOrUpdateTaskBlueprint } from "@/api/tasks-blueprints/public-mutations";
 import { getClientTasksBlueprints } from "@/api/tasks-blueprints/queries";
+import ButtonModal from "@/components/common/modal";
 import { Client, TaskBlueprint } from "@/types/schema";
 
-export type ClientModalProps = {
+export type TasksModalProps = {
   client: Client;
 };
 
-export default function ClientModal({ client }: ClientModalProps): ReactNode {
+export default function TasksModal({ client }: TasksModalProps): ReactNode {
   const { enqueueSnackbar } = useSnackbar();
 
-  const [isOpen, setIsOpen] = useState(false);
   const [tasks, setTasks] = useState<TaskBlueprint[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleOpen = async (): Promise<void> => {
-    setIsOpen(true);
     setLoading(true);
 
     const [data, error] = await getClientTasksBlueprints(client.id);
@@ -51,10 +40,6 @@ export default function ClientModal({ client }: ClientModalProps): ReactNode {
     setLoading(false);
   };
 
-  const handleClose = (): void => {
-    setIsOpen(false);
-  };
-
   const handleProcessRowUpdate = async (
     newRow: TaskBlueprint,
   ): Promise<TaskBlueprint> => {
@@ -62,7 +47,7 @@ export default function ClientModal({ client }: ClientModalProps): ReactNode {
 
     if (error || !data) {
       enqueueSnackbar("Failed to save task", { variant: "error" });
-      throw new Error(error ?? "Update failed"); // keeps old row
+      throw new Error(error ?? "Update failed");
     }
 
     setTasks((prev) => prev.map((task) => (task.id === data.id ? data : task)));
@@ -93,15 +78,6 @@ export default function ClientModal({ client }: ClientModalProps): ReactNode {
 
   const columns: GridColDef<TaskBlueprint>[] = [
     {
-      field: "type",
-      headerName: "Task",
-      flex: 1,
-      editable: true,
-      sortable: false,
-      filterable: false,
-      disableColumnMenu: true,
-    },
-    {
       field: "description",
       headerName: "Description",
       flex: 2,
@@ -113,15 +89,12 @@ export default function ClientModal({ client }: ClientModalProps): ReactNode {
     {
       field: "action",
       headerName: "Actions",
-      width: 120,
       sortable: false,
       filterable: false,
       disableColumnMenu: true,
+      resizable: false,
       renderCell: (params) => (
         <div>
-          <IconButton size="small" color="info">
-            <EditIcon />
-          </IconButton>
           <IconButton
             size="small"
             color="error"
@@ -136,64 +109,35 @@ export default function ClientModal({ client }: ClientModalProps): ReactNode {
 
   return (
     <>
-      <Button
-        onClick={handleOpen}
-        variant="outlined"
-        size="small"
-        style={{ marginRight: 8 }}
+      <ButtonModal
+        buttonTitle="Tasks"
+        modalTitle={`${client.firstName} ${client.lastName}'s Weekly Tasks`}
+        hasCloseButton={true}
+        onOpen={handleOpen}
       >
-        Tasks
-      </Button>
-
-      <Dialog open={isOpen} fullWidth maxWidth="md">
-        <DialogTitle variant="h5" sx={{ p: 2, textAlign: "center" }}>
-          {client.firstName} {client.lastName}'s Weekly Tasks
-        </DialogTitle>
-
-        <DialogContent>
-          <Box sx={{ display: "flex", justifyContent: "center", p: 2 }}>
-            {loading ? (
-              <CircularProgress />
-            ) : (
-              <div style={{ height: 400, width: "100%", marginTop: "16px" }}>
-                <DataGrid
-                  rows={tasks}
-                  columns={columns}
-                  disableRowSelectionOnClick
-                  processRowUpdate={handleProcessRowUpdate}
-                  onProcessRowUpdateError={(error) => console.error(error)}
-                  initialState={{
-                    pagination: {
-                      paginationModel: {
-                        pageSize: 5,
-                      },
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <div style={{ height: 400, width: "100%", marginTop: "16px" }}>
+              <DataGrid
+                rows={tasks}
+                columns={columns}
+                disableRowSelectionOnClick
+                processRowUpdate={handleProcessRowUpdate}
+                onProcessRowUpdateError={(error) => console.error(error)}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 5,
                     },
-                  }}
-                />
-              </div>
-            )}
-          </Box>
-        </DialogContent>
-
-        <DialogActions sx={{ p: 2, justifyContent: "space-between" }}>
-          <Button
-            variant="outlined"
-            onClick={handleClose}
-            sx={{ width: "45%" }}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ width: "45%" }}
-            onClick={handleClose}
-          >
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
+                  },
+                }}
+              />
+            </div>
+          )}
+        </Box>
+      </ButtonModal>
     </>
   );
 }
