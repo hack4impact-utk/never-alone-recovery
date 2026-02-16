@@ -112,18 +112,20 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
       <Box display="flex" alignItems="center" sx={{ py: 2 }}>
         <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       </Box>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        disableRowSelectionOnClick
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 8,
+      <Box sx={{ flex: 1, minHeight: 0 }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          disableRowSelectionOnClick
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 8,
+              },
             },
-          },
-        }}
-      />
+          }}
+        />
+      </Box>
     </Box>
   );
 }
