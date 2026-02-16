@@ -1,5 +1,6 @@
 "use client";
 
+import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, CircularProgress, IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
@@ -7,7 +8,8 @@ import { useSnackbar } from "notistack";
 import React, { ReactNode, useState } from "react";
 
 import {
-  deleteTaskBlueprint,
+  createTaskBlueprint,
+  removeTaskBlueprint,
   updateDescriptionOnTaskBlueprint,
 } from "@/api/tasks-blueprints/public-mutations";
 import { getClientTasksBlueprints } from "@/api/tasks-blueprints/queries";
@@ -70,7 +72,7 @@ export default function TasksModal({ client }: TasksModalProps): ReactNode {
   };
 
   const handleDelete = async (id: string): Promise<void> => {
-    const [, error] = await deleteTaskBlueprint(id);
+    const [, error] = await removeTaskBlueprint(id);
 
     if (error) {
       enqueueSnackbar("Failed to delete task", {
@@ -82,6 +84,26 @@ export default function TasksModal({ client }: TasksModalProps): ReactNode {
     setTasks((prev) => prev.filter((task) => task.id !== id));
 
     enqueueSnackbar("Task deleted successfully", {
+      variant: "success",
+    });
+  };
+
+  const handleAdd = async (): Promise<void> => {
+    const [newTask, error] = await createTaskBlueprint({
+      description: "New Task",
+      clientId: client.id,
+    });
+
+    if (error || !newTask) {
+      enqueueSnackbar("Failed to create task", {
+        variant: "error",
+      });
+      return;
+    }
+
+    setTasks((prev) => [...prev, newTask]);
+
+    enqueueSnackbar("Task created successfully", {
       variant: "success",
     });
   };
@@ -129,7 +151,7 @@ export default function TasksModal({ client }: TasksModalProps): ReactNode {
           {loading ? (
             <CircularProgress />
           ) : (
-            <div style={{ height: 400, width: "100%", marginTop: "16px" }}>
+            <Box style={{ width: "100%" }}>
               <DataGrid
                 rows={tasks}
                 columns={columns}
@@ -143,8 +165,20 @@ export default function TasksModal({ client }: TasksModalProps): ReactNode {
                     },
                   },
                 }}
+                slots={{
+                  toolbar: () => (
+                    <Box
+                      sx={{ p: 1, display: "flex", justifyContent: "flex-end" }}
+                    >
+                      <IconButton size="small" onClick={handleAdd}>
+                        <AddIcon />
+                      </IconButton>
+                    </Box>
+                  ),
+                }}
+                showToolbar={true}
               />
-            </div>
+            </Box>
           )}
         </Box>
       </ButtonModal>

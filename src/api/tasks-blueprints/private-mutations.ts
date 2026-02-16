@@ -7,7 +7,10 @@ import { TaskBlueprint } from "@/types/schema";
 import handleError from "@/utils/handle-error";
 
 export async function addTaskBlueprint(
-  task: Omit<TaskBlueprint, "id" | "createdAt" | "updatedAt">,
+  task: Omit<
+    TaskBlueprint,
+    "id" | "createdDate" | "createdById" | "editedDate" | "editedById"
+  >,
 ): Promise<Result<TaskBlueprint>> {
   if (!task.staffId || !task.clientId) {
     return [
