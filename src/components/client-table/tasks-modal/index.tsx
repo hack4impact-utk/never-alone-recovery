@@ -6,8 +6,10 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useSnackbar } from "notistack";
 import React, { ReactNode, useState } from "react";
 
-import { deleteTaskBlueprint } from "@/api/tasks-blueprints/private-mutations";
-import { addOrUpdateTaskBlueprint } from "@/api/tasks-blueprints/public-mutations";
+import {
+  deleteTaskBlueprint,
+  updateDescriptionOnTaskBlueprint,
+} from "@/api/tasks-blueprints/public-mutations";
 import { getClientTasksBlueprints } from "@/api/tasks-blueprints/queries";
 import ButtonModal from "@/components/common/modal";
 import { Client, TaskBlueprint } from "@/types/schema";
@@ -43,7 +45,15 @@ export default function TasksModal({ client }: TasksModalProps): ReactNode {
   const handleProcessRowUpdate = async (
     newRow: TaskBlueprint,
   ): Promise<TaskBlueprint> => {
-    const [data, error] = await addOrUpdateTaskBlueprint(newRow);
+    if (!newRow.description) {
+      enqueueSnackbar("Description cannot be empty", { variant: "error" });
+      throw new Error("Description cannot be empty");
+    }
+
+    const [data, error] = await updateDescriptionOnTaskBlueprint(
+      newRow.id,
+      newRow.description,
+    );
 
     if (error || !data) {
       enqueueSnackbar("Failed to save task", { variant: "error" });
