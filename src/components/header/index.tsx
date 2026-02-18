@@ -6,16 +6,22 @@ import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 
 import ProfilePicture from "./profile-picture";
 
 export default function Header(): ReactNode {
+  const [validSession, setValidSession] = useState(false); 
   const { data: session } = useSession();
 
-  if (!session) {
-    return null;
-  }
+  useEffect(() => {
+    if (!session) {
+      setValidSession(false);
+      return;
+    } else {
+      setValidSession(true);
+    }
+  }, [session]); // Dependency on session to update validSession
 
   return (
     <AppBar
@@ -45,7 +51,7 @@ export default function Header(): ReactNode {
                 }}
               />
             </Link>
-            <ProfilePicture />
+            {validSession && <ProfilePicture />}
           </Box>
         </Toolbar>
       </Container>
