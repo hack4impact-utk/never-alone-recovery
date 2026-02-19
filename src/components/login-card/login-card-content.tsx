@@ -1,4 +1,5 @@
 import { Avatar, Box, Button, Typography } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
 import { Session } from "next-auth";
 import { ReactNode } from "react";
@@ -69,10 +70,16 @@ export default function LoginCardContent({
 
   return (
     <>
-      <Typography variant="h5">Please Sign In</Typography>
-      <Typography color="text.secondary" mb={2}>
-        Sign in to access your account information
-      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+        <Image
+          src="/NeverAloneRecoveryLogo.svg"
+          alt="NAR Logo"
+          width={400}
+          height={400}
+          style={{ height: "auto" }}
+          priority
+        />
+      </Box>
       <Button
         variant="contained"
         size="large"
