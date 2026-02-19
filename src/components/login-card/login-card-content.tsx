@@ -1,6 +1,7 @@
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import Image from "next/image";
 import { ReactNode } from "react";
-import Image from "next/image" ;
+
 import { handleLogin } from "@/utils/auth/handle-login";
 
 type LoginCardContentProps = {
