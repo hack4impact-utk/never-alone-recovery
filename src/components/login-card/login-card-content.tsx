@@ -1,8 +1,9 @@
 import { Avatar, Box, Button, Typography } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
 import { Session } from "next-auth";
 import { ReactNode } from "react";
-import Image from "next/image" ;
+
 import { handleLogin } from "@/utils/auth/handle-login";
 import { handleLogout } from "@/utils/auth/handle-logout";
 
