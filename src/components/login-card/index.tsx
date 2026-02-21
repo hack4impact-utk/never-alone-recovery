@@ -30,10 +30,7 @@ export default function LoginCard(): ReactNode {
       }}
     >
       <CardContent sx={{ p: 4, textAlign: "center" }}>
-        <LoginCardContent
-          status={status}
-          callbackUrl={callbackUrl}
-        />
+        <LoginCardContent status={status} callbackUrl={callbackUrl} />
       </CardContent>
     </Card>
   );
