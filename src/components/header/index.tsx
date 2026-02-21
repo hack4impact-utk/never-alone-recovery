@@ -13,10 +13,6 @@ import ProfilePicture from "./profile-picture";
 export default function Header(): ReactNode {
   const { data: session } = useSession();
 
-  if (!session) {
-    return null;
-  }
-
   return (
     <AppBar
       position="sticky"
@@ -45,7 +41,7 @@ export default function Header(): ReactNode {
                 }}
               />
             </Link>
-            <ProfilePicture />
+            {session && <ProfilePicture />}
           </Box>
         </Toolbar>
       </Container>
