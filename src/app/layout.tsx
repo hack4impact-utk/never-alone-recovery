@@ -4,13 +4,14 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { ReactNode } from "react";
+import { getServerSession } from "next-auth/next";
 
 import DateLocalizationProvider from "@/providers/date-localization-provider";
 import NextAuthProvider from "@/providers/next-auth-provider";
 import NotistackProvider from "@/providers/notistack-provider";
 import theme from "@/styles/theme";
-
 import Header from "../components/header";
+import authOptions from "./api/auth/[...nextauth]/auth-options";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -29,7 +30,9 @@ type RootLayoutProps = {
   children: ReactNode;
 };
 
-export default function RootLayout({ children }: RootLayoutProps): ReactNode {
+export default async function RootLayout({ children }: RootLayoutProps): Promise<ReactNode> {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en" className={roboto.variable}>
       <body>
@@ -38,8 +41,8 @@ export default function RootLayout({ children }: RootLayoutProps): ReactNode {
             <NotistackProvider>
               <DateLocalizationProvider>
                 <NextAuthProvider>
-                  <CssBaseline />
-                  <Header />
+                  <CssBaseline/>
+                  {session && <Header />}
                   {children}
                 </NextAuthProvider>
               </DateLocalizationProvider>
