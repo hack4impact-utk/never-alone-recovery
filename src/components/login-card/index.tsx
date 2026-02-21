@@ -1,17 +1,24 @@
 "use client";
 
 import { Card, CardContent } from "@mui/material";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 import LoginCardContent from "./login-card-content";
 
 export default function LoginCard(): ReactNode {
   const searchParams = useSearchParams();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
+  const router = useRouter();
 
   const callbackUrl = searchParams.get("callbackUrl");
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace(callbackUrl ?? "/");
+    }
+  }, [status, callbackUrl, router]);
 
   return (
     <Card
@@ -24,7 +31,6 @@ export default function LoginCard(): ReactNode {
     >
       <CardContent sx={{ p: 4, textAlign: "center" }}>
         <LoginCardContent
-          session={session}
           status={status}
           callbackUrl={callbackUrl}
         />
