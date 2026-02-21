@@ -29,8 +29,9 @@ export const metadata: Metadata = {
 type RootLayoutProps = {
   children: ReactNode;
 };
-
-export default async function RootLayout({ children }: RootLayoutProps): Promise<ReactNode> {
+export default async function RootLayout({
+  children,
+}: RootLayoutProps): Promise<ReactNode> {
   const session = await getServerSession(authOptions);
 
   return (
@@ -41,7 +42,7 @@ export default async function RootLayout({ children }: RootLayoutProps): Promise
             <NotistackProvider>
               <DateLocalizationProvider>
                 <NextAuthProvider>
-                  <CssBaseline/>
+                  <CssBaseline />
                   {session && <Header />}
                   {children}
                 </NextAuthProvider>
