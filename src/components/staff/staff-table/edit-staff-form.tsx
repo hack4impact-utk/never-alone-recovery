@@ -6,15 +6,19 @@ import {
   DialogContent,
   DialogTitle,
   FormControlLabel,
+  FormHelperText,
   FormLabel,
   Radio,
   RadioGroup,
   Stack,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { enqueueSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
+import { updateStaffRole } from "@/api/staff/public-mutations";
 import { StaffRole } from "@/types/enums";
 import { User } from "@/types/schema";
 
@@ -27,8 +31,15 @@ type EditStaffFormProps = {
 };
 
 export default function EditStaffForm({ user }: EditStaffFormProps): ReactNode {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const { control, handleSubmit } = useForm<EditStaffFormValues>({
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EditStaffFormValues>({
     defaultValues: {
       role: user.role,
     },
@@ -42,15 +53,27 @@ export default function EditStaffForm({ user }: EditStaffFormProps): ReactNode {
     setIsOpen(false);
   };
 
-  const onSubmit = (data: EditStaffFormValues): void => {
-    // eslint-disable-next-line no-console
-    console.log("Form Submitted:", {
-      userId: user.id,
-      originalName: user.name,
-      newRole: data.role,
+  const onSubmit = async (data: EditStaffFormValues): Promise<void> => {
+    setIsLoading(true);
+
+    const [, error] = await updateStaffRole(user, data.role);
+
+    if (error) {
+      enqueueSnackbar(error, {
+        variant: "error",
+      });
+
+      return;
+    }
+
+    enqueueSnackbar(`${user.name}'s role updated to ${data.role}!`, {
+      variant: "success",
     });
 
+    setIsLoading(false);
+
     handleClose();
+    router.refresh();
   };
 
   return (
@@ -83,28 +106,37 @@ export default function EditStaffForm({ user }: EditStaffFormProps): ReactNode {
               </Box>
 
               <Controller
-                rules={{ required: true }}
+                rules={{ required: "Please select a role" }}
                 control={control}
                 name="role"
                 render={({ field }) => (
-                  <RadioGroup {...field}>
-                    <FormLabel>Role</FormLabel>
-                    <FormControlLabel
-                      value="admin"
-                      control={<Radio />}
-                      label="Admin"
-                    />
-                    <FormControlLabel
-                      value="staff"
-                      control={<Radio />}
-                      label="Staff"
-                    />
-                    <FormControlLabel
-                      value="disabled"
-                      control={<Radio />}
-                      label="Disabled"
-                    />
-                  </RadioGroup>
+                  <Box>
+                    <RadioGroup {...field}>
+                      <FormLabel error={!!errors.role}>
+                        Role {errors.role && "*"}
+                      </FormLabel>
+                      <FormControlLabel
+                        value="admin"
+                        control={<Radio />}
+                        label="Admin"
+                      />
+                      <FormControlLabel
+                        value="staff"
+                        control={<Radio />}
+                        label="Staff"
+                      />
+                      <FormControlLabel
+                        value="disabled"
+                        control={<Radio />}
+                        label="Disabled"
+                      />
+                    </RadioGroup>
+                    {errors.role && (
+                      <FormHelperText error>
+                        {errors.role.message}
+                      </FormHelperText>
+                    )}
+                  </Box>
                 )}
               />
             </Stack>
@@ -123,6 +155,7 @@ export default function EditStaffForm({ user }: EditStaffFormProps): ReactNode {
               variant="contained"
               color="primary"
               sx={{ width: "45%" }}
+              loading={isLoading}
             >
               Submit
             </Button>

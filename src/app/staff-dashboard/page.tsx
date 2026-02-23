@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
-import { getAllStaff } from "@/api/staff";
+import { getAllStaff } from "@/api/staff/queries";
 import StaffTable from "@/components/staff/staff-table";
 
 export default async function StaffDashboardPage(): Promise<ReactNode> {
@@ -26,7 +26,8 @@ export default async function StaffDashboardPage(): Promise<ReactNode> {
       sx={{
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
+        minHeight: "100vh",
+        py: 4,
       }}
     >
       <StaffTable staff={staff} />
