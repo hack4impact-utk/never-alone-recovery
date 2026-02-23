@@ -1,69 +1,22 @@
-import { Avatar, Box, Button, Typography } from "@mui/material";
-import Link from "next/link";
-import { Session } from "next-auth";
+import { Button, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 import { handleLogin } from "@/utils/auth/handle-login";
-import { handleLogout } from "@/utils/auth/handle-logout";
 
 type LoginCardContentProps = {
-  session: Session | null;
   status: "loading" | "authenticated" | "unauthenticated";
   callbackUrl: string | null;
 };
 
 export default function LoginCardContent({
-  session,
   status,
   callbackUrl,
 }: LoginCardContentProps): ReactNode {
-  if (status === "loading") {
+  if (status === "loading" || status === "authenticated") {
     return (
       <Typography variant="h6" color="text.secondary">
         Loading...
       </Typography>
-    );
-  }
-
-  if (session) {
-    return (
-      <>
-        <Avatar
-          src={session.user?.image || undefined}
-          alt={session.user?.name || "User"}
-          sx={{
-            width: 80,
-            height: 80,
-            mx: "auto",
-            mb: 2,
-            border: 2,
-            borderColor: "primary.main",
-          }}
-        />
-        <Typography variant="h5">Welcome, {session.user?.name}!</Typography>
-        <Typography color="text.secondary">{session.user?.email}</Typography>
-        <Typography variant="body2" color="text.secondary">
-          Session expires:{" "}
-          {session.expires
-            ? new Date(session.expires).toLocaleDateString()
-            : "Unknown"}
-        </Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
-          <Button variant="outlined" color="error" onClick={handleLogout}>
-            Sign Out
-          </Button>
-          <Link href="/example-table">
-            <Button variant="outlined" sx={{ width: "100%" }}>
-              Example Table
-            </Button>
-          </Link>
-          <Link href="/example-form">
-            <Button variant="outlined" sx={{ width: "100%" }}>
-              Example Form
-            </Button>
-          </Link>
-        </Box>
-      </>
     );
   }
 
