@@ -96,7 +96,7 @@ export default function ClientTable({
             onDischarge={updateClients}
             onGraduate={updateClients}
           />
-        </div>
+        </Box>
       ),
     },
   ];
