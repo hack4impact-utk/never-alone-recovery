@@ -18,7 +18,7 @@ import { enqueueSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-import { updateStaff } from "@/api/staff/public-mutations";
+import { updateStaffRole } from "@/api/staff/public-mutations";
 import { StaffRole } from "@/types/enums";
 import { User } from "@/types/schema";
 
@@ -56,20 +56,21 @@ export default function EditStaffForm({ user }: EditStaffFormProps): ReactNode {
   const onSubmit = async (data: EditStaffFormValues): Promise<void> => {
     setIsLoading(true);
 
-    const [, error] = await updateStaff(user.id, data.role);
-
-    setIsLoading(false);
+    const [, error] = await updateStaffRole(user, data.role);
 
     if (error) {
       enqueueSnackbar(error, {
         variant: "error",
       });
+
       return;
     }
 
     enqueueSnackbar(`${user.name}'s role updated to ${data.role}!`, {
       variant: "success",
     });
+
+    setIsLoading(false);
 
     handleClose();
     router.refresh();
@@ -154,9 +155,9 @@ export default function EditStaffForm({ user }: EditStaffFormProps): ReactNode {
               variant="contained"
               color="primary"
               sx={{ width: "45%" }}
-              disabled={isLoading}
+              loading={isLoading}
             >
-              {isLoading ? "Updating..." : "Submit"}
+              Submit
             </Button>
           </DialogActions>
         </form>
