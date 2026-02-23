@@ -23,8 +23,6 @@ export default function LoginCard(): ReactNode {
   return (
     <Card
       sx={{
-        maxWidth: 400,
-        width: "90%",
         boxShadow: 3,
         borderRadius: 2,
       }}

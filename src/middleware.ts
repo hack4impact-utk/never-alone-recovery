@@ -9,6 +9,8 @@ export default withAuth({
 
 export const config = {
   matcher: [
-    String.raw`/((?!api|_next/static|_next/image|favicon.ico|.\.(?:svg|png|jpg|jpeg|gif|webp)$).)`,
+    // The raw regex string required to access files like images while unauthenticated.
+    // eslint-disable-next-line unicorn/prefer-string-raw
+    "/((?!api/auth|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)).*)",
   ],
 };

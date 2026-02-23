@@ -1,3 +1,4 @@
+import GoogleIcon from "@mui/icons-material/Google";
 import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
 import { ReactNode } from "react";
@@ -25,7 +26,7 @@ export default function LoginCardContent({
     <>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
         <Image
-          src="/NeverAloneRecoveryLogo.svg"
+          src="/LargeNeverAloneRecoveryLogo.svg"
           alt="NAR Logo"
           width={400}
           height={400}
@@ -37,6 +38,8 @@ export default function LoginCardContent({
         variant="contained"
         size="large"
         onClick={() => handleLogin(callbackUrl)}
+        startIcon={<GoogleIcon />}
+        sx={{ marginTop: 1 }}
       >
         Sign In with Google
       </Button>
