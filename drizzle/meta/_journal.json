@@ -15,6 +15,13 @@
       "when": 1762727364684,
       "tag": "0001_wandering_thing",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1771201890403,
+      "tag": "0002_yielding_miracleman",
+      "breakpoints": true
     }
   ]
 }

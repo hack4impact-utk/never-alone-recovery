@@ -8,7 +8,7 @@ import { Client } from "@/types/schema";
 
 import SearchBox from "../common/search-box";
 import ClientInfo from "./client-info";
-import ClientModal from "./client-modal";
+import TasksModal from "./tasks-modal";
 
 type ClientTableProps = {
   initialClients: Client[];
@@ -79,15 +79,24 @@ export default function ClientTable({
       headerName: "Actions",
       width: 180,
       renderCell: (params) => (
-        <div>
-          <ClientModal client={params.row} />
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <TasksModal client={params.row} />
 
           <ClientInfo
             client={params.row}
             onDischarge={updateClients}
             onGraduate={updateClients}
           />
-        </div>
+        </Box>
       ),
     },
   ];
