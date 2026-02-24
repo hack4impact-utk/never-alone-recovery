@@ -7,6 +7,8 @@ import { useSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 import { FieldErrors, FormProvider, useForm } from "react-hook-form";
 
+import { useIntakeFormContext } from "@/providers/intake-form-provider";
+
 import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
 import {
@@ -16,7 +18,6 @@ import {
 } from "./intake-form-schema";
 import SearchConsentForm from "./search-consent-form";
 import TransportationReleaseForm from "./transportation-release-form";
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
 
 type FormNames = keyof IntakeFormValues;
 
