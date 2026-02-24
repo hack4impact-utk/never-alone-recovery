@@ -12,11 +12,16 @@ import {
   searchConsentFormDefaultValues,
   searchConsentFormSchema,
 } from "./search-consent-form/search-consent-form-schema";
+import {
+  transportationReleaseFormDefaultValues,
+  transportationReleaseFormSchema,
+} from "./transportation-release-form/transportation-release-form-schema";
 
 export const intakeFormSchema = z.object({
   demographic: demographicFormSchema,
   emergencyContact: emergencyContactFormSchema,
   searchConsent: searchConsentFormSchema,
+  transportationRelease: transportationReleaseFormSchema,
 });
 
 export type IntakeFormValues = z.infer<typeof intakeFormSchema>;
@@ -25,4 +30,5 @@ export const intakeFormDefaultValues: IntakeFormValues = {
   demographic: demographicFormDefaultValues,
   searchConsent: searchConsentFormDefaultValues,
   emergencyContact: emergencyContactFormDefaultValues,
+  transportationRelease: transportationReleaseFormDefaultValues,
 };

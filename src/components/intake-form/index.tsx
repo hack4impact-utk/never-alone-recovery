@@ -15,6 +15,7 @@ import {
   IntakeFormValues,
 } from "./intake-form-schema";
 import SearchConsentForm from "./search-consent-form";
+import TransportationReleaseForm from "./transportation-release-form";
 
 type FormNames = keyof IntakeFormValues;
 
@@ -27,6 +28,10 @@ const intakeFormSteps: IntakeFormStep[] = [
   {
     name: "demographic",
     form: <DemographicForm />,
+  },
+  {
+    name: "transportationRelease",
+    form: <TransportationReleaseForm />,
   },
   {
     name: "searchConsent",
