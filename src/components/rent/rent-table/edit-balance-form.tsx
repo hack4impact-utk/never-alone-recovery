@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
@@ -20,17 +21,24 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
 import { ReactNode, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import z from "zod";
 
+import { addTransaction } from "@/api/rent/public-mutations";
+import { useRentContext } from "@/providers/rent-provider";
 import { Balance } from "@/types/balance";
+import { TRANSACTION_TYPE_VALUES } from "@/types/enums";
 import { currencyColor } from "@/utils/money/currency-color";
 import { formatCurrency } from "@/utils/money/format-currency";
 
-type EditBalanceFormValues = {
-  amount: number;
-  type: "increase" | "decrease";
-};
+const EditBalanceFormSchema = z.object({
+  amount: z.number().min(0, "Amount must be at least 0"),
+  type: z.enum(TRANSACTION_TYPE_VALUES),
+});
+
+type EditBalanceFormValues = z.infer<typeof EditBalanceFormSchema>;
 
 type EditBalanceFormProps = {
   balance: Balance;
@@ -40,27 +48,64 @@ export default function EditBalanceForm({
   balance,
 }: EditBalanceFormProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
-  const { control, watch, reset, handleSubmit } =
-    useForm<EditBalanceFormValues>({
-      defaultValues: { amount: 0, type: "decrease" },
-    });
+  const { setClientBalances } = useRentContext();
+  const {
+    control,
+    watch,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EditBalanceFormValues>({
+    resolver: zodResolver(EditBalanceFormSchema),
+    defaultValues: { amount: 0, type: "payment" },
+  });
   const fullName = `${balance.client.firstName} ${balance.client.lastName}`;
 
   const amount = watch("amount");
   const type = watch("type");
 
   const newBalance = useMemo(() => {
-    return type === "decrease"
+    return type === "payment"
       ? Number(balance.total) + Number(amount || 0)
       : Number(balance.total) - Number(amount || 0);
   }, [type, amount, balance.total]);
 
-  const onSubmit = (): void => {
-    // eslint-disable-next-line no-console
-    console.log("Submit:", {
-      client: fullName,
-      amount,
-      type,
+  const onSubmit = async (data: EditBalanceFormValues): Promise<void> => {
+    const [, error] = await addTransaction({
+      staffId: balance.client.staffId,
+      clientId: balance.client.id,
+      amount: String(data.amount),
+      type: data.type,
+    });
+
+    if (error) {
+      console.error("Failed to add transaction:", error);
+      return;
+    }
+
+    if (error) {
+      enqueueSnackbar(
+        `Failed to charge ${fullName} of $${data.amount}. Please try again.`,
+        {
+          variant: "error",
+        },
+      );
+      return;
+    }
+
+    const successMessage = `${fullName} charged $${data.amount} successfully!`;
+
+    enqueueSnackbar(successMessage, {
+      variant: "success",
+    });
+
+    setClientBalances((prevBalances) => {
+      return prevBalances.map((b) => {
+        if (b.client.id === balance.client.id) {
+          return { ...b, total: newBalance };
+        }
+        return b;
+      });
     });
 
     handleClose();
@@ -98,6 +143,10 @@ export default function EditBalanceForm({
                   {...field}
                   label="Amount"
                   type="number"
+                  error={!!errors.amount}
+                  helperText={errors.amount?.message}
+                  fullWidth
+                  margin="dense"
                   slotProps={{
                     input: {
                       startAdornment: (
@@ -105,7 +154,9 @@ export default function EditBalanceForm({
                       ),
                     },
                   }}
-                  sx={{ mb: 2 }}
+                  onChange={(event) => {
+                    field.onChange(Number(event.target.value) || "");
+                  }}
                 />
               )}
             />
@@ -114,17 +165,17 @@ export default function EditBalanceForm({
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
-                <RadioGroup {...field} sx={{ mb: 2 }}>
+                <RadioGroup {...field} sx={{ my: 2 }}>
                   <FormLabel>Transaction Type</FormLabel>
                   <FormControlLabel
-                    value="increase"
+                    value="payment"
                     control={<Radio />}
-                    label="Increase Balance"
+                    label="Payment"
                   />
                   <FormControlLabel
-                    value="decrease"
+                    value="charge"
                     control={<Radio />}
-                    label="Decrease Balance"
+                    label="Charge"
                   />
                 </RadioGroup>
               )}
