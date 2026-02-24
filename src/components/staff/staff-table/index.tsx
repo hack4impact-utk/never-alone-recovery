@@ -1,7 +1,7 @@
 "use client";
 import { Box, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
 import { StaffRole } from "@/types/enums";
@@ -97,6 +97,14 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
     },
   ];
 
+  const [displayDataGrid, setDisplayDataGrid] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDisplayDataGrid(true);
+    });
+  }, []);
+
   return (
     <Box
       sx={{
@@ -112,7 +120,8 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
       <Box display="flex" alignItems="center" sx={{ py: 2 }}>
         <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       </Box>
-      <Box sx={{ flex: 1, minHeight: 0 }}>
+
+      {displayDataGrid && (
         <DataGrid
           rows={rows}
           columns={columns}
@@ -125,7 +134,7 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
             },
           }}
         />
-      </Box>
+      )}
     </Box>
   );
 }
