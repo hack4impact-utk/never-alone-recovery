@@ -103,7 +103,7 @@ export default function RentTable({
           staffId: balance.client.staffId,
           type: "charge",
           clientId: balance.client.id,
-          amount: data.amount,
+          amount: String(data.amount),
         };
       },
     );
@@ -111,7 +111,7 @@ export default function RentTable({
 
     if (!success) {
       enqueueSnackbar(
-        `Failed to charge clients of ${data.amount}. Please try again.`,
+        `Failed to charge clients of $${data.amount}. Please try again.`,
         {
           variant: "error",
         },
@@ -119,7 +119,7 @@ export default function RentTable({
       return;
     }
 
-    const successMessage = `Clients charged ${data.amount} successfully!`;
+    const successMessage = `Clients charged $${data.amount} successfully!`;
 
     enqueueSnackbar(successMessage, {
       variant: "success",
@@ -128,7 +128,7 @@ export default function RentTable({
     setClientBalances((prevBalances) =>
       prevBalances.map((balance) => ({
         ...balance,
-        total: Number(balance.total) + Number(data.amount),
+        total: balance.total - data.amount,
       })),
     );
 
