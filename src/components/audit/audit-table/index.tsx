@@ -3,7 +3,7 @@
 import { Box, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import dayjs from "dayjs";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
 import { AuditWithClientAndStaff } from "@/types/audit-with-client-and-staff";
@@ -102,6 +102,14 @@ export default function AuditTable({ audits }: AuditTableProps): ReactNode {
   const [searchQuery, setSearchQuery] = useState("");
   const filteredRows = getRows(audits, searchQuery);
 
+  const [displayDataGrid, setDisplayDataGrid] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDisplayDataGrid(true);
+    });
+  }, []);
+
   return (
     <Box
       sx={{
@@ -117,18 +125,21 @@ export default function AuditTable({ audits }: AuditTableProps): ReactNode {
       <Box display="flex" alignItems="center" sx={{ py: 2 }}>
         <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       </Box>
-      <DataGrid
-        rows={filteredRows}
-        columns={columns}
-        disableRowSelectionOnClick
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 8,
+
+      {displayDataGrid && (
+        <DataGrid
+          rows={filteredRows}
+          columns={columns}
+          disableRowSelectionOnClick
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 8,
+              },
             },
-          },
-        }}
-      />
+          }}
+        />
+      )}
     </Box>
   );
 }
