@@ -1,8 +1,13 @@
 "use client";
 
 import { Box, Button } from "@mui/material";
-import { PDFDocument } from "pdf-lib";
-import { ReactNode, useEffect, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { useFormContext } from "react-hook-form";
 
 import DocumentDisplay from "@/components/common/document-display";
@@ -14,28 +19,15 @@ import {
   Annotation,
   SignatureLocation,
 } from "@/utils/pdf/annotations";
+import { convertPdfToUrl, covertUrlToPdf } from "@/utils/pdf/conversion";
 
 import { IntakeFormValues } from "./intake-form-schema";
-
-const convertPdfToUrl = async (pdf: PDFDocument): Promise<string> => {
-  const pdfBytes = await pdf.save();
-
-  const blob = new Blob([new Uint8Array(pdfBytes)], {
-    type: "application/pdf",
-  });
-
-  return URL.createObjectURL(blob);
-};
-
-const fetchPdf = async (path: string): Promise<PDFDocument> => {
-  const response = await fetch(path);
-  const arrayBuffer = await response.arrayBuffer();
-  return await PDFDocument.load(arrayBuffer);
-};
 
 type DocumentSignatureProps = {
   pdfPath: string;
   formTitle: string;
+  pdfUrl: string;
+  setPdfUrl: Dispatch<SetStateAction<string>>;
   staffSignatureLocation: SignatureLocation;
   residentSignatureLocation: SignatureLocation;
   annotations?: Annotation[];
@@ -44,12 +36,13 @@ type DocumentSignatureProps = {
 export default function DocumentSignature({
   pdfPath,
   formTitle,
+  pdfUrl,
+  setPdfUrl,
   staffSignatureLocation,
   residentSignatureLocation,
   annotations: annotationLocations = [],
 }: DocumentSignatureProps): ReactNode {
   const { getValues } = useFormContext<IntakeFormValues>();
-  const [pdfUrl, setPdfUrl] = useState<string>("");
   const [residentSignature, setResidentSignature] = useState<string>("");
   const [staffSignature, setStaffSignature] = useState<string>("");
   const firstName = getValues("demographic").firstName;
@@ -57,7 +50,7 @@ export default function DocumentSignature({
   const fullName = `${firstName} ${lastName}`;
 
   const generatePdf = async (): Promise<void> => {
-    const pdf = await fetchPdf(pdfPath);
+    const pdf = await covertUrlToPdf(pdfPath);
 
     for (const annotation of annotationLocations) {
       switch (annotation.type) {

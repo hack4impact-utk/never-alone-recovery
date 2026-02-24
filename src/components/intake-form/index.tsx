@@ -16,6 +16,7 @@ import {
 } from "./intake-form-schema";
 import SearchConsentForm from "./search-consent-form";
 import TransportationReleaseForm from "./transportation-release-form";
+import { useIntakeFormContext } from "@/providers/intake-form-provider";
 
 type FormNames = keyof IntakeFormValues;
 
@@ -44,6 +45,7 @@ const intakeFormSteps: IntakeFormStep[] = [
 ];
 
 export default function IntakeForm(): ReactNode {
+  const { getIntakeFormPdfUrl } = useIntakeFormContext();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const methods = useForm<IntakeFormValues>({
@@ -54,7 +56,7 @@ export default function IntakeForm(): ReactNode {
   const { handleSubmit, trigger } = methods;
   const [step, setStep] = useState(intakeFormSteps[0]);
 
-  const onSubmit = (data: IntakeFormValues): void => {
+  const onSubmit = async (data: IntakeFormValues): Promise<void> => {
     // eslint-disable-next-line no-console
     console.log("Form Data:", data);
 
@@ -62,6 +64,15 @@ export default function IntakeForm(): ReactNode {
     enqueueSnackbar(successMessage, {
       variant: "success",
     });
+
+    const pdfUrl = await getIntakeFormPdfUrl();
+
+    if (pdfUrl) {
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.download = "intake-form.pdf";
+      link.click();
+    }
 
     router.push("/");
   };
