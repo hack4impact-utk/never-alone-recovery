@@ -2,7 +2,7 @@
 
 import { Box, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
 import { Client } from "@/types/schema";
 
@@ -101,6 +101,14 @@ export default function ClientTable({
     },
   ];
 
+  const [displayDataGrid, setDisplayDataGrid] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDisplayDataGrid(true);
+    });
+  }, []);
+
   return (
     <>
       <Box
@@ -120,18 +128,21 @@ export default function ClientTable({
             setSearchQuery={setSearchQuery}
           />
         </Box>
-        <DataGrid
-          rows={filteredRows}
-          columns={columns}
-          disableRowSelectionOnClick
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 8,
+
+        {displayDataGrid && (
+          <DataGrid
+            rows={filteredRows}
+            columns={columns}
+            disableRowSelectionOnClick
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 8,
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        )}
       </Box>
     </>
   );
