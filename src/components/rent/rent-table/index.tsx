@@ -2,7 +2,7 @@
 
 import { Box, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
 import { useRentContext } from "@/providers/rent-provider";
@@ -77,6 +77,14 @@ export default function RentTable(): ReactNode {
     },
   ];
 
+  const [displayDataGrid, setDisplayDataGrid] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDisplayDataGrid(true);
+    });
+  }, []);
+
   return (
     <>
       <Box
@@ -104,18 +112,21 @@ export default function RentTable(): ReactNode {
           <IncreaseBalanceForm />
         </Box>
 
-        <DataGrid
-          rows={filteredRows}
-          columns={columns}
-          disableRowSelectionOnClick
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 8,
+        {displayDataGrid && (
+          <DataGrid
+            sx={{ height: "100%" }}
+            rows={filteredRows}
+            columns={columns}
+            disableRowSelectionOnClick
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 8,
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        )}
       </Box>
     </>
   );
