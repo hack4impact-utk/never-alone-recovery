@@ -6,10 +6,10 @@ import handleError from "@/utils/handle-error";
 
 export async function insertTransactions(
   transactions: NewRentTransaction[],
-): Promise<Result<boolean>> {
+): Promise<Result<null>> {
   try {
     await db.insert(rentTransactions).values(transactions);
-    return [true, null];
+    return [null, null];
   } catch (error) {
     return [null, handleError(error)];
   }

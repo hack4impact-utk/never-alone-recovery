@@ -1,25 +1,17 @@
 "use client";
 
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { enqueueSnackbar } from "notistack";
 import { ReactNode, useMemo, useState } from "react";
 
-import { chargeAllClients } from "@/api/rent/public-mutations";
 import SearchBox from "@/components/common/search-box";
+import { useRentContext } from "@/providers/rent-provider";
 import { Balance } from "@/types/balance";
-import { NewRentTransaction } from "@/types/schema";
 import { currencyColor } from "@/utils/money/currency-color";
 import { formatCurrency } from "@/utils/money/format-currency";
 
 import EditBalanceForm from "./edit-balance-form";
-import IncreaseBalanceForm, {
-  IncreaseBalanceFormValues,
-} from "./increase-balance-form";
-
-type RentTableProps = {
-  initialClientBalances: Balance[];
-};
+import IncreaseBalanceForm from "./increase-balance-form";
 
 type Row = {
   id: string;
@@ -49,12 +41,9 @@ function getRows(clientBalances: Balance[], searchQuery: string): Row[] {
   });
 }
 
-export default function RentTable({
-  initialClientBalances,
-}: RentTableProps): ReactNode {
+export default function RentTable(): ReactNode {
+  const { clientBalances } = useRentContext();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isIncreaseBalanceOpen, setIsIncreaseBalanceOpen] = useState(false);
-  const [clientBalances, setClientBalances] = useState(initialClientBalances);
 
   const filteredRows = useMemo(() => {
     return getRows(clientBalances, searchQuery);
@@ -88,53 +77,6 @@ export default function RentTable({
     },
   ];
 
-  const handleBalanceOpen = (): void => {
-    setIsIncreaseBalanceOpen(true);
-  };
-
-  const handleBalanceClose = (): void => {
-    setIsIncreaseBalanceOpen(false);
-  };
-
-  const onSubmit = async (data: IncreaseBalanceFormValues): Promise<void> => {
-    const newRentTransactions: NewRentTransaction[] = clientBalances.map(
-      (balance) => {
-        return {
-          staffId: balance.client.staffId,
-          type: "charge",
-          clientId: balance.client.id,
-          amount: String(data.amount),
-        };
-      },
-    );
-    const [success] = await chargeAllClients(newRentTransactions);
-
-    if (!success) {
-      enqueueSnackbar(
-        `Failed to charge clients of $${data.amount}. Please try again.`,
-        {
-          variant: "error",
-        },
-      );
-      return;
-    }
-
-    const successMessage = `Clients charged $${data.amount} successfully!`;
-
-    enqueueSnackbar(successMessage, {
-      variant: "success",
-    });
-
-    setClientBalances((prevBalances) =>
-      prevBalances.map((balance) => ({
-        ...balance,
-        total: balance.total - data.amount,
-      })),
-    );
-
-    handleBalanceClose();
-  };
-
   return (
     <>
       <Box
@@ -159,13 +101,7 @@ export default function RentTable({
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
           />
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleBalanceOpen}
-          >
-            Increase Balance
-          </Button>
+          <IncreaseBalanceForm />
         </Box>
 
         <DataGrid
@@ -179,12 +115,6 @@ export default function RentTable({
               },
             },
           }}
-        />
-
-        <IncreaseBalanceForm
-          open={isIncreaseBalanceOpen}
-          handleClose={handleBalanceClose}
-          onSubmit={onSubmit}
         />
       </Box>
     </>

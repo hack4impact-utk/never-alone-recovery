@@ -7,6 +7,12 @@ import { insertTransactions } from "./private-mutations";
 
 export async function chargeAllClients(
   transactions: NewRentTransaction[],
-): Promise<Result<boolean>> {
+): Promise<Result<null>> {
   return await insertTransactions(transactions);
+}
+
+export async function addTransaction(
+  transaction: NewRentTransaction,
+): Promise<Result<null>> {
+  return await insertTransactions([transaction]);
 }
