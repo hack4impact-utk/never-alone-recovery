@@ -9,8 +9,8 @@ import handleError from "@/utils/handle-error";
 const calculateClientBalance = sql<number>`
   COALESCE(SUM(
     CASE 
-      WHEN ${rentTransactions.type} = 'charge' THEN ${rentTransactions.amount}::numeric
-      WHEN ${rentTransactions.type} = 'payment' THEN -1 * ${rentTransactions.amount}::numeric
+      WHEN ${rentTransactions.type} = 'payment' THEN ${rentTransactions.amount}::numeric
+      WHEN ${rentTransactions.type} = 'charge' THEN -1 * ${rentTransactions.amount}::numeric
       ELSE 0 
     END
   ), 0)
