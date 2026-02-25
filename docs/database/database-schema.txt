@@ -1,0 +1,128 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+// --- Enums ---
+Enum staffRoleEnum {
+  admin
+  staff
+  disabled
+}
+
+Enum clientStatusEnum {
+  resident
+  prospect
+  former
+}
+
+Enum transactionType {
+  credit
+  debit
+}
+
+Enum auditTypeEnum {
+  create
+  update
+  delete
+  system
+}
+
+// --- Tables ---
+
+Table intake_forms {
+  id text [pk]
+  created_date timestamp [default: `now()`]
+  created_by text
+  edited_date timestamp [default: `now()`]
+  edited_by text
+  first_name text [not null]
+  last_name text [not null]
+  email text [unique, not null]
+  date_of_birth date [not null]
+}
+
+Table users {
+  id text [pk]
+  created_date timestamp [default: `now()`]
+  created_by text
+  edited_date timestamp [default: `now()`]
+  edited_by text
+  name text [not null]
+  email text [unique]
+  email_verified timestamp
+  image text [not null]
+  role staffRoleEnum [default: 'disabled', not null]
+}
+
+Table clients {
+  id text [pk]
+  created_date timestamp [default: `now()`]
+  created_by text
+  edited_date timestamp [default: `now()`]
+  edited_by text
+  first_name text [not null]
+  last_name text [not null]
+  email text [unique, not null]
+  status clientStatusEnum [default: 'resident', not null]
+  staff_id text [not null]
+  intake_form_id text [not null]
+}
+
+Table tasks {
+  id text [pk]
+  created_date timestamp [default: `now()`]
+  created_by text
+  edited_date timestamp [default: `now()`]
+  edited_by text
+  staff_id text [not null]
+  client_id text [not null]
+  description text
+  completed boolean [default: false, not null]
+}
+
+Table task_blueprints {
+  id text [pk]
+  created_date timestamp [default: `now()`]
+  created_by text
+  edited_date timestamp [default: `now()`]
+  edited_by text
+  staff_id text [not null]
+  client_id text [not null]
+  description text
+}
+
+Table rent_transactions {
+  id text [pk]
+  created_date timestamp [default: `now()`]
+  created_by text
+  edited_date timestamp [default: `now()`]
+  edited_by text
+  staff_id text [not null]
+  client_id text [not null]
+  type transactionType [not null]
+  amount numeric(19,4) [not null]
+}
+
+Table audits {
+  id text [pk]
+  created_date timestamp [default: `now()`]
+  created_by text
+  edited_date timestamp [default: `now()`]
+  edited_by text
+  staff_id text
+  client_id text
+  type auditTypeEnum
+  message text
+}
+
+// --- Relationships ---
+
+Ref: clients.staff_id > users.id
+Ref: clients.intake_form_id - intake_forms.id // One-to-one
+Ref: tasks.staff_id > users.id
+Ref: tasks.client_id > clients.id
+Ref: task_blueprints.staff_id > users.id
+Ref: task_blueprints.client_id > clients.id
+Ref: rent_transactions.staff_id > users.id
+Ref: rent_transactions.client_id > clients.id
+Ref: audits.staff_id > users.id
+Ref: audits.client_id > clients.id
