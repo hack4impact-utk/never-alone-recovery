@@ -6,18 +6,18 @@ import { useIntakeFormContext } from "@/providers/intake-form-provider";
 
 import DocumentSignature from "../document-signature";
 
-const PDF_PATH = "neveralonerecovery.searchconsentform.pdf";
+const PDF_PATH = "neveralonerecovery.probationandparoleform.pdf";
 
-export default function SearchConsentForm(): ReactNode {
-  const { searchConsentFormPdfUrl, setSearchConsentFormPdfUrl } =
+export default function ProbationAndParoleForm(): ReactNode {
+  const { probationAndParoleFormPdfUrl, setProbationAndParoleFormPdfUrl } =
     useIntakeFormContext();
 
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
-      formTitle="Search Consent Form"
-      pdfUrl={searchConsentFormPdfUrl}
-      setPdfUrl={setSearchConsentFormPdfUrl}
+      formTitle="Probation and Parole Form"
+      pdfUrl={probationAndParoleFormPdfUrl}
+      setPdfUrl={setProbationAndParoleFormPdfUrl}
       staffSignatureLocation={{
         x: 150,
         y: 100,
@@ -26,29 +26,21 @@ export default function SearchConsentForm(): ReactNode {
       }}
       residentSignatureLocation={{
         x: 150,
-        y: 155,
+        y: 170,
         width: 200,
         height: 50,
       }}
       signaturePage={0}
       annotations={[
         {
-          type: "name",
+          type: "date",
           pageNumber: 0,
-          location: {
-            x: 100,
-            y: 230,
-          },
+          location: { x: 460, y: 185 },
         },
         {
           type: "date",
           pageNumber: 0,
-          location: { x: 475, y: 115 },
-        },
-        {
-          type: "date",
-          pageNumber: 0,
-          location: { x: 475, y: 175 },
+          location: { x: 460, y: 115 },
         },
       ]}
     />

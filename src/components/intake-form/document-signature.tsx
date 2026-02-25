@@ -30,6 +30,7 @@ type DocumentSignatureProps = {
   setPdfUrl: Dispatch<SetStateAction<string>>;
   staffSignatureLocation: SignatureLocation;
   residentSignatureLocation: SignatureLocation;
+  signaturePage: number;
   annotations?: Annotation[];
 };
 
@@ -40,6 +41,7 @@ export default function DocumentSignature({
   setPdfUrl,
   staffSignatureLocation,
   residentSignatureLocation,
+  signaturePage,
   annotations: annotationLocations = [],
 }: DocumentSignatureProps): ReactNode {
   const { getValues } = useFormContext<IntakeFormValues>();
@@ -72,12 +74,17 @@ export default function DocumentSignature({
       }
     }
 
-    await addSignatureToPdf(pdf, staffSignature, 0, staffSignatureLocation);
+    await addSignatureToPdf(
+      pdf,
+      staffSignature,
+      signaturePage,
+      staffSignatureLocation,
+    );
 
     await addSignatureToPdf(
       pdf,
       residentSignature,
-      0,
+      signaturePage,
       residentSignatureLocation,
     );
 

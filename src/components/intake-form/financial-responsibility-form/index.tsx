@@ -6,29 +6,29 @@ import { useIntakeFormContext } from "@/providers/intake-form-provider";
 
 import DocumentSignature from "../document-signature";
 
-const PDF_PATH = "neveralonerecovery.transportationreleaseform.pdf";
+const PDF_PATH = "neveralonerecovery.financialresponsibility.pdf";
 
-export default function TransportationReleaseForm(): ReactNode {
+export default function FinancialResponsibilityForm(): ReactNode {
   const {
-    transformationReleaseFormPdfUrl,
-    setTransformationReleaseFormPdfUrl,
+    financialResponsibilityFormPdfUrl,
+    setFinancialResponsibilityFormPdfUrl,
   } = useIntakeFormContext();
 
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
-      formTitle="Transportation Release Form"
-      pdfUrl={transformationReleaseFormPdfUrl}
-      setPdfUrl={setTransformationReleaseFormPdfUrl}
+      formTitle="Financial Responsibility Form"
+      pdfUrl={financialResponsibilityFormPdfUrl}
+      setPdfUrl={setFinancialResponsibilityFormPdfUrl}
       staffSignatureLocation={{
         x: 150,
-        y: 325,
+        y: 145,
         width: 200,
         height: 50,
       }}
       residentSignatureLocation={{
         x: 150,
-        y: 390,
+        y: 185,
         width: 200,
         height: 50,
       }}
@@ -38,19 +38,19 @@ export default function TransportationReleaseForm(): ReactNode {
           type: "name",
           pageNumber: 0,
           location: {
-            x: 100,
-            y: 550,
+            x: 170,
+            y: 565,
           },
         },
         {
           type: "date",
           pageNumber: 0,
-          location: { x: 400, y: 340 },
+          location: { x: 430, y: 197 },
         },
         {
           type: "date",
           pageNumber: 0,
-          location: { x: 400, y: 410 },
+          location: { x: 430, y: 155 },
         },
       ]}
     />
