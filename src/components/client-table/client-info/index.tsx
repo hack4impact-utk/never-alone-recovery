@@ -15,15 +15,19 @@ import { Client } from "@/types/schema";
 
 import Discharge from "./discharge-modal";
 import Graduate from "./graduate-modal";
+import ChangeHousingManger from "./housing-manager-modal";
+import { HousingManger } from "@/types/housing-manager";
 
 type ClientInfoProps = {
   client: Client;
+  housingMangers: HousingManger[] | null;
   onGraduate: (client: Client) => void;
   onDischarge: (client: Client) => void;
 };
 
 export default function ClientInfo({
   client,
+  housingMangers,
   onGraduate,
   onDischarge,
 }: ClientInfoProps): ReactNode {
@@ -55,6 +59,7 @@ export default function ClientInfo({
         </DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
+            <ChangeHousingManger client={client} housingManagers={housingMangers} />
             <Graduate client={client} onGraduate={onGraduate} />
             <Discharge client={client} onDischarge={onDischarge} />
           </Box>
