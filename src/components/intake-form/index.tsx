@@ -9,14 +9,21 @@ import { FieldErrors, FormProvider, useForm } from "react-hook-form";
 
 import { useIntakeFormContext } from "@/providers/intake-form-provider";
 
+import BehavioralStandardsForm from "./behavioral-standards-form";
+import ConfidentialityAgreementForm from "./confidentiality-agreement-form";
 import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
+import FinancialResponsibilityForm from "./financial-responsibility-form";
 import {
   intakeFormDefaultValues,
   intakeFormSchema,
   IntakeFormValues,
 } from "./intake-form-schema";
+import ProbationAndParoleForm from "./probation-and-parole-form";
+import ReleaseOfInformationForm from "./release-of-information-form";
 import SearchConsentForm from "./search-consent-form";
+import ServiceContractForm from "./service-contract-form";
+import TemporaryResidencyForm from "./temporary-residency-form";
 import TransportationReleaseForm from "./transportation-release-form";
 
 type FormNames = keyof IntakeFormValues;
@@ -38,6 +45,34 @@ const intakeFormSteps: IntakeFormStep[] = [
   {
     name: "searchConsent",
     form: <SearchConsentForm />,
+  },
+  {
+    name: "probationAndParole",
+    form: <ProbationAndParoleForm />,
+  },
+  {
+    name: "behavioralStandards",
+    form: <BehavioralStandardsForm />,
+  },
+  {
+    name: "confidentialityAgreement",
+    form: <ConfidentialityAgreementForm />,
+  },
+  {
+    name: "financialResponsibility",
+    form: <FinancialResponsibilityForm />,
+  },
+  {
+    name: "releaseOfInformation",
+    form: <ReleaseOfInformationForm />,
+  },
+  {
+    name: "serviceContract",
+    form: <ServiceContractForm />,
+  },
+  {
+    name: "temporaryResidency",
+    form: <TemporaryResidencyForm />,
   },
   {
     name: "emergencyContact",

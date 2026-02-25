@@ -30,6 +30,20 @@ type IntakeFormContextType = {
   setTransformationReleaseFormPdfUrl: Dispatch<SetStateAction<string>>;
   searchConsentFormPdfUrl: string;
   setSearchConsentFormPdfUrl: Dispatch<SetStateAction<string>>;
+  confidentialityAgreementFormPdfUrl: string;
+  setConfidentialityAgreementFormPdfUrl: Dispatch<SetStateAction<string>>;
+  financialResponsibilityFormPdfUrl: string;
+  setFinancialResponsibilityFormPdfUrl: Dispatch<SetStateAction<string>>;
+  behavioralStandardsFormPdfUrl: string;
+  setBehavioralStandardsFormPdfUrl: Dispatch<SetStateAction<string>>;
+  probationAndParoleFormPdfUrl: string;
+  setProbationAndParoleFormPdfUrl: Dispatch<SetStateAction<string>>;
+  releaseOfInformationFormPdfUrl: string;
+  setReleaseOfInformationFormPdfUrl: Dispatch<SetStateAction<string>>;
+  serviceContractFormPdfUrl: string;
+  setServiceContractFormPdfUrl: Dispatch<SetStateAction<string>>;
+  temporaryResidencyFormPdfUrl: string;
+  setTemporaryResidencyFormPdfUrl: Dispatch<SetStateAction<string>>;
   getIntakeFormPdfUrl: () => Promise<string>;
 };
 
@@ -48,11 +62,36 @@ export default function IntakeFormProvider({
     useState<string>("");
   const [searchConsentFormPdfUrl, setSearchConsentFormPdfUrl] =
     useState<string>("");
+  const [
+    confidentialityAgreementFormPdfUrl,
+    setConfidentialityAgreementFormPdfUrl,
+  ] = useState<string>("");
+  const [
+    financialResponsibilityFormPdfUrl,
+    setFinancialResponsibilityFormPdfUrl,
+  ] = useState<string>("");
+  const [behavioralStandardsFormPdfUrl, setBehavioralStandardsFormPdfUrl] =
+    useState<string>("");
+  const [probationAndParoleFormPdfUrl, setProbationAndParoleFormPdfUrl] =
+    useState<string>("");
+  const [releaseOfInformationFormPdfUrl, setReleaseOfInformationFormPdfUrl] =
+    useState<string>("");
+  const [serviceContractFormPdfUrl, setServiceContractFormPdfUrl] =
+    useState<string>("");
+  const [temporaryResidencyFormPdfUrl, setTemporaryResidencyFormPdfUrl] =
+    useState<string>("");
 
   const getIntakeFormPdfUrl = async (): Promise<string> => {
     return await mergePdfs([
       transformationReleaseFormPdfUrl,
       searchConsentFormPdfUrl,
+      probationAndParoleFormPdfUrl,
+      behavioralStandardsFormPdfUrl,
+      confidentialityAgreementFormPdfUrl,
+      financialResponsibilityFormPdfUrl,
+      releaseOfInformationFormPdfUrl,
+      serviceContractFormPdfUrl,
+      temporaryResidencyFormPdfUrl,
     ]);
   };
 
@@ -63,6 +102,20 @@ export default function IntakeFormProvider({
         setTransformationReleaseFormPdfUrl,
         searchConsentFormPdfUrl,
         setSearchConsentFormPdfUrl,
+        confidentialityAgreementFormPdfUrl,
+        setConfidentialityAgreementFormPdfUrl,
+        financialResponsibilityFormPdfUrl,
+        setFinancialResponsibilityFormPdfUrl,
+        behavioralStandardsFormPdfUrl,
+        setBehavioralStandardsFormPdfUrl,
+        probationAndParoleFormPdfUrl,
+        setProbationAndParoleFormPdfUrl,
+        releaseOfInformationFormPdfUrl,
+        setReleaseOfInformationFormPdfUrl,
+        serviceContractFormPdfUrl,
+        setServiceContractFormPdfUrl,
+        temporaryResidencyFormPdfUrl,
+        setTemporaryResidencyFormPdfUrl,
         getIntakeFormPdfUrl,
       }}
     >
