@@ -4,6 +4,7 @@ import db from "@/db";
 import { clients, rentTransactions } from "@/db/schema";
 import { Balance } from "@/types/balance";
 import { Result } from "@/types/result";
+import getUserSession from "@/utils/auth/get-user-session";
 import handleError from "@/utils/handle-error";
 
 const calculateClientBalance = sql<number>`
@@ -17,6 +18,12 @@ const calculateClientBalance = sql<number>`
 `;
 
 export async function getAllClientBalances(): Promise<Result<Balance[]>> {
+  const session = await getUserSession();
+
+  if (!session) {
+    return [null, "Unauthorized"];
+  }
+
   try {
     const balances = await db
       .select({
