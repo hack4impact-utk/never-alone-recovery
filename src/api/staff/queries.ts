@@ -4,9 +4,16 @@ import db from "@/db";
 import { users } from "@/db/schema";
 import { Result } from "@/types/result";
 import { User } from "@/types/schema";
+import getUserSession from "@/utils/auth/get-user-session";
 import handleError from "@/utils/handle-error";
 
 export async function getAllStaff(): Promise<Result<User[]>> {
+  const session = await getUserSession();
+
+  if (!session) {
+    return [null, "Unauthorized"];
+  }
+
   try {
     const staff = await db.query.users.findMany({
       orderBy: [sql`SPLIT_PART(${users.name}, ' ', -1)`],

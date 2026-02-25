@@ -21,20 +21,6 @@ type Row = {
   user: User;
 };
 
-function getRoleColor(role: StaffRole): "default" | "primary" | "info" {
-  switch (role) {
-    case "admin": {
-      return "primary";
-    }
-    case "staff": {
-      return "info";
-    }
-    default: {
-      return "default";
-    }
-  }
-}
-
 function getRows(staff: User[], searchQuery: string): Row[] {
   const rows = staff.map((member) => {
     return {
@@ -77,7 +63,6 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
         return (
           <Chip
             label={params.value}
-            color={getRoleColor(params.value)}
             variant="filled"
             size="small"
             sx={{ textTransform: "capitalize" }}
