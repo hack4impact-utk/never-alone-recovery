@@ -1,3 +1,3 @@
 import { User } from "./schema";
 
-export type HousingManger = Pick<User, "id" | "name">;
+export type HousingManager = Pick<User, "id" | "name">;

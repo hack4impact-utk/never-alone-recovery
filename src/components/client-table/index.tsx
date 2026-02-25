@@ -4,41 +4,26 @@ import { Box, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { ReactNode, useEffect, useState } from "react";
 
+import type { HousingManager } from "@/types/housing-manager";
 import { Client } from "@/types/schema";
 
 import SearchBox from "../common/search-box";
 import ClientInfo from "./client-info";
 import TasksModal from "./tasks-modal";
-import { getValidHousingMangers } from "@/api/staff/queries";
-import type { HousingManger } from "@/types/housing-manager";
 
 type ClientTableProps = {
   initialClients: Client[];
+  housingManagers: HousingManager[];
 };
 
 type Row = Client;
 
 export default function ClientTable({
   initialClients,
+  housingManagers,
 }: ClientTableProps): ReactNode {
   const [clients, setClients] = useState(initialClients);
-  const [housingManagers, setHousingManagers] = useState<HousingManger[] | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-
-  useEffect(() => {
-    const fetchHousingManagers = async (): Promise<void> => {
-      const [managers, error] = await getValidHousingMangers();
-
-      if (error) {
-        console.error("Failed to fetch housing managers:", error);
-        return;
-      } 
-
-      setHousingManagers(managers);
-    }
-
-    fetchHousingManagers();
-  }, [])
 
   const getRows = (): Row[] => {
     const lowerQuery = searchQuery.toLowerCase();
@@ -111,7 +96,7 @@ export default function ClientTable({
 
           <ClientInfo
             client={params.row}
-            housingMangers={housingManagers}
+            housingManagers={housingManagers}
             onDischarge={updateClients}
             onGraduate={updateClients}
           />

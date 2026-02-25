@@ -1,13 +1,12 @@
-import { sql } from "drizzle-orm";
+import { ne, sql } from "drizzle-orm";
 
 import db from "@/db";
-import { ne } from "drizzle-orm";
 import { users } from "@/db/schema";
+import type { HousingManager } from "@/types/housing-manager";
 import { Result } from "@/types/result";
 import { User } from "@/types/schema";
 import getUserSession from "@/utils/auth/get-user-session";
 import handleError from "@/utils/handle-error";
-import type { HousingManger } from "@/types/housing-manager";
 
 export async function getAllStaff(): Promise<Result<User[]>> {
   const session = await getUserSession();
@@ -26,7 +25,9 @@ export async function getAllStaff(): Promise<Result<User[]>> {
   }
 }
 
-export async function getValidHousingMangers(): Promise<Result<HousingManger[]>> {
+export async function getValidHousingManagers(): Promise<
+  Result<HousingManager[]>
+> {
   const session = await getUserSession();
 
   if (!session) {
@@ -34,13 +35,16 @@ export async function getValidHousingMangers(): Promise<Result<HousingManger[]>>
   }
 
   try {
-    const staff = await db.select({
-      id: users.id,
-      name: users.name
-    }).from(users).where(ne(users.role, "disabled"));
+    const staff = await db
+      .select({
+        id: users.id,
+        name: users.name,
+      })
+      .from(users)
+      .where(ne(users.role, "disabled"));
 
     return [staff, null];
   } catch (error) {
-    return [null, handleError(error)]
+    return [null, handleError(error)];
   }
 }
