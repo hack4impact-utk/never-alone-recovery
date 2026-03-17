@@ -2,22 +2,16 @@
 
 import { ReactNode } from "react";
 
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
-
 import DocumentSignature from "../document-signature";
 
 const PDF_PATH = "neveralonerecovery.servicecontract.pdf";
 
 export default function ServiceContractForm(): ReactNode {
-  const { serviceContractFormPdfUrl, setServiceContractFormPdfUrl } =
-    useIntakeFormContext();
-
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Service Contract Form"
-      pdfUrl={serviceContractFormPdfUrl}
-      setPdfUrl={setServiceContractFormPdfUrl}
+      form="serviceContractForm"
       staffSignatureLocation={{
         x: 150,
         y: 387,

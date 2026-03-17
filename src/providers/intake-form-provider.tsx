@@ -1,14 +1,8 @@
 "use client";
 import { PDFDocument } from "pdf-lib";
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
+import { Forms } from "@/types/forms";
 import { convertPdfToUrl, covertUrlToPdf } from "@/utils/pdf/conversion";
 
 const mergePdfs = async (pdfUrls: string[]): Promise<string> => {
@@ -25,25 +19,11 @@ const mergePdfs = async (pdfUrls: string[]): Promise<string> => {
   return await convertPdfToUrl(mergedPdf);
 };
 
+export type PdfUrls = Record<Forms, string>;
+
 type IntakeFormContextType = {
-  transformationReleaseFormPdfUrl: string;
-  setTransformationReleaseFormPdfUrl: Dispatch<SetStateAction<string>>;
-  searchConsentFormPdfUrl: string;
-  setSearchConsentFormPdfUrl: Dispatch<SetStateAction<string>>;
-  confidentialityAgreementFormPdfUrl: string;
-  setConfidentialityAgreementFormPdfUrl: Dispatch<SetStateAction<string>>;
-  financialResponsibilityFormPdfUrl: string;
-  setFinancialResponsibilityFormPdfUrl: Dispatch<SetStateAction<string>>;
-  behavioralStandardsFormPdfUrl: string;
-  setBehavioralStandardsFormPdfUrl: Dispatch<SetStateAction<string>>;
-  probationAndParoleFormPdfUrl: string;
-  setProbationAndParoleFormPdfUrl: Dispatch<SetStateAction<string>>;
-  releaseOfInformationFormPdfUrl: string;
-  setReleaseOfInformationFormPdfUrl: Dispatch<SetStateAction<string>>;
-  serviceContractFormPdfUrl: string;
-  setServiceContractFormPdfUrl: Dispatch<SetStateAction<string>>;
-  temporaryResidencyFormPdfUrl: string;
-  setTemporaryResidencyFormPdfUrl: Dispatch<SetStateAction<string>>;
+  getPdfUrl: (formName: keyof PdfUrls) => string;
+  setPdfUrl: (formName: keyof PdfUrls, url: string) => void;
   getIntakeFormPdfUrl: () => Promise<string>;
 };
 
@@ -58,64 +38,48 @@ type IntakeFormProviderProps = {
 export default function IntakeFormProvider({
   children,
 }: IntakeFormProviderProps): ReactNode {
-  const [transformationReleaseFormPdfUrl, setTransformationReleaseFormPdfUrl] =
-    useState<string>("");
-  const [searchConsentFormPdfUrl, setSearchConsentFormPdfUrl] =
-    useState<string>("");
-  const [
-    confidentialityAgreementFormPdfUrl,
-    setConfidentialityAgreementFormPdfUrl,
-  ] = useState<string>("");
-  const [
-    financialResponsibilityFormPdfUrl,
-    setFinancialResponsibilityFormPdfUrl,
-  ] = useState<string>("");
-  const [behavioralStandardsFormPdfUrl, setBehavioralStandardsFormPdfUrl] =
-    useState<string>("");
-  const [probationAndParoleFormPdfUrl, setProbationAndParoleFormPdfUrl] =
-    useState<string>("");
-  const [releaseOfInformationFormPdfUrl, setReleaseOfInformationFormPdfUrl] =
-    useState<string>("");
-  const [serviceContractFormPdfUrl, setServiceContractFormPdfUrl] =
-    useState<string>("");
-  const [temporaryResidencyFormPdfUrl, setTemporaryResidencyFormPdfUrl] =
-    useState<string>("");
+  const [pdfUrls, setPdfUrls] = useState<PdfUrls>({
+    transformationReleaseForm: "",
+    searchConsentForm: "",
+    confidentialityAgreementForm: "",
+    financialResponsibilityForm: "",
+    behavioralStandardsForm: "",
+    probationAndParoleForm: "",
+    releaseOfInformationForm: "",
+    serviceContractForm: "",
+    temporaryResidencyForm: "",
+  });
+
+  const getPdfUrl = (formName: keyof PdfUrls): string => {
+    return pdfUrls[formName];
+  };
+
+  const setPdfUrl = (formName: keyof PdfUrls, url: string): void => {
+    setPdfUrls((prev) => ({
+      ...prev,
+      [formName]: url,
+    }));
+  };
 
   const getIntakeFormPdfUrl = async (): Promise<string> => {
     return await mergePdfs([
-      transformationReleaseFormPdfUrl,
-      searchConsentFormPdfUrl,
-      probationAndParoleFormPdfUrl,
-      behavioralStandardsFormPdfUrl,
-      confidentialityAgreementFormPdfUrl,
-      financialResponsibilityFormPdfUrl,
-      releaseOfInformationFormPdfUrl,
-      serviceContractFormPdfUrl,
-      temporaryResidencyFormPdfUrl,
+      pdfUrls.transformationReleaseForm,
+      pdfUrls.searchConsentForm,
+      pdfUrls.probationAndParoleForm,
+      pdfUrls.behavioralStandardsForm,
+      pdfUrls.confidentialityAgreementForm,
+      pdfUrls.financialResponsibilityForm,
+      pdfUrls.releaseOfInformationForm,
+      pdfUrls.serviceContractForm,
+      pdfUrls.temporaryResidencyForm,
     ]);
   };
 
   return (
     <IntakeFormContext.Provider
       value={{
-        transformationReleaseFormPdfUrl,
-        setTransformationReleaseFormPdfUrl,
-        searchConsentFormPdfUrl,
-        setSearchConsentFormPdfUrl,
-        confidentialityAgreementFormPdfUrl,
-        setConfidentialityAgreementFormPdfUrl,
-        financialResponsibilityFormPdfUrl,
-        setFinancialResponsibilityFormPdfUrl,
-        behavioralStandardsFormPdfUrl,
-        setBehavioralStandardsFormPdfUrl,
-        probationAndParoleFormPdfUrl,
-        setProbationAndParoleFormPdfUrl,
-        releaseOfInformationFormPdfUrl,
-        setReleaseOfInformationFormPdfUrl,
-        serviceContractFormPdfUrl,
-        setServiceContractFormPdfUrl,
-        temporaryResidencyFormPdfUrl,
-        setTemporaryResidencyFormPdfUrl,
+        getPdfUrl,
+        setPdfUrl,
         getIntakeFormPdfUrl,
       }}
     >

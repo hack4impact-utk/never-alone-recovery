@@ -1,17 +1,13 @@
 "use client";
 
 import { Box, Button } from "@mui/material";
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import DocumentDisplay from "@/components/common/document-display";
 import SignaturePad from "@/components/common/forms/signature-pad";
+import { useIntakeFormContext } from "@/providers/intake-form-provider";
+import { Forms } from "@/types/forms";
 import {
   addDateToPdf,
   addSignatureToPdf,
@@ -26,8 +22,7 @@ import { IntakeFormValues } from "./intake-form-schema";
 type DocumentSignatureProps = {
   pdfPath: string;
   formTitle: string;
-  pdfUrl: string;
-  setPdfUrl: Dispatch<SetStateAction<string>>;
+  form: Forms;
   staffSignatureLocation: SignatureLocation;
   residentSignatureLocation: SignatureLocation;
   signaturePage: number;
@@ -37,13 +32,13 @@ type DocumentSignatureProps = {
 export default function DocumentSignature({
   pdfPath,
   formTitle,
-  pdfUrl,
-  setPdfUrl,
+  form,
   staffSignatureLocation,
   residentSignatureLocation,
   signaturePage,
   annotations: annotationLocations = [],
 }: DocumentSignatureProps): ReactNode {
+  const { getPdfUrl, setPdfUrl } = useIntakeFormContext();
   const { getValues } = useFormContext<IntakeFormValues>();
   const [residentSignature, setResidentSignature] = useState<string>("");
   const [staffSignature, setStaffSignature] = useState<string>("");
@@ -89,7 +84,7 @@ export default function DocumentSignature({
     );
 
     const url = await convertPdfToUrl(pdf);
-    setPdfUrl(url);
+    setPdfUrl(form, url);
   };
 
   useEffect(() => {
@@ -98,7 +93,7 @@ export default function DocumentSignature({
 
   return (
     <Box sx={{ width: "100%", height: "750px", padding: 4 }}>
-      <DocumentDisplay pdfUrl={pdfUrl} />
+      <DocumentDisplay pdfUrl={getPdfUrl(form)} />
       <Box
         sx={{
           marginY: 4,
@@ -118,7 +113,7 @@ export default function DocumentSignature({
           title="Staff Signature"
           description="Staff Member: Please provide your signature below:"
         />
-        <a href={pdfUrl} download={`${fullName} - ${formTitle}.pdf`}>
+        <a href={getPdfUrl(form)} download={`${fullName} - ${formTitle}.pdf`}>
           <Button variant="contained" sx={{ alignSelf: "center" }}>
             Download
           </Button>

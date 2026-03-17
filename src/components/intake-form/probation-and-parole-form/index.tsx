@@ -2,22 +2,16 @@
 
 import { ReactNode } from "react";
 
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
-
 import DocumentSignature from "../document-signature";
 
 const PDF_PATH = "neveralonerecovery.probationandparoleform.pdf";
 
 export default function ProbationAndParoleForm(): ReactNode {
-  const { probationAndParoleFormPdfUrl, setProbationAndParoleFormPdfUrl } =
-    useIntakeFormContext();
-
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Probation and Parole Form"
-      pdfUrl={probationAndParoleFormPdfUrl}
-      setPdfUrl={setProbationAndParoleFormPdfUrl}
+      form="probationAndParoleForm"
       staffSignatureLocation={{
         x: 150,
         y: 100,

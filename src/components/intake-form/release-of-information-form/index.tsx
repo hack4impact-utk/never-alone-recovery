@@ -2,22 +2,16 @@
 
 import { ReactNode } from "react";
 
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
-
 import DocumentSignature from "../document-signature";
 
 const PDF_PATH = "neveralonerecovery.releaseofinformation.pdf";
 
 export default function ReleaseOfInformationForm(): ReactNode {
-  const { releaseOfInformationFormPdfUrl, setReleaseOfInformationFormPdfUrl } =
-    useIntakeFormContext();
-
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Release of Information Form"
-      pdfUrl={releaseOfInformationFormPdfUrl}
-      setPdfUrl={setReleaseOfInformationFormPdfUrl}
+      form="releaseOfInformationForm"
       staffSignatureLocation={{
         x: 150,
         y: 90,

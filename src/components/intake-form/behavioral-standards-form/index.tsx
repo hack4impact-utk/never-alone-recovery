@@ -2,22 +2,16 @@
 
 import { ReactNode } from "react";
 
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
-
 import DocumentSignature from "../document-signature";
 
 const PDF_PATH = "neveralonerecovery.behavioralstandards.pdf";
 
 export default function BehavioralStandardsForm(): ReactNode {
-  const { behavioralStandardsFormPdfUrl, setBehavioralStandardsFormPdfUrl } =
-    useIntakeFormContext();
-
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Behavioral Standards Form"
-      pdfUrl={behavioralStandardsFormPdfUrl}
-      setPdfUrl={setBehavioralStandardsFormPdfUrl}
+      form="behavioralStandardsForm"
       staffSignatureLocation={{
         x: 150,
         y: 115,

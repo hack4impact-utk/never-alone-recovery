@@ -2,22 +2,16 @@
 
 import { ReactNode } from "react";
 
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
-
 import DocumentSignature from "../document-signature";
 
 const PDF_PATH = "neveralonerecovery.temporaryresidencyform.pdf";
 
 export default function TemporaryResidencyForm(): ReactNode {
-  const { temporaryResidencyFormPdfUrl, setTemporaryResidencyFormPdfUrl } =
-    useIntakeFormContext();
-
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Temporary Residency Form"
-      pdfUrl={temporaryResidencyFormPdfUrl}
-      setPdfUrl={setTemporaryResidencyFormPdfUrl}
+      form="temporaryResidencyForm"
       staffSignatureLocation={{
         x: 150,
         y: 90,

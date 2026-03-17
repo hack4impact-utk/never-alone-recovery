@@ -2,24 +2,16 @@
 
 import { ReactNode } from "react";
 
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
-
 import DocumentSignature from "../document-signature";
 
 const PDF_PATH = "neveralonerecovery.financialresponsibility.pdf";
 
 export default function FinancialResponsibilityForm(): ReactNode {
-  const {
-    financialResponsibilityFormPdfUrl,
-    setFinancialResponsibilityFormPdfUrl,
-  } = useIntakeFormContext();
-
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Financial Responsibility Form"
-      pdfUrl={financialResponsibilityFormPdfUrl}
-      setPdfUrl={setFinancialResponsibilityFormPdfUrl}
+      form="financialResponsibilityForm"
       staffSignatureLocation={{
         x: 150,
         y: 145,

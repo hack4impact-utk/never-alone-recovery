@@ -2,22 +2,16 @@
 
 import { ReactNode } from "react";
 
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
-
 import DocumentSignature from "../document-signature";
 
 const PDF_PATH = "neveralonerecovery.searchconsentform.pdf";
 
 export default function SearchConsentForm(): ReactNode {
-  const { searchConsentFormPdfUrl, setSearchConsentFormPdfUrl } =
-    useIntakeFormContext();
-
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Search Consent Form"
-      pdfUrl={searchConsentFormPdfUrl}
-      setPdfUrl={setSearchConsentFormPdfUrl}
+      form="searchConsentForm"
       staffSignatureLocation={{
         x: 150,
         y: 100,
