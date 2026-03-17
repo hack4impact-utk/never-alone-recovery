@@ -39,7 +39,7 @@ const columns: GridColDef<Row>[] = [
     headerName: "Date",
     flex: 1,
     valueFormatter: (params): string => {
-      return dayjs(params).format("HH:mm A MM-DD-YYYY");
+      return dayjs(params).format("MMMM D, YYYY h:mm A");
     },
   },
   { field: "staffName", headerName: "Staff", flex: 1 },
