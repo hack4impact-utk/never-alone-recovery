@@ -4,6 +4,7 @@ import { Box, Chip, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { ReactNode, useEffect, useState } from "react";
 
+import type { HousingManager } from "@/types/housing-manager";
 import { Client } from "@/types/schema";
 
 import SearchBox from "../common/search-box";
@@ -12,12 +13,14 @@ import TasksModal from "./tasks-modal";
 
 type ClientTableProps = {
   initialClients: Client[];
+  housingManagers: HousingManager[];
 };
 
 type Row = Client;
 
 export default function ClientTable({
   initialClients,
+  housingManagers,
 }: ClientTableProps): ReactNode {
   const [clients, setClients] = useState(initialClients);
   const [searchQuery, setSearchQuery] = useState("");
@@ -93,6 +96,7 @@ export default function ClientTable({
 
           <ClientInfo
             client={params.row}
+            housingManagers={housingManagers}
             onDischarge={updateClients}
             onGraduate={updateClients}
           />

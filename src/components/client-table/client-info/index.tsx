@@ -11,19 +11,23 @@ import {
 } from "@mui/material";
 import { ReactNode, useState } from "react";
 
+import { HousingManager } from "@/types/housing-manager";
 import { Client } from "@/types/schema";
 
 import Discharge from "./discharge-modal";
 import Graduate from "./graduate-modal";
+import ChangeHousingManger from "./housing-manager-modal";
 
 type ClientInfoProps = {
   client: Client;
+  housingManagers: HousingManager[];
   onGraduate: (client: Client) => void;
   onDischarge: (client: Client) => void;
 };
 
 export default function ClientInfo({
   client,
+  housingManagers,
   onGraduate,
   onDischarge,
 }: ClientInfoProps): ReactNode {
@@ -55,6 +59,10 @@ export default function ClientInfo({
         </DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
+            <ChangeHousingManger
+              client={client}
+              housingManagers={housingManagers}
+            />
             <Graduate client={client} onGraduate={onGraduate} />
             <Discharge client={client} onDischarge={onDischarge} />
           </Box>
