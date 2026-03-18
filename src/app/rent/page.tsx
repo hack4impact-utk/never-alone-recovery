@@ -27,7 +27,11 @@ export default async function RentPage(): Promise<ReactNode> {
       sx={{
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "flex-start",
+        flex: 1,
+        minHeight: 0,
+        width: "100%",
+        px: { xs: 2, md: "12.5%" },
       }}
     >
       <RentProvider initialClientBalances={balances}>

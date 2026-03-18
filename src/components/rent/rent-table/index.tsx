@@ -50,13 +50,14 @@ export default function RentTable(): ReactNode {
   }, [clientBalances, searchQuery]);
 
   const columns: GridColDef<Row>[] = [
-    { field: "firstName", headerName: "First Name", flex: 1 },
-    { field: "lastName", headerName: "Last Name", flex: 1 },
-    { field: "email", headerName: "Email", flex: 1 },
+    { field: "firstName", headerName: "First Name", flex: 1, minWidth: 120 },
+    { field: "lastName", headerName: "Last Name", flex: 1, minWidth: 120 },
+    { field: "email", headerName: "Email", flex: 1, minWidth: 200 },
     {
       field: "total",
       headerName: "Balance",
       flex: 0.5,
+      minWidth: 100,
       type: "number",
       display: "flex",
       renderCell: (params) => (
@@ -89,8 +90,9 @@ export default function RentTable(): ReactNode {
     <>
       <Box
         sx={{
-          height: "75vh",
-          width: "75vw",
+          flex: 1,
+          minHeight: 0,
+          width: "100%",
           display: "flex",
           flexDirection: "column",
         }}
@@ -103,7 +105,7 @@ export default function RentTable(): ReactNode {
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-          sx={{ py: 2 }}
+          sx={{ py: 2, gap: 1, flexWrap: "wrap" }}
         >
           <SearchBox
             searchQuery={searchQuery}
@@ -114,7 +116,7 @@ export default function RentTable(): ReactNode {
 
         {displayDataGrid && (
           <DataGrid
-            sx={{ height: "100%" }}
+            sx={{ flex: 1, minHeight: 0 }}
             rows={filteredRows}
             columns={columns}
             disableRowSelectionOnClick

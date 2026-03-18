@@ -26,8 +26,11 @@ export default async function StaffDashboardPage(): Promise<ReactNode> {
       sx={{
         display: "flex",
         justifyContent: "center",
-        minHeight: "100vh",
-        py: 4,
+        alignItems: "flex-start",
+        flex: 1,
+        minHeight: 0,
+        width: "100%",
+        px: { xs: 2, md: "12.5%" },
       }}
     >
       <StaffTable staff={staff} />

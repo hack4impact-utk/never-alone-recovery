@@ -49,16 +49,19 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
       field: "name",
       headerName: "Name",
       flex: 2,
+      minWidth: 180,
     },
     {
       field: "email",
       headerName: "Email",
       flex: 2,
+      minWidth: 250,
     },
     {
       field: "role",
       headerName: "Role",
       flex: 1,
+      minWidth: 120,
       renderCell: (params: GridRenderCellParams<Row>): ReactNode => {
         return (
           <Chip
@@ -73,6 +76,7 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
     {
       field: "action",
       headerName: "Action",
+      minWidth: 100,
       sortable: false,
       align: "center",
       headerAlign: "center",
@@ -93,8 +97,9 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
   return (
     <Box
       sx={{
-        height: "75vh",
-        width: "75vw",
+        flex: 1,
+        minHeight: 0,
+        width: "100%",
         display: "flex",
         flexDirection: "column",
       }}
@@ -108,6 +113,7 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
 
       {displayDataGrid && (
         <DataGrid
+          sx={{ flex: 1, minHeight: 0 }}
           rows={rows}
           columns={columns}
           disableRowSelectionOnClick
