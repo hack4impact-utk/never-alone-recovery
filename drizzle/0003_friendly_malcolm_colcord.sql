@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD COLUMN "last_completed_drug_test" timestamp;

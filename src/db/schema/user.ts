@@ -12,8 +12,10 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image").notNull(),
   role: staffRoleEnum("role").default("disabled").notNull(),
+  lastCompletedDrugTest: timestamp("last_completed_drug_test", {
+    mode: "date",
+  }),
 });
-
 export const userRelations = relations(users, ({ many }) => ({
   audits: many(audits),
 }));

@@ -22,3 +22,12 @@ export async function updateStaffRole(
 
   return await updateStaff({ ...user, role });
 }
+
+export async function updateDrugTestDate(
+  user: User,
+  date: Date,
+): Promise<Result<User>> {
+  const session = await getUserSession();
+  if (!session) return [null, "Unauthorized"];
+  return await updateStaff({ ...user, lastCompletedDrugTest: date });
+}
