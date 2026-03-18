@@ -1,17 +1,17 @@
 import { z } from "zod";
 
-export const transportationReleaseFormSchema = z.object({
+export const temporaryResidencyFormSchema = z.object({
   residentSignature: z
     .string()
     .min(1, { message: "Resident signature is required" }),
   staffSignature: z.string().min(1, { message: "Staff signature is required" }),
 });
 
-export type TransportationReleaseFormValues = z.infer<
-  typeof transportationReleaseFormSchema
+export type TemporaryResidencyFormValues = z.infer<
+  typeof temporaryResidencyFormSchema
 >;
 
-export const transportationReleaseFormDefaultValues: TransportationReleaseFormValues =
+export const temporaryResidencyFormDefaultValues: TemporaryResidencyFormValues =
   {
     residentSignature: "",
     staffSignature: "",

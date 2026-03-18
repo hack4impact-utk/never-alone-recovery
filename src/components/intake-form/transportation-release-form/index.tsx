@@ -2,24 +2,16 @@
 
 import { ReactNode } from "react";
 
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
-
 import DocumentSignature from "../document-signature";
 
 const PDF_PATH = "neveralonerecovery.transportationreleaseform.pdf";
 
 export default function TransportationReleaseForm(): ReactNode {
-  const {
-    transformationReleaseFormPdfUrl,
-    setTransformationReleaseFormPdfUrl,
-  } = useIntakeFormContext();
-
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Transportation Release Form"
-      pdfUrl={transformationReleaseFormPdfUrl}
-      setPdfUrl={setTransformationReleaseFormPdfUrl}
+      form="transportationRelease"
       staffSignatureLocation={{
         x: 150,
         y: 325,
@@ -32,6 +24,7 @@ export default function TransportationReleaseForm(): ReactNode {
         width: 200,
         height: 50,
       }}
+      signaturePage={0}
       annotations={[
         {
           type: "name",

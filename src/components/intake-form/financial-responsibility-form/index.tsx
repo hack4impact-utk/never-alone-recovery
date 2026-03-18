@@ -4,23 +4,23 @@ import { ReactNode } from "react";
 
 import DocumentSignature from "../document-signature";
 
-const PDF_PATH = "neveralonerecovery.searchconsentform.pdf";
+const PDF_PATH = "neveralonerecovery.financialresponsibility.pdf";
 
-export default function SearchConsentForm(): ReactNode {
+export default function FinancialResponsibilityForm(): ReactNode {
   return (
     <DocumentSignature
       pdfPath={PDF_PATH}
-      formTitle="Search Consent Form"
-      form="searchConsent"
+      formTitle="Financial Responsibility Form"
+      form="financialResponsibility"
       staffSignatureLocation={{
         x: 150,
-        y: 100,
+        y: 145,
         width: 200,
         height: 50,
       }}
       residentSignatureLocation={{
         x: 150,
-        y: 155,
+        y: 185,
         width: 200,
         height: 50,
       }}
@@ -30,19 +30,19 @@ export default function SearchConsentForm(): ReactNode {
           type: "name",
           pageNumber: 0,
           location: {
-            x: 100,
-            y: 230,
+            x: 170,
+            y: 565,
           },
         },
         {
           type: "date",
           pageNumber: 0,
-          location: { x: 475, y: 115 },
+          location: { x: 430, y: 197 },
         },
         {
           type: "date",
           pageNumber: 0,
-          location: { x: 475, y: 175 },
+          location: { x: 430, y: 155 },
         },
       ]}
     />

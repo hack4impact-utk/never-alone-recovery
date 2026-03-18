@@ -1,14 +1,8 @@
 "use client";
 import { PDFDocument } from "pdf-lib";
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
+import { IntakeSignatureForms } from "@/components/intake-form/intake-form-schema";
 import { convertPdfToUrl, covertUrlToPdf } from "@/utils/pdf/conversion";
 
 const mergePdfs = async (pdfUrls: string[]): Promise<string> => {
@@ -25,11 +19,11 @@ const mergePdfs = async (pdfUrls: string[]): Promise<string> => {
   return await convertPdfToUrl(mergedPdf);
 };
 
+export type PdfUrls = Record<IntakeSignatureForms, string>;
+
 type IntakeFormContextType = {
-  transformationReleaseFormPdfUrl: string;
-  setTransformationReleaseFormPdfUrl: Dispatch<SetStateAction<string>>;
-  searchConsentFormPdfUrl: string;
-  setSearchConsentFormPdfUrl: Dispatch<SetStateAction<string>>;
+  getPdfUrl: (formName: keyof PdfUrls) => string;
+  setPdfUrl: (formName: keyof PdfUrls, url: string) => void;
   getIntakeFormPdfUrl: () => Promise<string>;
 };
 
@@ -44,25 +38,48 @@ type IntakeFormProviderProps = {
 export default function IntakeFormProvider({
   children,
 }: IntakeFormProviderProps): ReactNode {
-  const [transformationReleaseFormPdfUrl, setTransformationReleaseFormPdfUrl] =
-    useState<string>("");
-  const [searchConsentFormPdfUrl, setSearchConsentFormPdfUrl] =
-    useState<string>("");
+  const [pdfUrls, setPdfUrls] = useState<PdfUrls>({
+    transportationRelease: "",
+    searchConsent: "",
+    confidentialityAgreement: "",
+    financialResponsibility: "",
+    behavioralStandards: "",
+    probationAndParole: "",
+    releaseOfInformation: "",
+    serviceContract: "",
+    temporaryResidency: "",
+  });
+
+  const getPdfUrl = (formName: keyof PdfUrls): string => {
+    return pdfUrls[formName];
+  };
+
+  const setPdfUrl = (formName: keyof PdfUrls, url: string): void => {
+    setPdfUrls((prev) => ({
+      ...prev,
+      [formName]: url,
+    }));
+  };
 
   const getIntakeFormPdfUrl = async (): Promise<string> => {
     return await mergePdfs([
-      transformationReleaseFormPdfUrl,
-      searchConsentFormPdfUrl,
+      pdfUrls.transportationRelease,
+      pdfUrls.searchConsent,
+      pdfUrls.probationAndParole,
+      pdfUrls.behavioralStandards,
+      pdfUrls.confidentialityAgreement,
+      pdfUrls.financialResponsibility,
+      pdfUrls.releaseOfInformation,
+      pdfUrls.serviceContract,
+      pdfUrls.temporaryResidency,
     ]);
   };
 
   return (
     <IntakeFormContext.Provider
       value={{
-        transformationReleaseFormPdfUrl,
-        setTransformationReleaseFormPdfUrl,
-        searchConsentFormPdfUrl,
-        setSearchConsentFormPdfUrl,
+        getPdfUrl,
+        setPdfUrl,
         getIntakeFormPdfUrl,
       }}
     >

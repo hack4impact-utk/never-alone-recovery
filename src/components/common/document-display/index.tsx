@@ -9,7 +9,7 @@ export default function DocumentDisplay({
   pdfUrl,
 }: DocumentDisplayProps): JSX.Element {
   return (
-    <Box sx={{ height: "100%", width: "100%" }}>
+    <Box sx={{ height: "750px", width: "100%" }}>
       <iframe
         src={`${pdfUrl}#toolbar=0`}
         width="100%"

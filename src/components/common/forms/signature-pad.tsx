@@ -89,6 +89,8 @@ export default function SignaturePad({
                 },
               }}
               ref={sigCanvas}
+              minWidth={4}
+              maxWidth={4}
             />
           </Box>
         </DialogContent>
