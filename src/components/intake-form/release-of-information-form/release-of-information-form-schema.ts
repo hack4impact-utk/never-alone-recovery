@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const releaseOfInformationFormSchema = z.object({
-  signed: z.boolean(),
+  residentSignature: z
+    .string()
+    .min(1, { message: "Resident signature is required" }),
+  staffSignature: z.string().min(1, { message: "Staff signature is required" }),
 });
 
 export type ReleaseOfInformationFormValues = z.infer<
@@ -10,5 +13,6 @@ export type ReleaseOfInformationFormValues = z.infer<
 
 export const releaseOfInformationFormDefaultValues: ReleaseOfInformationFormValues =
   {
-    signed: false,
+    residentSignature: "",
+    staffSignature: "",
   };

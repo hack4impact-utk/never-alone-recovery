@@ -11,7 +11,7 @@ export default function ConfidentialityAgreementForm(): ReactNode {
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Confidentiality Agreement Form"
-      form="confidentialityAgreementForm"
+      form="confidentialityAgreement"
       staffSignatureLocation={{
         x: 150,
         y: 130,

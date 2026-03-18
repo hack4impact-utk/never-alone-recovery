@@ -1,13 +1,12 @@
 "use client";
 
-import { Box, Button } from "@mui/material";
-import { ReactNode, useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { Box, Typography } from "@mui/material";
+import { ReactNode, useEffect } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 
 import DocumentDisplay from "@/components/common/document-display";
 import SignaturePad from "@/components/common/forms/signature-pad";
 import { useIntakeFormContext } from "@/providers/intake-form-provider";
-import { Forms } from "@/types/forms";
 import {
   addDateToPdf,
   addSignatureToPdf,
@@ -17,12 +16,12 @@ import {
 } from "@/utils/pdf/annotations";
 import { convertPdfToUrl, covertUrlToPdf } from "@/utils/pdf/conversion";
 
-import { IntakeFormValues } from "./intake-form-schema";
+import { IntakeFormValues, IntakeSignatureForms } from "./intake-form-schema";
 
 type DocumentSignatureProps = {
   pdfPath: string;
   formTitle: string;
-  form: Forms;
+  form: IntakeSignatureForms;
   staffSignatureLocation: SignatureLocation;
   residentSignatureLocation: SignatureLocation;
   signaturePage: number;
@@ -38,10 +37,12 @@ export default function DocumentSignature({
   signaturePage,
   annotations: annotationLocations = [],
 }: DocumentSignatureProps): ReactNode {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<IntakeFormValues>();
   const { getPdfUrl, setPdfUrl } = useIntakeFormContext();
   const { getValues } = useFormContext<IntakeFormValues>();
-  const [residentSignature, setResidentSignature] = useState<string>("");
-  const [staffSignature, setStaffSignature] = useState<string>("");
   const firstName = getValues("demographic").firstName;
   const lastName = getValues("demographic").lastName;
   const fullName = `${firstName} ${lastName}`;
@@ -71,14 +72,14 @@ export default function DocumentSignature({
 
     await addSignatureToPdf(
       pdf,
-      staffSignature,
+      getValues(`${form}.staffSignature`),
       signaturePage,
       staffSignatureLocation,
     );
 
     await addSignatureToPdf(
       pdf,
-      residentSignature,
+      getValues(`${form}.residentSignature`),
       signaturePage,
       residentSignatureLocation,
     );
@@ -89,35 +90,79 @@ export default function DocumentSignature({
 
   useEffect(() => {
     void generatePdf();
-  }, [staffSignature, residentSignature]);
+  }, []);
 
   return (
-    <Box sx={{ width: "100%", height: "750px", padding: 4 }}>
+    <Box sx={{ width: "100%" }}>
+      <Typography variant="h5" sx={{ mb: 2, textAlign: "center" }}>
+        {formTitle}
+      </Typography>
+
       <DocumentDisplay pdfUrl={getPdfUrl(form)} />
       <Box
         sx={{
           marginY: 4,
           display: "flex",
           gap: 2,
-          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "start",
           width: "100%",
         }}
       >
-        <SignaturePad
-          onSign={setResidentSignature}
-          title="Resident Signature"
-          description="Resident: Please provide your signature below:"
+        <Controller
+          control={control}
+          name={`${form}.residentSignature`}
+          render={({ field }) => (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <SignaturePad
+                onSign={(signatureData) => {
+                  field.onChange(signatureData);
+                  void generatePdf();
+                }}
+                title="Resident Signature"
+                description="Resident: Please provide your signature below:"
+              />
+              {errors[form]?.residentSignature && (
+                <Box sx={{ color: "error.main", mt: 1, fontSize: "0.875rem" }}>
+                  {errors[form]?.residentSignature?.message}
+                </Box>
+              )}
+            </Box>
+          )}
         />
-        <SignaturePad
-          onSign={setStaffSignature}
-          title="Staff Signature"
-          description="Staff Member: Please provide your signature below:"
+        <Controller
+          control={control}
+          name={`${form}.staffSignature`}
+          render={({ field }) => (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <SignaturePad
+                onSign={(signatureData) => {
+                  field.onChange(signatureData);
+                  void generatePdf();
+                }}
+                title="Staff Signature"
+                description="Staff Member: Please provide your signature below:"
+              />
+              {errors[form]?.staffSignature && (
+                <Box sx={{ color: "error.main", mt: 1, fontSize: "0.875rem" }}>
+                  {errors[form]?.staffSignature?.message}
+                </Box>
+              )}
+            </Box>
+          )}
         />
-        <a href={getPdfUrl(form)} download={`${fullName} - ${formTitle}.pdf`}>
-          <Button variant="contained" sx={{ alignSelf: "center" }}>
-            Download
-          </Button>
-        </a>
       </Box>
     </Box>
   );

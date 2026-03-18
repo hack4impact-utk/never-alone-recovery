@@ -11,7 +11,7 @@ export default function SearchConsentForm(): ReactNode {
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Search Consent Form"
-      form="searchConsentForm"
+      form="searchConsent"
       staffSignatureLocation={{
         x: 150,
         y: 100,

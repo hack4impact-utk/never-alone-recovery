@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const temporaryResidencyFormSchema = z.object({
-  signed: z.boolean(),
+  residentSignature: z
+    .string()
+    .min(1, { message: "Resident signature is required" }),
+  staffSignature: z.string().min(1, { message: "Staff signature is required" }),
 });
 
 export type TemporaryResidencyFormValues = z.infer<
@@ -10,5 +13,6 @@ export type TemporaryResidencyFormValues = z.infer<
 
 export const temporaryResidencyFormDefaultValues: TemporaryResidencyFormValues =
   {
-    signed: false,
+    residentSignature: "",
+    staffSignature: "",
   };

@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const transportationReleaseFormSchema = z.object({
-  signed: z.boolean(),
+  residentSignature: z
+    .string()
+    .min(1, { message: "Resident signature is required" }),
+  staffSignature: z.string().min(1, { message: "Staff signature is required" }),
 });
 
 export type TransportationReleaseFormValues = z.infer<
@@ -10,5 +13,6 @@ export type TransportationReleaseFormValues = z.infer<
 
 export const transportationReleaseFormDefaultValues: TransportationReleaseFormValues =
   {
-    signed: false,
+    residentSignature: "",
+    staffSignature: "",
   };

@@ -2,7 +2,7 @@
 import { PDFDocument } from "pdf-lib";
 import { createContext, ReactNode, useContext, useState } from "react";
 
-import { Forms } from "@/types/forms";
+import { IntakeSignatureForms } from "@/components/intake-form/intake-form-schema";
 import { convertPdfToUrl, covertUrlToPdf } from "@/utils/pdf/conversion";
 
 const mergePdfs = async (pdfUrls: string[]): Promise<string> => {
@@ -19,7 +19,7 @@ const mergePdfs = async (pdfUrls: string[]): Promise<string> => {
   return await convertPdfToUrl(mergedPdf);
 };
 
-export type PdfUrls = Record<Forms, string>;
+export type PdfUrls = Record<IntakeSignatureForms, string>;
 
 type IntakeFormContextType = {
   getPdfUrl: (formName: keyof PdfUrls) => string;
@@ -39,15 +39,15 @@ export default function IntakeFormProvider({
   children,
 }: IntakeFormProviderProps): ReactNode {
   const [pdfUrls, setPdfUrls] = useState<PdfUrls>({
-    transformationReleaseForm: "",
-    searchConsentForm: "",
-    confidentialityAgreementForm: "",
-    financialResponsibilityForm: "",
-    behavioralStandardsForm: "",
-    probationAndParoleForm: "",
-    releaseOfInformationForm: "",
-    serviceContractForm: "",
-    temporaryResidencyForm: "",
+    transportationRelease: "",
+    searchConsent: "",
+    confidentialityAgreement: "",
+    financialResponsibility: "",
+    behavioralStandards: "",
+    probationAndParole: "",
+    releaseOfInformation: "",
+    serviceContract: "",
+    temporaryResidency: "",
   });
 
   const getPdfUrl = (formName: keyof PdfUrls): string => {
@@ -63,15 +63,15 @@ export default function IntakeFormProvider({
 
   const getIntakeFormPdfUrl = async (): Promise<string> => {
     return await mergePdfs([
-      pdfUrls.transformationReleaseForm,
-      pdfUrls.searchConsentForm,
-      pdfUrls.probationAndParoleForm,
-      pdfUrls.behavioralStandardsForm,
-      pdfUrls.confidentialityAgreementForm,
-      pdfUrls.financialResponsibilityForm,
-      pdfUrls.releaseOfInformationForm,
-      pdfUrls.serviceContractForm,
-      pdfUrls.temporaryResidencyForm,
+      pdfUrls.transportationRelease,
+      pdfUrls.searchConsent,
+      pdfUrls.probationAndParole,
+      pdfUrls.behavioralStandards,
+      pdfUrls.confidentialityAgreement,
+      pdfUrls.financialResponsibility,
+      pdfUrls.releaseOfInformation,
+      pdfUrls.serviceContract,
+      pdfUrls.temporaryResidency,
     ]);
   };
 

@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const serviceContractFormSchema = z.object({
-  signed: z.boolean(),
+  residentSignature: z
+    .string()
+    .min(1, { message: "Resident signature is required" }),
+  staffSignature: z.string().min(1, { message: "Staff signature is required" }),
 });
 
 export type ServiceContractFormValues = z.infer<
@@ -9,5 +12,6 @@ export type ServiceContractFormValues = z.infer<
 >;
 
 export const serviceContractFormDefaultValues: ServiceContractFormValues = {
-  signed: false,
+  residentSignature: "",
+  staffSignature: "",
 };

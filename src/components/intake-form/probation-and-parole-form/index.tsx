@@ -11,7 +11,7 @@ export default function ProbationAndParoleForm(): ReactNode {
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Probation and Parole Form"
-      form="probationAndParoleForm"
+      form="probationAndParole"
       staffSignatureLocation={{
         x: 150,
         y: 100,

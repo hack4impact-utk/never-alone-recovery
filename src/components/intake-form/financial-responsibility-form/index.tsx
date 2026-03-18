@@ -11,7 +11,7 @@ export default function FinancialResponsibilityForm(): ReactNode {
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Financial Responsibility Form"
-      form="financialResponsibilityForm"
+      form="financialResponsibility"
       staffSignatureLocation={{
         x: 150,
         y: 145,

@@ -47,8 +47,8 @@ import {
 
 export const intakeFormSchema = z.object({
   demographic: demographicFormSchema,
-  emergencyContact: emergencyContactFormSchema,
   searchConsent: searchConsentFormSchema,
+  emergencyContact: emergencyContactFormSchema,
   transportationRelease: transportationReleaseFormSchema,
   probationAndParole: probationAndParoleFormSchema,
   financialResponsibility: financialResponsibilityFormSchema,
@@ -74,3 +74,13 @@ export const intakeFormDefaultValues: IntakeFormValues = {
   serviceContract: serviceContractFormDefaultValues,
   temporaryResidency: temporaryResidencyFormDefaultValues,
 };
+
+// Get all the forms that have the residentSignature and staffSignature fields
+export type IntakeSignatureForms = {
+  [K in keyof IntakeFormValues]: IntakeFormValues[K] extends {
+    residentSignature: string;
+    staffSignature: string;
+  }
+    ? K
+    : never;
+}[keyof IntakeFormValues];

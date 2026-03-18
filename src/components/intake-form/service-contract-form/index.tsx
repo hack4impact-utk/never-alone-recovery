@@ -11,7 +11,7 @@ export default function ServiceContractForm(): ReactNode {
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Service Contract Form"
-      form="serviceContractForm"
+      form="serviceContract"
       staffSignatureLocation={{
         x: 150,
         y: 387,

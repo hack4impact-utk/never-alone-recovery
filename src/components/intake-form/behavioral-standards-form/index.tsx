@@ -11,7 +11,7 @@ export default function BehavioralStandardsForm(): ReactNode {
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Behavioral Standards Form"
-      form="behavioralStandardsForm"
+      form="behavioralStandards"
       staffSignatureLocation={{
         x: 150,
         y: 115,

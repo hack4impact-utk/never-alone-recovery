@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const behavioralStandardsFormSchema = z.object({
-  signed: z.boolean(),
+  residentSignature: z
+    .string()
+    .min(1, { message: "Resident signature is required" }),
+  staffSignature: z.string().min(1, { message: "Staff signature is required" }),
 });
 
 export type BehavioralStandardsFormValues = z.infer<
@@ -10,5 +13,6 @@ export type BehavioralStandardsFormValues = z.infer<
 
 export const behavioralStandardsFormDefaultValues: BehavioralStandardsFormValues =
   {
-    signed: false,
+    residentSignature: "",
+    staffSignature: "",
   };

@@ -11,7 +11,7 @@ export default function TransportationReleaseForm(): ReactNode {
     <DocumentSignature
       pdfPath={PDF_PATH}
       formTitle="Transportation Release Form"
-      form="transformationReleaseForm"
+      form="transportationRelease"
       staffSignatureLocation={{
         x: 150,
         y: 325,
