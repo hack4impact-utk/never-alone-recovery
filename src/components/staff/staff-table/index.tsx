@@ -7,6 +7,7 @@ import SearchBox from "@/components/common/search-box";
 import { StaffRole } from "@/types/enums";
 import { User } from "@/types/schema";
 
+import AddDrugTestForm from "./add-drug-test-form";
 import EditStaffForm from "./edit-staff-form";
 
 type StaffTableProps = {
@@ -19,6 +20,7 @@ type Row = {
   email: string | null;
   role: StaffRole;
   user: User;
+  lastCompletedDrugTest: Date | null;
 };
 
 function getRows(staff: User[], searchQuery: string): Row[] {
@@ -29,6 +31,7 @@ function getRows(staff: User[], searchQuery: string): Row[] {
       email: member.email,
       role: member.role,
       user: member,
+      lastCompletedDrugTest: member.lastCompletedDrugTest,
     };
   });
 
@@ -65,10 +68,33 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
             label={params.value}
             variant="filled"
             size="small"
-            sx={{ textTransform: "capitalize" }}
+            sx={{
+              textTransform: "capitalize",
+              backgroundColor:
+                params.value === "admin"
+                  ? "#000000"
+                  : params.value === "staff"
+                    ? "#1976d2"
+                    : "#e0e0e0",
+              color:
+                params.value === "disabled" ? "rgba(0,0,0,0.87)" : "#ffffff",
+            }}
           />
         );
       },
+    },
+    {
+      field: "lastCompletedDrugTest",
+      headerName: "Last Completed Drug Test",
+      flex: 2,
+      renderCell: (params) =>
+        params.value
+          ? new Date(params.value).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })
+          : "—",
     },
     {
       field: "action",
@@ -102,8 +128,14 @@ export default function StaffTable({ staff }: StaffTableProps): ReactNode {
       <Typography align="center" variant="h5" sx={{ mt: 2 }}>
         Staff Dashboard
       </Typography>
-      <Box display="flex" alignItems="center" sx={{ py: 2 }}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ py: 2 }}
+      >
         <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <AddDrugTestForm staff={staff} />
       </Box>
 
       {displayDataGrid && (
