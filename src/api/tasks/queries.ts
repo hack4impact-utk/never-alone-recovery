@@ -15,10 +15,15 @@ export async function getAllClientTasks(): Promise<Result<ClientTasks[]>> {
   }
 
   try {
-    const filtered_clients = await db.query.clients.findMany({
-      with: { tasks: true },
-      where: eq(clients.staffId, session.user.id),
-    });
+    const filtered_clients =
+      session.user.role == "admin"
+        ? await db.query.clients.findMany({
+            with: { tasks: true },
+          })
+        : await db.query.clients.findMany({
+            with: { tasks: true },
+            where: eq(clients.staffId, session.user.id),
+          });
     return [filtered_clients, null];
   } catch (error) {
     return [null, handleError(error)];
