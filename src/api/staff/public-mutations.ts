@@ -21,10 +21,10 @@ export async function updateStaffRole(
   if (session.user.email === user.email) {
     return [null, "Forbidden"];
   }
- 
+
   const [, updateStaffError] = await updateStaff({ ...user, role: role });
 
-  if (!updateStaffError){
+  if (updateStaffError) {
     return [null, "Error updating role"];
   }
 
