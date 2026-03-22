@@ -14,14 +14,14 @@ export async function markTaskAsCompleted(task: Task): Promise<Result<Task>> {
     return [null, "Unauthorized"];
   }
 
-  const [, error] = await updateTask({...task, completed: true});
+  const [, error] = await updateTask({ ...task, completed: true });
 
   if (!error) {
     await addAudit({
       staffId: session.user.id,
       clientId: task.clientId,
       type: "client_task_completed",
-      message: `${task.description} completed`
+      message: `${task.description} completed`,
     });
   }
 
