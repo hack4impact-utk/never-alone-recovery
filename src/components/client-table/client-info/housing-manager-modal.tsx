@@ -15,16 +15,19 @@ import {
   Select,
   Typography,
 } from "@mui/material";
+import { useSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { updateClientHousingManager } from "@/api/client/public-mutations";
 import { HousingManager } from "@/types/housing-manager";
 import { Client } from "@/types/schema";
 
 type HousingManagerProps = {
   client: Client;
   housingManagers: HousingManager[];
+  onUpdateHousingManager: (client: Client) => void;
 };
 
 const housingManagerSchema = z.object({
@@ -36,8 +39,12 @@ type HousingManagerValues = z.infer<typeof housingManagerSchema>;
 export default function ChangeHousingManger({
   client,
   housingManagers,
+  onUpdateHousingManager,
 }: HousingManagerProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const {
     control,
@@ -47,7 +54,7 @@ export default function ChangeHousingManger({
   } = useForm<HousingManagerValues>({
     resolver: zodResolver(housingManagerSchema),
     defaultValues: {
-      manager: "",
+      manager: client.staffId,
     },
   });
 
@@ -59,21 +66,46 @@ export default function ChangeHousingManger({
     setIsOpen(false);
   };
 
-  const onSubmit = (data: HousingManagerValues): void => {
-    // eslint-disable-next-line no-console
-    console.log("Selected Housing Manager:", data.manager);
-    reset();
+  const onSubmit = async (data: HousingManagerValues): Promise<void> => {
+    setIsLoading(true);
+    const [updatedClient, error] = await updateClientHousingManager(
+      client,
+      data.manager,
+    );
+
+    if (error || !updatedClient) {
+      enqueueSnackbar(
+        `Failed to change "${client.firstName} ${client.lastName}'s housing manager". Please try again.`,
+        {
+          variant: "error",
+        },
+      );
+      return;
+    }
+
+    const successMessage = `${housingManagers.find((manager) => manager.id === data.manager)?.name} is now ${client.firstName}'s housing manager.`;
+
+    enqueueSnackbar(successMessage, {
+      variant: "success",
+    });
+    onUpdateHousingManager(updatedClient);
+
+    setIsLoading(false);
+    setIsDisabled(false);
   };
 
   const onError = (errors: FieldErrors<HousingManagerValues>): void => {
     // eslint-disable-next-line no-console
     console.log("Validation Errors:", errors);
+    enqueueSnackbar("Please fix the errors in the form.", {
+      variant: "error",
+    });
   };
 
   return (
     <>
       <Button variant="outlined" sx={{ width: "100%" }} onClick={handleOpen}>
-        Change Housing Manger
+        Change Housing Manager
       </Button>
 
       <Dialog open={isOpen} fullWidth maxWidth="sm">
@@ -153,6 +185,8 @@ export default function ChangeHousingManger({
               variant="contained"
               color="primary"
               sx={{ width: "50%" }}
+              disabled={isLoading || isDisabled}
+              loading={isLoading}
             >
               Confirm
             </Button>

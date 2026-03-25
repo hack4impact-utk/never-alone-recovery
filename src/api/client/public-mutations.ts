@@ -58,3 +58,25 @@ export async function dischargeClient(client: Client): Promise<Result<Client>> {
 
   return [updatedClient, null];
 }
+
+export async function updateClientHousingManager(
+  client: Client,
+  housingManagerId: string,
+): Promise<Result<Client>> {
+  const session = await getUserSession();
+
+  if (!session) {
+    return [null, "Unauthorized"];
+  }
+
+  const [updatedClient, error] = await updateClient({
+    ...client,
+    staffId: housingManagerId,
+  });
+
+  if (!updatedClient || error) {
+    return [null, error];
+  }
+
+  return [updatedClient, null];
+}
