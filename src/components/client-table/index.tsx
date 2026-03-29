@@ -99,6 +99,7 @@ export default function ClientTable({
             housingManagers={housingManagers}
             onDischarge={updateClients}
             onGraduate={updateClients}
+            onUpdateHousingManager={updateClients}
           />
         </Box>
       ),

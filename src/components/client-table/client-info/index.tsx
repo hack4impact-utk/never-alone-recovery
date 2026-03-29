@@ -23,6 +23,7 @@ type ClientInfoProps = {
   housingManagers: HousingManager[];
   onGraduate: (client: Client) => void;
   onDischarge: (client: Client) => void;
+  onUpdateHousingManager: (client: Client) => void;
 };
 
 export default function ClientInfo({
@@ -30,6 +31,7 @@ export default function ClientInfo({
   housingManagers,
   onGraduate,
   onDischarge,
+  onUpdateHousingManager,
 }: ClientInfoProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -62,6 +64,7 @@ export default function ClientInfo({
             <ChangeHousingManger
               client={client}
               housingManagers={housingManagers}
+              onUpdateHousingManager={onUpdateHousingManager}
             />
             <Graduate client={client} onGraduate={onGraduate} />
             <Discharge client={client} onDischarge={onDischarge} />
