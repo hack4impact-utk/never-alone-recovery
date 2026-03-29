@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
-import { Controller, FieldErrors, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { dischargeClient } from "@/api/client/public-mutations";
@@ -91,9 +91,7 @@ export default function Discharge({
     handleClose();
   };
 
-  const onError = (errors: FieldErrors<ClientInfoValues>): void => {
-    // eslint-disable-next-line no-console
-    console.log("Validation Errors:", errors);
+  const onError = (): void => {
     enqueueSnackbar("Please fix the errors in the form.", {
       variant: "error",
     });

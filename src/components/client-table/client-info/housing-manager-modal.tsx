@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
-import { Controller, FieldErrors, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { updateClientHousingManager } from "@/api/client/public-mutations";
@@ -92,11 +92,10 @@ export default function ChangeHousingManger({
 
     setIsLoading(false);
     setIsDisabled(false);
+    handleClose();
   };
 
-  const onError = (errors: FieldErrors<HousingManagerValues>): void => {
-    // eslint-disable-next-line no-console
-    console.log("Validation Errors:", errors);
+  const onError = (): void => {
     enqueueSnackbar("Please fix the errors in the form.", {
       variant: "error",
     });
