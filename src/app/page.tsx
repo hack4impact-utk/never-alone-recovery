@@ -4,6 +4,7 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import PeopleIcon from "@mui/icons-material/People";
 import SecurityIcon from "@mui/icons-material/Security";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import { Container, Grid } from "@mui/material";
 import React, { ReactNode } from "react";
 
@@ -54,6 +55,12 @@ const tiles: Tile[] = [
     title: "Staff Dashboard",
     href: "/staff-dashboard",
     icon: <BadgeIcon sx={{ fontSize: ICON_FONT_SIZE }} />,
+  },
+  {
+    id: "donor",
+    title: "Donor Dashboard",
+    href: "/donor-dashboard",
+    icon: <VolunteerActivismIcon sx={{ fontSize: ICON_FONT_SIZE }} />,
   },
 ];
 
