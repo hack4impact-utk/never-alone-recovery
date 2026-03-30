@@ -28,6 +28,7 @@ export default function ControlledDatePicker({
           sx={{ marginBottom: "1rem" }}
           label={label}
           value={dayjs(field.value)}
+          onChange={(date) => field.onChange(date ? date.toDate() : null)}
           slotProps={{
             textField: {
               fullWidth: true,
