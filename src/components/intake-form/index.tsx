@@ -11,6 +11,7 @@ import { useIntakeFormContext } from "@/providers/intake-form-provider";
 
 import BehavioralStandardsForm from "./behavioral-standards-form";
 import ConfidentialityAgreementForm from "./confidentiality-agreement-form";
+import ConfirmationForm from "./confirmation-form";
 import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
 import FinancialResponsibilityForm from "./financial-responsibility-form";
@@ -77,6 +78,10 @@ const intakeFormSteps: IntakeFormStep[] = [
   {
     name: "emergencyContact",
     form: <EmergencyContactForm />,
+  },
+  {
+    name: "confirmation",
+    form: <ConfirmationForm />,
   },
 ];
 
