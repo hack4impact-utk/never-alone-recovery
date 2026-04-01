@@ -3,8 +3,8 @@ import { Box, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 
-import AddDonorForm from "@/components/donor/add-donor-form";
 import SearchBox from "@/components/common/search-box";
+import AddDonorForm from "@/components/donor/add-donor-form";
 import { Donor } from "@/types/schema";
 
 import BulkEmailButton from "./bulk-email-button";
