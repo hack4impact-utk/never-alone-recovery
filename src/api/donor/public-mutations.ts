@@ -6,9 +6,7 @@ import getUserSession from "@/utils/auth/get-user-session";
 
 import { insertDonor } from "./private-mutations";
 
-export async function createDonor(
-  donor: NewDonor,
-): Promise<Result<Donor>> {
+export async function createDonor(donor: NewDonor): Promise<Result<Donor>> {
   const session = await getUserSession();
 
   if (!session) {
