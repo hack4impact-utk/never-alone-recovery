@@ -25,6 +25,10 @@ import {
   financialResponsibilityFormSchema,
 } from "./financial-responsibility-form/financial-responsibility-form-schema";
 import {
+  medicalHistoryFormDefaultValues,
+  medicalHistoryFormSchema,
+} from "./medical-history-form/medical-history-form-schema";
+import {
   probationAndParoleFormDefaultValues,
   probationAndParoleFormSchema,
 } from "./probation-and-parole-form/probation-and-parole-form-schema";
@@ -51,6 +55,7 @@ import {
 
 export const intakeFormSchema = z.object({
   demographic: demographicFormSchema,
+  medicalHistory: medicalHistoryFormSchema,
   searchConsent: searchConsentFormSchema,
   emergencyContact: emergencyContactFormSchema,
   transportationRelease: transportationReleaseFormSchema,
@@ -68,6 +73,7 @@ export type IntakeFormValues = z.infer<typeof intakeFormSchema>;
 
 export const intakeFormDefaultValues: IntakeFormValues = {
   demographic: demographicFormDefaultValues,
+  medicalHistory: medicalHistoryFormDefaultValues,
   searchConsent: searchConsentFormDefaultValues,
   emergencyContact: emergencyContactFormDefaultValues,
   transportationRelease: transportationReleaseFormDefaultValues,

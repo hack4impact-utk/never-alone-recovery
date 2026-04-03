@@ -20,6 +20,7 @@ import {
   intakeFormSchema,
   IntakeFormValues,
 } from "./intake-form-schema";
+import MedicalHistoryForm from "./medical-history-form";
 import ProbationAndParoleForm from "./probation-and-parole-form";
 import ReleaseOfInformationForm from "./release-of-information-form";
 import SearchConsentForm from "./search-consent-form";
@@ -38,6 +39,10 @@ const intakeFormSteps: IntakeFormStep[] = [
   {
     name: "demographic",
     form: <DemographicForm />,
+  },
+  {
+    name: "medicalHistory",
+    form: <MedicalHistoryForm />,
   },
   {
     name: "transportationRelease",
