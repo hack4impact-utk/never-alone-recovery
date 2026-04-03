@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Divider, Grid, Paper, Typography } from "@mui/material";
 import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,25 +14,22 @@ const demographicFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   middleName: z.string().optional(),
   lastName: z.string().min(1, "Last name is required"),
-  gender: z
-    .string()
-    .min(1, "Gender is required")
-    .refine((value) => value === "male" || value === "female", {
-      message: "Gender is required",
-    }),
-  date: z.string().min(1, "Date is required"),
-  dateOfBirth: z.string().min(1, "Date of birth is required"),
   socialSecurityNumber: z.string().min(1, "Social security number is required"),
-  ethnicity: z.string().min(1, "Ethnicity is required"),
+  ethnicity: z.enum(
+    [
+      "White",
+      "Black or African American",
+      "American Indian or Alaska Native",
+      "Asian",
+      "Native Hawaiian or Other Pacific Islander",
+      "Other",
+    ],
+    "Ethnicity is required",
+  ),
+  dateOfBirth: z.string().min(1, "Date of birth is required"),
   phoneNumber: z.string().min(1, "Phone number is required"),
   tomis: z.string().min(1, "TOMIS is required"),
   email: z.email("Invalid email address").min(1, "Email is required"),
-  lastKnownAddress: z.string().min(1, "Last known address is required"),
-  amountOfCleanTime: z.string().min(1, "Amount of clean time is required"),
-  drugOfChoice: z.string().min(1, "Drug of choice is required"),
-  priorRecoveryExperience: z
-    .string()
-    .min(1, "Prior recovery experience is required"),
 });
 
 type DemographicFormValues = z.infer<typeof demographicFormSchema>;
@@ -48,29 +45,26 @@ export default function IntakeForm(): ReactNode {
       firstName: "",
       middleName: "",
       lastName: "",
-      date: "",
-      dateOfBirth: "",
       socialSecurityNumber: "",
-      ethnicity: "",
+      dateOfBirth: "",
+      ethnicity: undefined,
       phoneNumber: "",
       tomis: "",
       email: "",
-      lastKnownAddress: "",
-      amountOfCleanTime: "",
-      drugOfChoice: "",
-      priorRecoveryExperience: "",
-      gender: "",
     },
   });
 
   const onSubmit = (data: DemographicFormValues): void => {
-    void data;
-    // Submit action will be wired to API mutation in a follow-up change.
+    console.log("Form submitted with data:", data);
   };
 
   return (
-    <Paper sx={{ p: 4, maxWidth: 800, mx: "auto", mt: 4 }}>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ maxWidth: 800, mt: 4 }}
+    >
+      <Paper sx={{ p: 4 }}>
         <Grid container spacing={3}>
           <Grid size={12}>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
@@ -99,17 +93,6 @@ export default function IntakeForm(): ReactNode {
             gridProps={{ size: { xs: 12, sm: 4 } }}
           />
 
-          <ControlledDropdown
-            name="gender"
-            control={control}
-            label="Gender"
-            options={[
-              { value: "male", label: "Male" },
-              { value: "female", label: "Female" },
-            ]}
-            gridProps={{ size: { xs: 12, sm: 6 } }}
-          />
-
           <ControlledDateField
             name="dateOfBirth"
             control={control}
@@ -124,6 +107,46 @@ export default function IntakeForm(): ReactNode {
             gridProps={{ size: { xs: 12, sm: 6 } }}
           />
 
+          <ControlledDropdown
+            name="ethnicity"
+            control={control}
+            label="Ethnicity"
+            options={[
+              { value: "White", label: "White" },
+              {
+                value: "Black or African American",
+                label: "Black or African American",
+              },
+              {
+                value: "American Indian or Alaska Native",
+                label: "American Indian or Alaska Native",
+              },
+              { value: "Asian", label: "Asian" },
+              {
+                value: "Native Hawaiian or Other Pacific Islander",
+                label: "Native Hawaiian or Other Pacific Islander",
+              },
+              { value: "Other", label: "Other" },
+            ]}
+            gridProps={{ size: { xs: 12, sm: 6 } }}
+          />
+
+          {/* ADDED FIELD: TOMIS */}
+          <ControlledTextField
+            name="tomis"
+            control={control}
+            label="TOMIS ID"
+            gridProps={{ size: { xs: 12, sm: 6 } }}
+          />
+
+          {/* ADDED FIELD: Phone Number */}
+          <ControlledTextField
+            name="phoneNumber"
+            control={control}
+            label="Phone Number"
+            gridProps={{ size: { xs: 12, sm: 6 } }}
+          />
+
           <ControlledTextField
             name="email"
             control={control}
@@ -131,20 +154,23 @@ export default function IntakeForm(): ReactNode {
             gridProps={{ size: { xs: 12, sm: 6 } }}
           />
 
-          <Grid size={{ xs: 12 }}>
+          <Grid size={12}>
+            <Divider />
+          </Grid>
+
+          <Grid size={12}>
             <Button
               type="submit"
               variant="contained"
               fullWidth
               size="large"
               disabled={isSubmitting}
-              sx={{ mt: 2 }}
             >
               {isSubmitting ? "Processing..." : "Submit Application"}
             </Button>
           </Grid>
         </Grid>
-      </Box>
-    </Paper>
+      </Paper>
+    </Box>
   );
 }

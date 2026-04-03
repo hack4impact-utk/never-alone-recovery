@@ -44,6 +44,7 @@ export default function ControlledDropdown<TFieldValues extends FieldValues>({
       <Controller
         name={name}
         control={control}
+        defaultValue={"" as never}
         render={({ field, fieldState: { error } }) => (
           <FormControl fullWidth error={!!error}>
             <InputLabel id={`${name}-label`}>{label}</InputLabel>
