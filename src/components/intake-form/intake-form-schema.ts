@@ -9,6 +9,10 @@ import {
   confidentialityAgreementFormSchema,
 } from "./confidentiality-agreement-form/confidentiality-agreement-form-schema";
 import {
+  confirmationFormDefaultValues,
+  confirmationFormSchema,
+} from "./confirmation-form/confirmation-form-schema";
+import {
   demographicFormDefaultValues,
   demographicFormSchema,
 } from "./demographic-form/demographic-form-schema";
@@ -57,6 +61,7 @@ export const intakeFormSchema = z.object({
   releaseOfInformation: releaseOfInformationFormSchema,
   serviceContract: serviceContractFormSchema,
   temporaryResidency: temporaryResidencyFormSchema,
+  confirmation: confirmationFormSchema,
 });
 
 export type IntakeFormValues = z.infer<typeof intakeFormSchema>;
@@ -73,6 +78,7 @@ export const intakeFormDefaultValues: IntakeFormValues = {
   releaseOfInformation: releaseOfInformationFormDefaultValues,
   serviceContract: serviceContractFormDefaultValues,
   temporaryResidency: temporaryResidencyFormDefaultValues,
+  confirmation: confirmationFormDefaultValues,
 };
 
 // Get all the forms that have the residentSignature and staffSignature fields
