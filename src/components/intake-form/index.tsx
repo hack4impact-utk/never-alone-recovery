@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Divider, Grid, Paper, Typography } from "@mui/material";
 import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
+import useFormPersist from "react-hook-form-persist";
 import { z } from "zod";
 
 import ControlledDateField from "../common/forms/controlled-date-field";
@@ -38,6 +39,8 @@ export default function IntakeForm(): ReactNode {
   const {
     control,
     handleSubmit,
+    watch,
+    setValue,
     formState: { isSubmitting },
   } = useForm<DemographicFormValues>({
     resolver: zodResolver(demographicFormSchema),
@@ -52,6 +55,12 @@ export default function IntakeForm(): ReactNode {
       tomis: "",
       email: "",
     },
+  });
+
+  useFormPersist("intakeForm", {
+    watch,
+    setValue,
+    storage: globalThis.localStorage,
   });
 
   const onSubmit = (data: DemographicFormValues): void => {
