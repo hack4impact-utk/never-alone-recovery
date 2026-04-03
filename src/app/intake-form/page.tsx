@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { ReactNode } from "react";
 
 import IntakeForm from "@/components/intake-form";
-import IntakeFormProvider from "@/providers/intake-form-provider";
 
 export default function IntakeFormPage(): ReactNode {
   return (
@@ -13,9 +12,7 @@ export default function IntakeFormPage(): ReactNode {
         alignItems: "center",
       }}
     >
-      <IntakeFormProvider>
-        <IntakeForm />
-      </IntakeFormProvider>
+      <IntakeForm />
     </Box>
   );
 }
