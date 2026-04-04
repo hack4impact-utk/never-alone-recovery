@@ -11,12 +11,13 @@ import {
   Typography,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { ReactNode, useEffect, useState } from "react";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { ReactNode, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import useFormPersist from "react-hook-form-persist";
 
 import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
+import ResetButton from "./reset-button";
 import {
   intakeFormDefaultValues,
   intakeFormSchema,
@@ -55,7 +56,14 @@ export default function IntakeForm(): ReactNode {
     defaultValues: intakeFormDefaultValues,
     mode: "onChange",
   });
-  const { trigger, watch, setValue, handleSubmit } = methods;
+  const {
+    trigger,
+    watch,
+    setValue,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = methods;
 
   const showBackButton = step !== intakeFormSteps[0];
   const showNextButton = step !== intakeFormSteps.at(-1);
@@ -73,11 +81,24 @@ export default function IntakeForm(): ReactNode {
   const handleNext = async (): Promise<void> => {
     const isValid = await trigger(step.name);
 
-    if (!isValid) {
+    if (isValid) {
+      setStep(intakeFormSteps[currentIndex + 1]);
       return;
     }
 
-    setStep(intakeFormSteps[currentIndex + 1]);
+    const errorCount = Object.keys(errors[step.name] || {}).length;
+    enqueueSnackbar(
+      `Please fix ${errorCount} validation error(s) before proceeding.`,
+      {
+        variant: "error",
+      },
+    );
+  };
+
+  const handleReset = (): void => {
+    reset();
+    globalThis.localStorage.removeItem(INTAKE_FORM_STORAGE_KEY);
+    setStep(intakeFormSteps[0]);
   };
 
   const onSubmit = (_data: IntakeFormValues): void => {
@@ -137,13 +158,16 @@ export default function IntakeForm(): ReactNode {
                   pt: 3,
                 }}
               >
-                <Button
-                  variant="outlined"
-                  onClick={handleBack}
-                  disabled={!showBackButton}
-                >
-                  Back
-                </Button>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <Button
+                    variant="outlined"
+                    onClick={handleBack}
+                    disabled={!showBackButton}
+                  >
+                    Back
+                  </Button>
+                  <ResetButton onConfirmReset={handleReset} />
+                </Box>
 
                 {showNextButton ? (
                   <Button
