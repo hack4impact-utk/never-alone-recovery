@@ -36,21 +36,21 @@ type IntakeFormStep = {
 };
 
 const intakeFormSteps: IntakeFormStep[] = [
-  // {
-  //   name: "demographic",
-  //   label: "Demographic",
-  //   form: <DemographicForm />,
-  // },
+  {
+    name: "demographic",
+    label: "Demographic",
+    form: <DemographicForm />,
+  },
   {
     name: "serviceContract",
     label: "Service Contract",
     form: <ServiceContractForm />,
   },
-  // {
-  //   name: "transportationRelease",
-  //   label: "Transportation Release",
-  //   form: <TransportationReleaseForm />,
-  // },
+  {
+    name: "transportationRelease",
+    label: "Transportation Release",
+    form: <TransportationReleaseForm />,
+  },
   {
     name: "emergencyContact",
     label: "Emergency Contact",

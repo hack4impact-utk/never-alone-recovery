@@ -18,7 +18,7 @@ export const addDateToPdf = (form: PDFForm): void => {
   const fields = form.getFields();
 
   for (const field of fields) {
-    if (field.getName().toLowerCase().includes("date")) {
+    if (field.getName() === "date") {
       const textField = field as PDFTextField;
 
       textField.setText(date);
@@ -33,10 +33,11 @@ export const addNameToPdf = (
   lastName: string | undefined,
 ): void => {
   const fields = form.getFields();
-  const fullName = [firstName, middleName, lastName].filter(Boolean).join(" ");
+  const fullName =
+    `${firstName ?? ""} ${middleName ?? ""} ${lastName ?? ""}`.trim();
 
   for (const field of fields) {
-    if (field.getName().toLowerCase().includes("fullName")) {
+    if (field.getName() === "fullName") {
       const textField = field as PDFTextField;
 
       textField.setText(fullName);
@@ -72,10 +73,4 @@ export const addSignatureToPdf = async (
     width: location.width,
     height: location.height,
   });
-};
-
-export type Annotation = {
-  type: "date" | "name";
-  pageNumber: number;
-  location: AnnotationLocation;
 };

@@ -1,40 +1,26 @@
 "use client";
 
-import { Grid, Typography } from "@mui/material";
 import dayjs from "dayjs";
-import { ReactNode, useEffect } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { PDFDocument } from "pdf-lib";
+import { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
 
-import DocumentDisplay from "@/components/common/document-display/document-display";
 import ControlledDateField from "@/components/common/forms/controlled-date-field";
 import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
-import {
-  addDateToPdf,
-  addNameToPdf,
-  addSignatureToPdf,
-  addTextToPdf,
-} from "@/utils/pdf/annotations";
-import { fetchPdf } from "@/utils/pdf/conversion";
+import FormContainer from "@/components/common/forms/form-container";
+import { addSignatureToPdf, addTextToPdf } from "@/utils/pdf/annotations";
 
 import { IntakeFormValues } from "../schema";
 
 export default function ServiceContractForm(): ReactNode {
-  const { getPdfUrl, savePdf } = useIntakeFormContext();
   const { control, getValues } = useFormContext<IntakeFormValues>();
-  const watch = useWatch({ name: "serviceContract" });
 
-  const generatePdf = async (): Promise<void> => {
-    const pdf = await fetchPdf("serviceContract");
+  const generatePdf = async (pdf: PDFDocument): Promise<void> => {
     const form = pdf.getForm();
 
     const {
-      demographic: { firstName, middleName, lastName },
-      serviceContract: { residentSignature, staffSignature, entryDate },
+      serviceContract: { entryDate, residentSignature, staffSignature },
     } = getValues();
-
-    addDateToPdf(form);
-    addNameToPdf(form, firstName, middleName, lastName);
 
     const signDate = dayjs();
 
@@ -63,24 +49,14 @@ export default function ServiceContractForm(): ReactNode {
       width: 200,
       height: 50,
     });
-
-    await savePdf("serviceContract", pdf);
   };
 
-  useEffect(() => {
-    void generatePdf();
-  }, [watch]);
-
   return (
-    <Grid container spacing={3}>
-      <Grid size={12}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          Service Contract Form
-        </Typography>
-      </Grid>
-
-      <DocumentDisplay pdfUrl={getPdfUrl("serviceContract")} />
-
+    <FormContainer
+      formName="serviceContract"
+      formTitle="Service Contract Form"
+      generatePdf={generatePdf}
+    >
       <ControlledDateField
         name="serviceContract.entryDate"
         control={control}
@@ -101,6 +77,6 @@ export default function ServiceContractForm(): ReactNode {
         label="Staff Signature"
         gridProps={{ size: { xs: 12, sm: 6 } }}
       />
-    </Grid>
+    </FormContainer>
   );
 }

@@ -1,26 +1,34 @@
 "use client";
 
-import { Divider, Grid, Typography } from "@mui/material";
+import { Divider, Grid } from "@mui/material";
+import { PDFDocument } from "pdf-lib";
 import { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 
 import ControlledDateField from "@/components/common/forms/controlled-date-field";
 import ControlledDropdown from "@/components/common/forms/controlled-dropdown";
 import ControlledTextField from "@/components/common/forms/controlled-text-field";
+import FormContainer from "@/components/common/forms/form-container";
 
 import { IntakeFormValues } from "../schema";
 
 export default function IntakeForm(): ReactNode {
-  const { control } = useFormContext<IntakeFormValues>();
+  const { control, getValues } = useFormContext<IntakeFormValues>();
+
+  const generatePdf = (pdf: PDFDocument): void => {
+    const form = pdf.getForm();
+
+    // for (const [key, value] of Object.entries(getValues().demographic)) {
+    //   form.getTextField(key).setText(String(value ?? ""));
+    // }
+  };
 
   return (
-    <Grid container spacing={3}>
-      <Grid size={12}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          Demographic Information
-        </Typography>
-      </Grid>
-
+    <FormContainer
+      formName="demographic"
+      formTitle="Demographic Information"
+      generatePdf={generatePdf}
+    >
       <ControlledTextField
         name="demographic.firstName"
         control={control}
@@ -100,10 +108,6 @@ export default function IntakeForm(): ReactNode {
         label="Email"
         gridProps={{ size: { xs: 12, sm: 6 } }}
       />
-
-      <Grid size={12}>
-        <Divider />
-      </Grid>
-    </Grid>
+    </FormContainer>
   );
 }

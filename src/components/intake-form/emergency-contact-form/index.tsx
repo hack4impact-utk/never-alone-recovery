@@ -24,15 +24,10 @@ export default function EmergencyContactForm(): ReactNode {
   return (
     <FormContainer
       formName="emergencyContact"
+      formTitle="Emergency Contact Information"
       generatePdf={generatePdf}
       showPdf={false}
     >
-      <Grid size={12}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          Emergency Contact Information
-        </Typography>
-      </Grid>
-
       <Grid size={12}>
         <Typography variant="body1" sx={{ fontWeight: "bold" }}>
           Emergency Contact 1

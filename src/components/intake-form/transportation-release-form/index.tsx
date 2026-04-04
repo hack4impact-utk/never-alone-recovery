@@ -1,32 +1,22 @@
 "use client";
 
-import { Grid, Typography } from "@mui/material";
-import { ReactNode, useEffect } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { PDFDocument } from "pdf-lib";
+import { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
 
-import DocumentDisplay from "@/components/common/document-display/document-display";
 import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
+import FormContainer from "@/components/common/forms/form-container";
 import { addSignatureToPdf } from "@/utils/pdf/annotations";
-import { fetchPdf } from "@/utils/pdf/conversion";
 
 import { IntakeFormValues } from "../schema";
 
 export default function TransportationReleaseForm(): ReactNode {
-  const { getPdfUrl, savePdf } = useIntakeFormContext();
-  const { control } = useFormContext<IntakeFormValues>();
+  const { control, getValues } = useFormContext<IntakeFormValues>();
 
-  const residentSignature = useWatch({
-    control,
-    name: "transportationRelease.residentSignature",
-  });
-  const staffSignature = useWatch({
-    control,
-    name: "transportationRelease.staffSignature",
-  });
-
-  const generatePdf = async (): Promise<void> => {
-    const pdf = await fetchPdf("transportationRelease");
+  const generatePdf = async (pdf: PDFDocument): Promise<void> => {
+    const {
+      transportationRelease: { residentSignature, staffSignature },
+    } = getValues();
 
     await addSignatureToPdf(pdf, residentSignature, 0, {
       x: 150,
@@ -41,24 +31,14 @@ export default function TransportationReleaseForm(): ReactNode {
       width: 200,
       height: 50,
     });
-
-    await savePdf("transportationRelease", pdf);
   };
 
-  useEffect(() => {
-    void generatePdf();
-  }, [residentSignature, staffSignature]);
-
   return (
-    <Grid container spacing={3}>
-      <Grid size={12}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          Transportation Release Form
-        </Typography>
-      </Grid>
-
-      <DocumentDisplay pdfUrl={getPdfUrl("transportationRelease")} />
-
+    <FormContainer
+      formName="transportationRelease"
+      formTitle="Transportation Release Form"
+      generatePdf={generatePdf}
+    >
       <ControlledSignaturePad
         name="transportationRelease.residentSignature"
         control={control}
@@ -72,6 +52,6 @@ export default function TransportationReleaseForm(): ReactNode {
         label="Staff Signature"
         gridProps={{ size: 6 }}
       />
-    </Grid>
+    </FormContainer>
   );
 }
