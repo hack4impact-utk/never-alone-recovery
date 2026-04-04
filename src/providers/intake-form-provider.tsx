@@ -1,13 +1,15 @@
 "use client";
+import PDFDocument from "pdf-lib/cjs/api/PDFDocument";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 import { FormNames } from "@/components/intake-form/schema";
+import { convertPdfToUrl } from "@/utils/pdf/conversion";
 
 export type PdfUrls = Record<FormNames, string>;
 
 type IntakeFormContextType = {
   getPdfUrl: (formName: keyof PdfUrls) => string;
-  setPdfUrl: (formName: keyof PdfUrls, url: string) => void;
+  savePdf: (formName: keyof PdfUrls, pdf: PDFDocument) => Promise<void>;
 };
 
 const IntakeFormContext = createContext<IntakeFormContextType | undefined>(
@@ -31,7 +33,12 @@ export default function IntakeFormProvider({
     return pdfUrls[formName];
   };
 
-  const setPdfUrl = (formName: keyof PdfUrls, url: string): void => {
+  const savePdf = async (
+    formName: keyof PdfUrls,
+    pdf: PDFDocument,
+  ): Promise<void> => {
+    const url = await convertPdfToUrl(pdf);
+
     setPdfUrls((prev) => ({
       ...prev,
       [formName]: url,
@@ -42,7 +49,7 @@ export default function IntakeFormProvider({
     <IntakeFormContext.Provider
       value={{
         getPdfUrl,
-        setPdfUrl,
+        savePdf,
       }}
     >
       {children}

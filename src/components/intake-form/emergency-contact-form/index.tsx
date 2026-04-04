@@ -1,23 +1,47 @@
 "use client";
 
 import { Divider, Grid, Typography } from "@mui/material";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
+import DocumentDisplay from "@/components/common/document-display/document-display";
 import ControlledTextField from "@/components/common/forms/controlled-text-field";
+import { useIntakeFormContext } from "@/providers/intake-form-provider";
+import { convertUrlToPdf } from "@/utils/pdf/conversion";
 
 import { IntakeFormValues } from "../schema";
 
 export default function EmergencyContactForm(): ReactNode {
-  const { control } = useFormContext<IntakeFormValues>();
+  const { control, getValues } = useFormContext<IntakeFormValues>();
+  const { getPdfUrl, savePdf } = useIntakeFormContext();
+
+  const generatePdf = async (): Promise<void> => {
+    const pdf = await convertUrlToPdf(
+      "neveralonerecovery.emergencycontactform.pdf",
+    );
+
+    const form = pdf.getForm();
+
+    for (const [key, value] of Object.entries(getValues().emergencyContact)) {
+      form.getTextField(key).setText(value);
+    }
+
+    await savePdf("emergencyContact", pdf);
+  };
+
+  useEffect(() => {
+    void generatePdf();
+  }, []);
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} onBlurCapture={generatePdf}>
       <Grid size={12}>
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
           Emergency Contact Information
         </Typography>
       </Grid>
+
+      <DocumentDisplay pdfUrl={getPdfUrl("emergencyContact")} />
 
       <Grid size={12}>
         <Typography variant="body1" sx={{ fontWeight: "bold" }}>

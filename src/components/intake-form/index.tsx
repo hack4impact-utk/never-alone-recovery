@@ -40,11 +40,11 @@ const intakeFormSteps: IntakeFormStep[] = [
   //   label: "Demographic",
   //   form: <DemographicForm />,
   // },
-  {
-    name: "transportationRelease",
-    label: "Transportation Release",
-    form: <TransportationReleaseForm />,
-  },
+  // {
+  //   name: "transportationRelease",
+  //   label: "Transportation Release",
+  //   form: <TransportationReleaseForm />,
+  // },
   {
     name: "emergencyContact",
     label: "Emergency Contact",
