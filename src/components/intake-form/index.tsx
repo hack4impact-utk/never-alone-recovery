@@ -11,16 +11,19 @@ import {
   Typography,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { ReactNode, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { ReactNode, useEffect, useState } from "react";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import useFormPersist from "react-hook-form-persist";
 
 import DemographicForm from "./demographic-form";
+import EmergencyContactForm from "./emergency-contact-form";
 import {
   intakeFormDefaultValues,
   intakeFormSchema,
   IntakeFormValues,
 } from "./schema";
+
+const INTAKE_FORM_STORAGE_KEY = "intakeForm";
 
 type FormNames = keyof IntakeFormValues;
 
@@ -36,6 +39,11 @@ const intakeFormSteps: IntakeFormStep[] = [
     label: "Demographic",
     form: <DemographicForm />,
   },
+  {
+    name: "emergencyContact",
+    label: "Emergency Contact",
+    form: <EmergencyContactForm />,
+  },
 ];
 
 export default function IntakeForm(): ReactNode {
@@ -45,11 +53,18 @@ export default function IntakeForm(): ReactNode {
   const methods = useForm<IntakeFormValues>({
     resolver: zodResolver(intakeFormSchema),
     defaultValues: intakeFormDefaultValues,
+    mode: "onChange",
   });
   const { trigger, watch, setValue, handleSubmit } = methods;
 
   const showBackButton = step !== intakeFormSteps[0];
   const showNextButton = step !== intakeFormSteps.at(-1);
+
+  useFormPersist(INTAKE_FORM_STORAGE_KEY, {
+    watch,
+    setValue,
+    storage: globalThis.localStorage,
+  });
 
   const handleBack = (): void => {
     setStep(intakeFormSteps[currentIndex - 1]);
@@ -65,24 +80,12 @@ export default function IntakeForm(): ReactNode {
     setStep(intakeFormSteps[currentIndex + 1]);
   };
 
-  useFormPersist("intakeForm", {
-    watch,
-    setValue,
-    storage: globalThis.localStorage,
-  });
+  const onSubmit = (_data: IntakeFormValues): void => {
+    void _data;
 
-  const onError = (): void => {
-    enqueueSnackbar("Please fix the errors in the form.", {
-      variant: "error",
-    });
-  };
-
-  const onSubmit = (data: IntakeFormValues): void => {
     enqueueSnackbar("Form submitted successfully!", {
       variant: "success",
     });
-
-    void data;
   };
 
   return (
@@ -135,7 +138,6 @@ export default function IntakeForm(): ReactNode {
                 }}
               >
                 <Button
-                  type="button"
                   variant="outlined"
                   onClick={handleBack}
                   disabled={!showBackButton}
@@ -153,9 +155,9 @@ export default function IntakeForm(): ReactNode {
                   </Button>
                 ) : (
                   <Button
-                    type="submit"
+                    type="button"
                     variant="contained"
-                    onClick={handleSubmit(onSubmit, onError)}
+                    onClick={handleSubmit(onSubmit)}
                   >
                     Submit
                   </Button>
