@@ -8,12 +8,9 @@ import DocumentDisplay from "@/components/common/document-display/document-displ
 import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
 import { useIntakeFormContext } from "@/providers/intake-form-provider";
 import { addSignatureToPdf } from "@/utils/pdf/annotations";
-import { convertUrlToPdf } from "@/utils/pdf/conversion";
+import { fetchPdf } from "@/utils/pdf/conversion";
 
 import { IntakeFormValues } from "../schema";
-
-const TRANSPORTATION_RELEASE_PDF_URL =
-  "neveralonerecovery.transportationreleaseform.pdf";
 
 export default function TransportationReleaseForm(): ReactNode {
   const { getPdfUrl, savePdf } = useIntakeFormContext();
@@ -29,7 +26,7 @@ export default function TransportationReleaseForm(): ReactNode {
   });
 
   const generatePdf = async (): Promise<void> => {
-    const pdf = await convertUrlToPdf(TRANSPORTATION_RELEASE_PDF_URL);
+    const pdf = await fetchPdf("transportationRelease");
 
     await addSignatureToPdf(pdf, residentSignature, 0, {
       x: 150,

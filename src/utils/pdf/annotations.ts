@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument, PDFForm, PDFTextField } from "pdf-lib";
 
 export type AnnotationLocation = {
   x: number;
@@ -26,13 +26,17 @@ export const addTextToPdf = (
   });
 };
 
-export const addDateToPdf = (
-  pdf: PDFDocument | null,
-  pageNumber: number,
-  location: AnnotationLocation,
-): void => {
+export const addDateToPdf = (form: PDFForm): void => {
   const date = dayjs().format("MM/DD/YYYY");
-  addTextToPdf(pdf, date, pageNumber, location);
+  const fields = form.getFields();
+
+  for (const field of fields) {
+    if (field.getName().toLowerCase().includes("date")) {
+      const textField = field as PDFTextField;
+
+      textField.setText(date);
+    }
+  }
 };
 
 export type SignatureLocation = {

@@ -23,6 +23,7 @@ type ControlledSignaturePadProps<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
   label: string;
   gridProps?: GridProps;
+  onBlur?: () => void;
 };
 
 export default function ControlledSignaturePad<
@@ -32,6 +33,7 @@ export default function ControlledSignaturePad<
   control,
   label,
   gridProps,
+  onBlur,
 }: ControlledSignaturePadProps<TFieldValues>): ReactNode {
   const sigCanvas = useRef<SignatureCanvas>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -45,6 +47,8 @@ export default function ControlledSignaturePad<
     const signatureData = sigCanvas.current.toDataURL("image/png");
 
     onSign(signatureData);
+
+    onBlur?.();
 
     handleClose();
   };
@@ -64,11 +68,11 @@ export default function ControlledSignaturePad<
               sx={{
                 justifyContent: "space-between",
                 px: 2,
-                textTransform: "none",
-                borderColor: error ? "error.main" : "",
+                py: 1.5,
+                borderColor: error ? "error.main" : "default.secondary",
               }}
             >
-              <Box component="span">{`Add ${label}`}</Box>
+              <Box>{`Add ${label}`}</Box>
               <Chip
                 label={field.value ? "Signed" : "Required"}
                 color={field.value ? "success" : "default"}

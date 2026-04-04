@@ -7,10 +7,9 @@ import { ReactNode, useEffect, useRef } from "react";
 import DocumentDisplay from "@/components/common/document-display/document-display";
 import { FormNames } from "@/components/intake-form/schema";
 import { useIntakeFormContext } from "@/providers/intake-form-provider";
-import { convertUrlToPdf } from "@/utils/pdf/conversion";
+import { fetchPdf } from "@/utils/pdf/conversion";
 
 type EmergencyContactFormProps = {
-  pdfPath: string;
   formName: FormNames;
   children: ReactNode;
   generatePdf: (pdf: PDFDocument) => void;
@@ -18,7 +17,6 @@ type EmergencyContactFormProps = {
 };
 
 export default function FormContainer({
-  pdfPath,
   formName,
   children,
   generatePdf,
@@ -28,7 +26,7 @@ export default function FormContainer({
   const hasUnsavedInputRef = useRef<boolean>(false);
 
   const updatePdf = async (): Promise<void> => {
-    const pdf = await convertUrlToPdf(pdfPath);
+    const pdf = await fetchPdf(formName);
 
     generatePdf(pdf);
 

@@ -23,7 +23,6 @@ export default function EmergencyContactForm(): ReactNode {
 
   return (
     <FormContainer
-      pdfPath="neveralonerecovery.emergencycontactform.pdf"
       formName="emergencyContact"
       generatePdf={generatePdf}
       showPdf={false}

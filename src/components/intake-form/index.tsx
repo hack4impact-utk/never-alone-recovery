@@ -24,7 +24,8 @@ import {
   intakeFormSchema,
   IntakeFormValues,
 } from "./schema";
-import TransportationReleaseForm from "./transportation-release";
+import ServiceContractForm from "./service-contract-form";
+import TransportationReleaseForm from "./transportation-release-form";
 
 const INTAKE_FORM_STORAGE_KEY = "intakeForm";
 
@@ -35,16 +36,21 @@ type IntakeFormStep = {
 };
 
 const intakeFormSteps: IntakeFormStep[] = [
+  // {
+  //   name: "demographic",
+  //   label: "Demographic",
+  //   form: <DemographicForm />,
+  // },
   {
-    name: "demographic",
-    label: "Demographic",
-    form: <DemographicForm />,
+    name: "serviceContract",
+    label: "Service Contract",
+    form: <ServiceContractForm />,
   },
-  {
-    name: "transportationRelease",
-    label: "Transportation Release",
-    form: <TransportationReleaseForm />,
-  },
+  // {
+  //   name: "transportationRelease",
+  //   label: "Transportation Release",
+  //   form: <TransportationReleaseForm />,
+  // },
   {
     name: "emergencyContact",
     label: "Emergency Contact",

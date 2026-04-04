@@ -10,14 +10,19 @@ import {
   emergencyContactFormSchema,
 } from "./emergency-contact-form/schema";
 import {
+  serviceContractFormDefaultValues,
+  serviceContractFormSchema,
+} from "./service-contract-form/schema";
+import {
   transportationReleaseFormDefaultValues,
   transportationReleaseFormSchema,
-} from "./transportation-release/schema";
+} from "./transportation-release-form/schema";
 
 export const intakeFormSchema = z.object({
   demographic: demographicFormSchema,
   emergencyContact: emergencyContactFormSchema,
   transportationRelease: transportationReleaseFormSchema,
+  serviceContract: serviceContractFormSchema,
 });
 
 export type IntakeFormValues = z.infer<typeof intakeFormSchema>;
@@ -26,6 +31,7 @@ export const intakeFormDefaultValues: DefaultValues<IntakeFormValues> = {
   demographic: demographicFormDefaultValues,
   emergencyContact: emergencyContactFormDefaultValues,
   transportationRelease: transportationReleaseFormDefaultValues,
+  serviceContract: serviceContractFormDefaultValues,
 };
 
 export type FormNames = keyof IntakeFormValues;
