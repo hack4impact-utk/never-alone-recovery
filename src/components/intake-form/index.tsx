@@ -19,14 +19,14 @@ import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
 import ResetButton from "./reset-button";
 import {
+  FormNames,
   intakeFormDefaultValues,
   intakeFormSchema,
   IntakeFormValues,
 } from "./schema";
+import TransportationReleaseForm from "./transportation-release";
 
 const INTAKE_FORM_STORAGE_KEY = "intakeForm";
-
-type FormNames = keyof IntakeFormValues;
 
 type IntakeFormStep = {
   name: FormNames;
@@ -35,10 +35,15 @@ type IntakeFormStep = {
 };
 
 const intakeFormSteps: IntakeFormStep[] = [
+  // {
+  //   name: "demographic",
+  //   label: "Demographic",
+  //   form: <DemographicForm />,
+  // },
   {
-    name: "demographic",
-    label: "Demographic",
-    form: <DemographicForm />,
+    name: "transportationRelease",
+    label: "Transportation Release",
+    form: <TransportationReleaseForm />,
   },
   {
     name: "emergencyContact",
