@@ -35,16 +35,16 @@ type IntakeFormStep = {
 };
 
 const intakeFormSteps: IntakeFormStep[] = [
-  // {
-  //   name: "demographic",
-  //   label: "Demographic",
-  //   form: <DemographicForm />,
-  // },
-  // {
-  //   name: "transportationRelease",
-  //   label: "Transportation Release",
-  //   form: <TransportationReleaseForm />,
-  // },
+  {
+    name: "demographic",
+    label: "Demographic",
+    form: <DemographicForm />,
+  },
+  {
+    name: "transportationRelease",
+    label: "Transportation Release",
+    form: <TransportationReleaseForm />,
+  },
   {
     name: "emergencyContact",
     label: "Emergency Contact",
@@ -116,7 +116,7 @@ export default function IntakeForm(): ReactNode {
 
   return (
     <FormProvider {...methods}>
-      <Box component="form" sx={{ maxWidth: 1100, mt: 4, mx: "auto" }}>
+      <Box component="form" sx={{ maxWidth: 1100, my: 4, mx: "auto" }}>
         <Paper
           elevation={2}
           sx={{
