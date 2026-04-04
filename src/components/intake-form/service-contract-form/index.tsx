@@ -9,7 +9,12 @@ import DocumentDisplay from "@/components/common/document-display/document-displ
 import ControlledDateField from "@/components/common/forms/controlled-date-field";
 import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
 import { useIntakeFormContext } from "@/providers/intake-form-provider";
-import { addDateToPdf, addSignatureToPdf } from "@/utils/pdf/annotations";
+import {
+  addDateToPdf,
+  addNameToPdf,
+  addSignatureToPdf,
+  addTextToPdf,
+} from "@/utils/pdf/annotations";
 import { fetchPdf } from "@/utils/pdf/conversion";
 
 import { IntakeFormValues } from "../schema";
@@ -24,29 +29,37 @@ export default function ServiceContractForm(): ReactNode {
     const form = pdf.getForm();
 
     const {
+      demographic: { firstName, middleName, lastName },
       serviceContract: { residentSignature, staffSignature, entryDate },
     } = getValues();
 
-    if (entryDate) {
-      const date = dayjs(entryDate);
+    addDateToPdf(form);
+    addNameToPdf(form, firstName, middleName, lastName);
 
-      form.getTextField("entryDay").setText(date.format("DD"));
-      form.getTextField("entryMonth").setText(date.format("MMMM"));
-      form.getTextField("entryYear").setText(date.format("YY"));
+    const signDate = dayjs();
+
+    addTextToPdf(form, "signDay", signDate.format("DD"));
+    addTextToPdf(form, "signMonth", signDate.format("MMMM"));
+    addTextToPdf(form, "signYear", signDate.format("YY"));
+
+    if (entryDate) {
+      const entryDateJs = dayjs(entryDate);
+
+      addTextToPdf(form, "entryDay", entryDateJs.format("DD"));
+      addTextToPdf(form, "entryMonth", entryDateJs.format("MMMM"));
+      addTextToPdf(form, "entryYear", entryDateJs.format("YY"));
     }
 
-    addDateToPdf(form);
-
-    await addSignatureToPdf(pdf, residentSignature, 0, {
-      x: 150,
-      y: 390,
+    await addSignatureToPdf(pdf, residentSignature, 6, {
+      x: 50,
+      y: 475,
       width: 200,
       height: 50,
     });
 
-    await addSignatureToPdf(pdf, staffSignature, 0, {
-      x: 150,
-      y: 325,
+    await addSignatureToPdf(pdf, staffSignature, 6, {
+      x: 50,
+      y: 390,
       width: 200,
       height: 50,
     });

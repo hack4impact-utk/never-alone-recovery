@@ -1,29 +1,16 @@
 import dayjs from "dayjs";
 import { PDFDocument, PDFForm, PDFTextField } from "pdf-lib";
 
-export type AnnotationLocation = {
-  x: number;
-  y: number;
-};
-
 export const addTextToPdf = (
-  pdf: PDFDocument | null,
+  form: PDFForm,
+  fieldName: string,
   text: string,
-  pageNumber: number,
-  location: AnnotationLocation,
 ): void => {
-  if (!pdf) {
-    return;
+  const field = form.getTextField(fieldName);
+
+  if (field) {
+    field.setText(text);
   }
-
-  const pages = pdf.getPages();
-  const page = pages[pageNumber];
-
-  page.drawText(text, {
-    x: location.x,
-    y: location.y,
-    size: 12,
-  });
 };
 
 export const addDateToPdf = (form: PDFForm): void => {
@@ -35,6 +22,24 @@ export const addDateToPdf = (form: PDFForm): void => {
       const textField = field as PDFTextField;
 
       textField.setText(date);
+    }
+  }
+};
+
+export const addNameToPdf = (
+  form: PDFForm,
+  firstName: string | undefined,
+  middleName: string | undefined,
+  lastName: string | undefined,
+): void => {
+  const fields = form.getFields();
+  const fullName = [firstName, middleName, lastName].filter(Boolean).join(" ");
+
+  for (const field of fields) {
+    if (field.getName().toLowerCase().includes("fullName")) {
+      const textField = field as PDFTextField;
+
+      textField.setText(fullName);
     }
   }
 };
