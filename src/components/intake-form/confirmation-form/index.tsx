@@ -1,11 +1,12 @@
 "use client";
 
-import { Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import DocumentDisplay from "@/components/common/document-display/document-display";
 import ControlledCheckbox from "@/components/common/forms/controlled-checkbox";
+import FormSection from "@/components/common/forms/form-section";
 import { useIntakeFormContext } from "@/providers/intake-form-provider";
 
 import { IntakeFormValues } from "../schema";
@@ -25,21 +26,20 @@ export default function ConfirmationForm(): ReactNode {
   }, [getMergedPdfUrl]);
 
   return (
-    <Grid container spacing={3}>
-      <Grid size={12}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          Confirmation
-        </Typography>
-      </Grid>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+        Confirmation
+      </Typography>
 
       <DocumentDisplay pdfUrl={mergedPdfUrl} />
 
-      <ControlledCheckbox
-        name="confirmation.confirm"
-        control={control}
-        label="I confirm that all the information above is correct."
-        gridProps={{ size: 12 }}
-      />
-    </Grid>
+      <FormSection>
+        <ControlledCheckbox
+          name="confirmation.confirm"
+          control={control}
+          label="I confirm that all the information above is correct."
+        />
+      </FormSection>
+    </Box>
   );
 }

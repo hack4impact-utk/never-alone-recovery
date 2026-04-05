@@ -1,10 +1,12 @@
 "use client";
 
+import { Typography } from "@mui/material";
 import { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 
 import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
 import FormContainer from "@/components/common/forms/form-container";
+import FormSection from "@/components/common/forms/form-section";
 
 import { IntakeFormValues } from "../schema";
 import { annotateTransportationReleasePdf } from "./helper";
@@ -18,19 +20,23 @@ export default function TransportationReleaseForm(): ReactNode {
       formTitle="Transportation Release Form"
       annotatePdf={annotateTransportationReleasePdf}
     >
-      <ControlledSignaturePad
-        name="transportationRelease.residentSignature"
-        control={control}
-        label="Resident Signature"
-        gridProps={{ size: 6 }}
-      />
+      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        Signatures
+      </Typography>
 
-      <ControlledSignaturePad
-        name="transportationRelease.staffSignature"
-        control={control}
-        label="Staff Signature"
-        gridProps={{ size: 6 }}
-      />
+      <FormSection>
+        <ControlledSignaturePad
+          name="transportationRelease.residentSignature"
+          control={control}
+          label="Resident Signature"
+        />
+
+        <ControlledSignaturePad
+          name="transportationRelease.staffSignature"
+          control={control}
+          label="Staff Signature"
+        />
+      </FormSection>
     </FormContainer>
   );
 }
