@@ -128,10 +128,11 @@ export default function IntakeForm(): ReactNode {
 
   return (
     <FormProvider {...methods}>
-      <Box component="form" sx={{ maxWidth: 1250, my: 4, mx: "auto" }}>
+      <Box component="form" sx={{ width: "100%", my: 4, mx: "auto" }}>
         <Paper
           elevation={2}
           sx={{
+            width: "100%",
             borderRadius: 3,
             overflow: "hidden",
           }}
@@ -168,12 +169,13 @@ export default function IntakeForm(): ReactNode {
             <Box
               sx={{
                 flexGrow: 1,
+                minWidth: 0,
                 p: 3,
                 display: "flex",
                 flexDirection: "column",
               }}
             >
-              <Box>{step.form}</Box>
+              <Box sx={{ width: "100%" }}>{step.form}</Box>
 
               <Box
                 sx={{
