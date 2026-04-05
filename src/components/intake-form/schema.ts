@@ -2,6 +2,10 @@ import { DefaultValues } from "react-hook-form";
 import { z } from "zod";
 
 import {
+  confirmationFormDefaultValues,
+  confirmationFormSchema,
+} from "./confirmation-form/schema";
+import {
   demographicFormDefaultValues,
   demographicFormSchema,
 } from "./demographic-form/schema";
@@ -23,6 +27,7 @@ export const intakeFormSchema = z.object({
   emergencyContact: emergencyContactFormSchema,
   transportationRelease: transportationReleaseFormSchema,
   serviceContract: serviceContractFormSchema,
+  confirmation: confirmationFormSchema,
 });
 
 export type IntakeFormValues = z.infer<typeof intakeFormSchema>;
@@ -32,6 +37,7 @@ export const intakeFormDefaultValues: DefaultValues<IntakeFormValues> = {
   emergencyContact: emergencyContactFormDefaultValues,
   transportationRelease: transportationReleaseFormDefaultValues,
   serviceContract: serviceContractFormDefaultValues,
+  confirmation: confirmationFormDefaultValues,
 };
 
-export type FormNames = keyof IntakeFormValues;
+export type FormNames = Exclude<keyof IntakeFormValues, "confirmation">;

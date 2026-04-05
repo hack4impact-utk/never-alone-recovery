@@ -15,6 +15,7 @@ import { ReactNode, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import useFormPersist from "react-hook-form-persist";
 
+import ConfirmationForm from "./confirmation-form";
 import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
 import ResetButton from "./reset-button";
@@ -30,12 +31,12 @@ import TransportationReleaseForm from "./transportation-release-form";
 const INTAKE_FORM_STORAGE_KEY = "intakeForm";
 
 type IntakeFormStep = {
-  name: FormNames;
+  name: FormNames | "confirmation";
   label: string;
   form: ReactNode;
 };
 
-const intakeFormSteps: IntakeFormStep[] = [
+export const intakeFormSteps: IntakeFormStep[] = [
   {
     name: "demographic",
     label: "Demographic",
@@ -55,6 +56,11 @@ const intakeFormSteps: IntakeFormStep[] = [
     name: "emergencyContact",
     label: "Emergency Contact",
     form: <EmergencyContactForm />,
+  },
+  {
+    name: "confirmation",
+    label: "Confirmation",
+    form: <ConfirmationForm />,
   },
 ];
 
