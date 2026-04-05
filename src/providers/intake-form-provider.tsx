@@ -3,13 +3,18 @@ import PDFDocument from "pdf-lib/cjs/api/PDFDocument";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 import { FormNames } from "@/components/intake-form/schema";
-import { convertPdfToUrl } from "@/utils/pdf/conversion";
+import { INTAKE_FORM_PDF_FILE_NAMES } from "@/constants/intake-form-file-names";
+import { convertPdfToUrl, convertUrlToPdf } from "@/utils/pdf/conversion";
 
 export type PdfUrls = Record<FormNames, string>;
 
 type IntakeFormContextType = {
-  getPdfUrl: (formName: keyof PdfUrls) => string;
-  savePdf: (formName: keyof PdfUrls, pdf: PDFDocument) => Promise<void>;
+  getOriginalPdf: (formName: keyof PdfUrls) => Promise<PDFDocument>;
+  getAnnotatedPdfUrl: (formName: keyof PdfUrls) => string;
+  saveAnnotatedPdf: (
+    formName: keyof PdfUrls,
+    pdf: PDFDocument,
+  ) => Promise<void>;
 };
 
 const IntakeFormContext = createContext<IntakeFormContextType | undefined>(
@@ -26,30 +31,34 @@ export default function IntakeFormProvider({
   const [pdfUrls, setPdfUrls] = useState<PdfUrls>({
     demographic: "",
     emergencyContact: "",
+    serviceContract: "",
     transportationRelease: "",
   });
 
-  const getPdfUrl = (formName: keyof PdfUrls): string => {
+  const getOriginalPdf = async (
+    formName: keyof PdfUrls,
+  ): Promise<PDFDocument> => {
+    return await convertUrlToPdf(INTAKE_FORM_PDF_FILE_NAMES[formName]);
+  };
+
+  const getAnnotatedPdfUrl = (formName: keyof PdfUrls): string => {
     return pdfUrls[formName];
   };
 
-  const savePdf = async (
+  const saveAnnotatedPdf = async (
     formName: keyof PdfUrls,
     pdf: PDFDocument,
   ): Promise<void> => {
     const url = await convertPdfToUrl(pdf);
-
-    setPdfUrls((prev) => ({
-      ...prev,
-      [formName]: url,
-    }));
+    setPdfUrls((prev) => ({ ...prev, [formName]: url }));
   };
 
   return (
     <IntakeFormContext.Provider
       value={{
-        getPdfUrl,
-        savePdf,
+        getOriginalPdf,
+        getAnnotatedPdfUrl,
+        saveAnnotatedPdf,
       }}
     >
       {children}

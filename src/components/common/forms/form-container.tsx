@@ -9,13 +9,15 @@ import DocumentDisplay from "@/components/common/document-display/document-displ
 import { FormNames, IntakeFormValues } from "@/components/intake-form/schema";
 import { useIntakeFormContext } from "@/providers/intake-form-provider";
 import { addDateToPdf, addNameToPdf } from "@/utils/pdf/annotations";
-import { fetchPdf } from "@/utils/pdf/conversion";
 
 type EmergencyContactFormProps = {
   formName: FormNames;
   formTitle: string;
   children: ReactNode;
-  generatePdf: (pdf: PDFDocument) => Promise<void> | void;
+  annotatePdf?: (
+    pdf: PDFDocument,
+    formValues: IntakeFormValues,
+  ) => Promise<void> | void;
   showPdf?: boolean;
 };
 
@@ -23,15 +25,16 @@ export default function FormContainer({
   formName,
   formTitle,
   children,
-  generatePdf,
+  annotatePdf,
   showPdf = true,
 }: EmergencyContactFormProps): ReactNode {
-  const { getPdfUrl, savePdf } = useIntakeFormContext();
+  const { getOriginalPdf, getAnnotatedPdfUrl, saveAnnotatedPdf } =
+    useIntakeFormContext();
   const { getValues } = useFormContext<IntakeFormValues>();
   const watch = useWatch({ name: formName });
 
   const updatePdf = async (): Promise<void> => {
-    const pdf = await fetchPdf(formName);
+    const pdf = await getOriginalPdf(formName);
     const form = pdf.getForm();
 
     const {
@@ -41,9 +44,9 @@ export default function FormContainer({
     addDateToPdf(form);
     addNameToPdf(form, firstName, middleName, lastName);
 
-    await generatePdf(pdf);
+    await annotatePdf?.(pdf, getValues());
 
-    await savePdf(formName, pdf);
+    await saveAnnotatedPdf(formName, pdf);
   };
 
   useEffect(() => {
@@ -58,7 +61,7 @@ export default function FormContainer({
         </Typography>
       </Grid>
 
-      {showPdf && <DocumentDisplay pdfUrl={getPdfUrl(formName)} />}
+      {showPdf && <DocumentDisplay pdfUrl={getAnnotatedPdfUrl(formName)} />}
 
       {children}
     </Grid>

@@ -45,6 +45,21 @@ export const addNameToPdf = (
   }
 };
 
+export const addFieldsToPdf = (
+  form: PDFForm,
+  fields: Record<string, string>,
+): void => {
+  const formFieldNames = new Set(
+    form.getFields().map((field) => field.getName()),
+  );
+
+  for (const [key, value] of Object.entries(fields)) {
+    if (formFieldNames.has(key)) {
+      form.getTextField(key).setText(value);
+    }
+  }
+};
+
 export type SignatureLocation = {
   x: number;
   y: number;

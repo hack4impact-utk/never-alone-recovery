@@ -1,7 +1,5 @@
 "use client";
 
-import { Divider, Grid } from "@mui/material";
-import { PDFDocument } from "pdf-lib";
 import { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -11,23 +9,16 @@ import ControlledTextField from "@/components/common/forms/controlled-text-field
 import FormContainer from "@/components/common/forms/form-container";
 
 import { IntakeFormValues } from "../schema";
+import { annotateDemographicPdf } from "./helper";
 
 export default function IntakeForm(): ReactNode {
-  const { control, getValues } = useFormContext<IntakeFormValues>();
-
-  const generatePdf = (pdf: PDFDocument): void => {
-    const form = pdf.getForm();
-
-    // for (const [key, value] of Object.entries(getValues().demographic)) {
-    //   form.getTextField(key).setText(String(value ?? ""));
-    // }
-  };
+  const { control } = useFormContext<IntakeFormValues>();
 
   return (
     <FormContainer
       formName="demographic"
       formTitle="Demographic Information"
-      generatePdf={generatePdf}
+      annotatePdf={annotateDemographicPdf}
     >
       <ControlledTextField
         name="demographic.firstName"
