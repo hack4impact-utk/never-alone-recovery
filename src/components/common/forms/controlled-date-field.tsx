@@ -1,35 +1,40 @@
 "use client";
 
-import { GridProps, TextFieldProps } from "@mui/material";
+import { TextFieldProps } from "@mui/material";
 import { ReactNode } from "react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
-import ControlledTextField from "./controlled-text-field";
+import ControlledPatternField from "./controlled-pattern-field";
 
-type ControlledDateFieldProps<TFieldValues extends FieldValues> =
-  TextFieldProps & {
-    name: FieldPath<TFieldValues>;
-    control: Control<TFieldValues>;
-    gridProps?: GridProps;
-    showField?: boolean;
-  };
+type ControlledDateFieldProps<TFieldValues extends FieldValues> = {
+  name: FieldPath<TFieldValues>;
+  control: Control<TFieldValues>;
+  label: string;
+  showField?: boolean;
+  helperText?: TextFieldProps["helperText"];
+  placeholder?: string;
+};
 
 export default function ControlledDateField<TFieldValues extends FieldValues>({
   name,
   control,
   label,
   showField = true,
-  ...rest
+  helperText,
+  placeholder,
 }: ControlledDateFieldProps<TFieldValues>): ReactNode {
   return (
-    <ControlledTextField
+    <ControlledPatternField
       name={name}
       control={control}
-      type="date"
       label={label}
       showField={showField}
-      slotProps={{ inputLabel: { shrink: true } }}
-      {...rest}
+      format="##/##/####"
+      mask="_"
+      placeholder={placeholder ?? "MM/DD/YYYY"}
+      helperText={helperText}
+      type="tel"
+      inputMode="numeric"
     />
   );
 }
