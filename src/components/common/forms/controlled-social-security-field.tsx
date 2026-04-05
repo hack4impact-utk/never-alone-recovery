@@ -6,41 +6,39 @@ import { Control, FieldPath, FieldValues } from "react-hook-form";
 
 import ControlledPatternField from "./controlled-pattern-field";
 
-type ControlledPhoneNumberFieldProps<TFieldValues extends FieldValues> = {
+type ControlledSocialSecurityFieldProps<TFieldValues extends FieldValues> = {
   name: FieldPath<TFieldValues>;
   control: Control<TFieldValues>;
   label: string;
   showField?: boolean;
-  format?: string;
   mask?: string;
   placeholder?: string;
   helperText?: TextFieldProps["helperText"];
 };
 
-export default function ControlledPhoneNumberField<
+export default function ControlledSocialSecurityField<
   TFieldValues extends FieldValues,
 >({
   name,
   control,
   label,
   showField = true,
-  format = "(###) ###-####",
   mask = "_",
   placeholder,
   helperText,
-}: ControlledPhoneNumberFieldProps<TFieldValues>): ReactNode {
+}: ControlledSocialSecurityFieldProps<TFieldValues>): ReactNode {
   return (
     <ControlledPatternField
       name={name}
       control={control}
       label={label}
       showField={showField}
-      format={format}
+      format="###-##-####"
       mask={mask}
       placeholder={placeholder}
       helperText={helperText}
       type="tel"
-      inputMode="tel"
+      inputMode="numeric"
     />
   );
 }

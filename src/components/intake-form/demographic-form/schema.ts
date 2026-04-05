@@ -5,6 +5,7 @@ import {
   optionalText,
   requiredEmail,
   requiredPhone,
+  requiredSsn,
   requiredText,
   yesNo,
 } from "@/utils/form/validations";
@@ -13,7 +14,7 @@ export const demographicFormSchema = z.object({
   firstName: requiredText("First name is required"),
   middleName: optionalText,
   lastName: requiredText("Last name is required"),
-  socialSecurityNumber: requiredText("Social security number is required"),
+  socialSecurityNumber: requiredSsn("Social security number is required"),
   ethnicity: z.enum(
     [
       "White",

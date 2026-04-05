@@ -8,6 +8,7 @@ import ControlledDateField from "@/components/common/forms/controlled-date-field
 import ControlledDropdown from "@/components/common/forms/controlled-dropdown";
 import ControlledPhoneNumberField from "@/components/common/forms/controlled-phone-number-field";
 import ControlledRadioButton from "@/components/common/forms/controlled-radio-button";
+import ControlledSocialSecurityField from "@/components/common/forms/controlled-social-security-field";
 import ControlledTextField from "@/components/common/forms/controlled-text-field";
 import FormContainer from "@/components/common/forms/form-container";
 import FormSection from "@/components/common/forms/form-section";
@@ -121,10 +122,11 @@ export default function IntakeForm(): ReactNode {
           label="Date of Birth"
         />
 
-        <ControlledTextField
+        <ControlledSocialSecurityField
           name="demographic.socialSecurityNumber"
           control={control}
           label="SSN"
+          placeholder="123-45-6789"
         />
       </FormSection>
 
