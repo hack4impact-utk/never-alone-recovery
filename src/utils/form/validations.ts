@@ -22,10 +22,8 @@ export const requiredSsn = (requiredMessage: string): z.ZodString =>
     .min(1, requiredMessage)
     .regex(SSN_REGEX, "Enter a valid social security number");
 
-export const requiredEmail = (
-  requiredMessage: string,
-  invalidMessage = "Invalid email address",
-): z.ZodString => z.string().min(1, requiredMessage).email(invalidMessage);
+export const requiredEmail = (requiredMessage: string): z.ZodEmail =>
+  z.email({ message: requiredMessage });
 
-export const requiredTrue = (message: string): z.ZodType<boolean> =>
+export const requiredTrue = (message: string): z.ZodBoolean =>
   z.boolean().refine((val) => val === true, { message });
