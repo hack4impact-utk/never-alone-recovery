@@ -6,7 +6,6 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Grid,
   GridProps,
 } from "@mui/material";
 import { ReactNode } from "react";
@@ -25,34 +24,31 @@ export default function ControlledCheckbox<TFieldValues extends FieldValues>({
   name,
   control,
   label,
-  gridProps,
   showField = true,
   ...rest
 }: ControlledCheckboxProps<TFieldValues>): ReactNode {
   return showField ? (
-    <Grid {...gridProps}>
-      <Controller
-        name={name}
-        control={control}
-        render={({ field, fieldState: { error } }) => (
-          <FormControl error={!!error}>
-            <FormControlLabel
-              label={label}
-              control={
-                <Checkbox
-                  {...rest}
-                  checked={!!field.value}
-                  onChange={(event) => {
-                    field.onChange(event.target.checked);
-                  }}
-                  name={field.name}
-                />
-              }
-            />
-            {error ? <FormHelperText>{error.message}</FormHelperText> : null}
-          </FormControl>
-        )}
-      />
-    </Grid>
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState: { error } }) => (
+        <FormControl error={!!error}>
+          <FormControlLabel
+            label={label}
+            control={
+              <Checkbox
+                {...rest}
+                checked={!!field.value}
+                onChange={(event) => {
+                  field.onChange(event.target.checked);
+                }}
+                name={field.name}
+              />
+            }
+          />
+          {error ? <FormHelperText>{error.message}</FormHelperText> : null}
+        </FormControl>
+      )}
+    />
   ) : null;
 }

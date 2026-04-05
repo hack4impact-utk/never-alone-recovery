@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import PDFDocument from "pdf-lib/cjs/api/PDFDocument";
 import { ReactNode, useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -54,16 +54,14 @@ export default function FormContainer({
   }, [watch]);
 
   return (
-    <Grid container spacing={3}>
-      <Grid size={12}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          {formTitle}
-        </Typography>
-      </Grid>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+        {formTitle}
+      </Typography>
 
       {showPdf && <DocumentDisplay pdfUrl={getAnnotatedPdfUrl(formName)} />}
 
       {children}
-    </Grid>
+    </Box>
   );
 }
