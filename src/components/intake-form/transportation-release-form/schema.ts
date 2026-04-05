@@ -1,9 +1,11 @@
 import { DefaultValues } from "react-hook-form";
 import { z } from "zod";
 
+import { requiredText } from "@/utils/form/validations";
+
 export const transportationReleaseFormSchema = z.object({
-  residentSignature: z.string().min(1, "Resident signature is required"),
-  staffSignature: z.string().min(1, "Staff signature is required"),
+  residentSignature: requiredText("Resident signature is required"),
+  staffSignature: requiredText("Staff signature is required"),
 });
 
 export type TransportationReleaseFormValues = z.infer<

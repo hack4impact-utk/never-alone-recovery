@@ -1,11 +1,12 @@
 import { DefaultValues } from "react-hook-form";
 import { z } from "zod";
 
+import { requiredTrue } from "@/utils/form/validations";
+
 export const confirmationFormSchema = z.object({
-  confirm: z.boolean().refine((val) => val === true, {
-    message:
-      "You must confirm that the above emergency contact information is accurate.",
-  }),
+  confirm: requiredTrue(
+    "You must confirm that the above emergency contact information is accurate.",
+  ),
 });
 
 export type ConfirmationFormValues = z.infer<typeof confirmationFormSchema>;
