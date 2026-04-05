@@ -6,6 +6,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 
 import ControlledDateField from "@/components/common/forms/controlled-date-field";
 import ControlledDropdown from "@/components/common/forms/controlled-dropdown";
+import ControlledPhoneNumberField from "@/components/common/forms/controlled-phone-number-field";
 import ControlledRadioButton from "@/components/common/forms/controlled-radio-button";
 import ControlledTextField from "@/components/common/forms/controlled-text-field";
 import FormContainer from "@/components/common/forms/form-container";
@@ -143,7 +144,7 @@ export default function IntakeForm(): ReactNode {
       </FormSection>
 
       <FormSection>
-        <ControlledTextField
+        <ControlledPhoneNumberField
           name="demographic.phoneNumber"
           control={control}
           label="Phone Number"

@@ -4,6 +4,7 @@ import { Divider, Typography } from "@mui/material";
 import { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 
+import ControlledPhoneNumberField from "@/components/common/forms/controlled-phone-number-field";
 import ControlledTextField from "@/components/common/forms/controlled-text-field";
 import FormContainer from "@/components/common/forms/form-container";
 import FormSection from "@/components/common/forms/form-section";
@@ -38,7 +39,7 @@ export default function EmergencyContactForm(): ReactNode {
           label="Relationship to You"
         />
 
-        <ControlledTextField
+        <ControlledPhoneNumberField
           name="emergencyContact.contact1PhoneNumber"
           control={control}
           label="Phone Number"
@@ -70,7 +71,7 @@ export default function EmergencyContactForm(): ReactNode {
           label="Relationship to You"
         />
 
-        <ControlledTextField
+        <ControlledPhoneNumberField
           name="emergencyContact.contact2PhoneNumber"
           control={control}
           label="Phone Number"

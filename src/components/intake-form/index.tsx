@@ -100,6 +100,7 @@ export default function IntakeForm(): ReactNode {
 
     if (isValid) {
       setStep(intakeFormSteps[currentIndex + 1]);
+      window.scrollTo(0, 0);
       return;
     }
 

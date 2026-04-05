@@ -5,6 +5,11 @@ const requiredText = (message: string): z.ZodString =>
   z.string().min(1, message);
 const optionalText = z.string().optional();
 const yesNo = z.enum(["Yes", "No"]).optional();
+const requiredPhone = (requiredMessage: string): z.ZodString =>
+  z
+    .string()
+    .min(1, requiredMessage)
+    .regex(/^\(\d{3}\) \d{3}-\d{4}$/, "Enter a valid phone number");
 
 export const demographicFormSchema = z.object({
   firstName: requiredText("First name is required"),
@@ -23,7 +28,7 @@ export const demographicFormSchema = z.object({
     "Ethnicity is required",
   ),
   dateOfBirth: requiredText("Date of birth is required"),
-  phoneNumber: requiredText("Phone number is required"),
+  phoneNumber: requiredPhone("Phone number is required"),
   tomis: requiredText("TOMIS is required"),
   email: z.email("Invalid email address").min(1, "Email is required"),
   lastKnownAddress: optionalText,

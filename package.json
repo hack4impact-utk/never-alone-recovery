@@ -33,6 +33,7 @@
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
     "react-hook-form-persist": "^3.0.0",
+    "react-number-format": "^5.4.5",
     "react-signature-canvas": "1.1.0-alpha.2",
     "zod": "^4.0.17"
   },
