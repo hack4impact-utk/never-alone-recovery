@@ -9,6 +9,7 @@ type ControlledTextFieldProps<TFieldValues extends FieldValues> =
     name: FieldPath<TFieldValues>;
     control: Control<TFieldValues>;
     gridProps?: GridProps;
+    showField?: boolean;
   };
 
 export default function ControlledTextField<TFieldValues extends FieldValues>({
@@ -16,9 +17,10 @@ export default function ControlledTextField<TFieldValues extends FieldValues>({
   control,
   label,
   gridProps,
+  showField = true,
   ...rest
 }: ControlledTextFieldProps<TFieldValues>): ReactNode {
-  return (
+  return showField ? (
     <Grid {...gridProps}>
       <Controller
         name={name}
@@ -35,5 +37,5 @@ export default function ControlledTextField<TFieldValues extends FieldValues>({
         )}
       />
     </Grid>
-  );
+  ) : null;
 }

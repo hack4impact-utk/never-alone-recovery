@@ -18,6 +18,7 @@ type ControlledCheckboxProps<TFieldValues extends FieldValues> =
     control: Control<TFieldValues>;
     label: string;
     gridProps?: GridProps;
+    showField?: boolean;
   };
 
 export default function ControlledCheckbox<TFieldValues extends FieldValues>({
@@ -25,9 +26,10 @@ export default function ControlledCheckbox<TFieldValues extends FieldValues>({
   control,
   label,
   gridProps,
+  showField = true,
   ...rest
 }: ControlledCheckboxProps<TFieldValues>): ReactNode {
-  return (
+  return showField ? (
     <Grid {...gridProps}>
       <Controller
         name={name}
@@ -52,5 +54,5 @@ export default function ControlledCheckbox<TFieldValues extends FieldValues>({
         )}
       />
     </Grid>
-  );
+  ) : null;
 }

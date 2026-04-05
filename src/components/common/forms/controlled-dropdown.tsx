@@ -29,6 +29,7 @@ type ControlledDropdownProps<T extends FieldValues> = SelectProps & {
   label: string;
   options: FormSelectOption[];
   gridProps?: GridProps;
+  showField?: boolean;
 };
 
 export default function ControlledDropdown<TFieldValues extends FieldValues>({
@@ -37,9 +38,10 @@ export default function ControlledDropdown<TFieldValues extends FieldValues>({
   label,
   options,
   gridProps,
+  showField = true,
   ...rest
 }: ControlledDropdownProps<TFieldValues>): ReactNode {
-  return (
+  return showField ? (
     <Grid {...gridProps}>
       <Controller
         name={name}
@@ -65,5 +67,5 @@ export default function ControlledDropdown<TFieldValues extends FieldValues>({
         )}
       />
     </Grid>
-  );
+  ) : null;
 }

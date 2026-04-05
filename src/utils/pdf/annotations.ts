@@ -47,7 +47,7 @@ export const addNameToPdf = (
 
 export const addFieldsToPdf = (
   form: PDFForm,
-  fields: Record<string, string>,
+  fields: Record<string, unknown>,
 ): void => {
   const formFieldNames = new Set(
     form.getFields().map((field) => field.getName()),
@@ -55,7 +55,7 @@ export const addFieldsToPdf = (
 
   for (const [key, value] of Object.entries(fields)) {
     if (formFieldNames.has(key)) {
-      form.getTextField(key).setText(value);
+      form.getTextField(key).setText(String(value));
     }
   }
 };

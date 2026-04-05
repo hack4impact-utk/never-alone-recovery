@@ -11,6 +11,7 @@ type ControlledDateFieldProps<TFieldValues extends FieldValues> =
     name: FieldPath<TFieldValues>;
     control: Control<TFieldValues>;
     gridProps?: GridProps;
+    showField?: boolean;
   };
 
 export default function ControlledDateField<TFieldValues extends FieldValues>({
@@ -18,6 +19,7 @@ export default function ControlledDateField<TFieldValues extends FieldValues>({
   control,
   label,
   gridProps,
+  showField = true,
   ...rest
 }: ControlledDateFieldProps<TFieldValues>): ReactNode {
   return (
@@ -27,6 +29,7 @@ export default function ControlledDateField<TFieldValues extends FieldValues>({
       type="date"
       label={label}
       gridProps={gridProps}
+      showField={showField}
       slotProps={{ inputLabel: { shrink: true } }}
       {...rest}
     />

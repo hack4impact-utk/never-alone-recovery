@@ -24,6 +24,7 @@ type ControlledSignaturePadProps<TFieldValues extends FieldValues> = {
   label: string;
   gridProps?: GridProps;
   onBlur?: () => void;
+  showField?: boolean;
 };
 
 export default function ControlledSignaturePad<
@@ -34,6 +35,7 @@ export default function ControlledSignaturePad<
   label,
   gridProps,
   onBlur,
+  showField = true,
 }: ControlledSignaturePadProps<TFieldValues>): ReactNode {
   const sigCanvas = useRef<SignatureCanvas>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +57,7 @@ export default function ControlledSignaturePad<
 
   const handleClear = (): void => sigCanvas.current?.clear();
 
-  return (
+  return showField ? (
     <Grid {...gridProps}>
       <Controller
         name={name}
@@ -153,5 +155,5 @@ export default function ControlledSignaturePad<
         )}
       />
     </Grid>
-  );
+  ) : null;
 }
