@@ -4,12 +4,12 @@ import { PDFDocument, PDFForm, PDFTextField } from "pdf-lib";
 export const addTextToPdf = (
   form: PDFForm,
   fieldName: string,
-  text: string,
+  text: string | number,
 ): void => {
   const field = form.getTextField(fieldName);
 
   if (field) {
-    field.setText(text);
+    field.setText(String(text));
   }
 };
 
@@ -49,18 +49,23 @@ export const addFieldsToPdf = (
   form: PDFForm,
   fields: Record<string, unknown>,
 ): void => {
-  const formFieldNames = new Set(
-    form.getFields().map((field) => field.getName()),
-  );
+  const formFields = new Set(Object.keys(fields));
+  const pdfFormFields = form.getFields();
 
-  for (const [key, value] of Object.entries(fields)) {
-    if (formFieldNames.has(key)) {
-      form.getTextField(key).setText(String(value));
+  for (const field of pdfFormFields) {
+    const fieldName = field.getName();
+
+    if (!formFields.has(fieldName)) {
+      continue;
     }
+
+    const value = String(fields[fieldName]);
+    const textField = field as PDFTextField;
+    textField.setText(value);
   }
 };
 
-export type SignatureLocation = {
+type SignatureLocation = {
   x: number;
   y: number;
   width: number;
@@ -71,7 +76,7 @@ export const addSignatureToPdf = async (
   pdf: PDFDocument,
   signatureData: string,
   pageNumber: number,
-  location: SignatureLocation,
+  { x, y, width, height }: SignatureLocation,
 ): Promise<void> => {
   if (!signatureData) {
     return;
@@ -83,9 +88,31 @@ export const addSignatureToPdf = async (
   const signatureImage = await pdf.embedPng(signatureData);
 
   page.drawImage(signatureImage, {
-    x: location.x,
-    y: location.y,
-    width: location.width,
-    height: location.height,
+    x,
+    y,
+    width,
+    height,
+  });
+};
+
+type circleLocation = {
+  x: number;
+  y: number;
+};
+
+export const addCircleToPdf = (
+  pdf: PDFDocument,
+  pageNumber: number,
+  { x, y }: circleLocation,
+): void => {
+  const pages = pdf.getPages();
+  const page = pages[pageNumber];
+
+  page.drawCircle({
+    x,
+    y,
+    size: 8,
+    borderWidth: 2.5,
+    opacity: 0,
   });
 };

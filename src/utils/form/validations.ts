@@ -10,6 +10,8 @@ export const optionalText = z.string().optional();
 
 export const yesNo = z.enum(["Yes", "No"]).optional();
 
+export type YesNo = z.infer<typeof yesNo>;
+
 export const requiredPhone = (requiredMessage: string): z.ZodString =>
   z
     .string()
