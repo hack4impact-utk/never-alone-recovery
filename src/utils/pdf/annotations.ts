@@ -59,9 +59,13 @@ export const addFieldsToPdf = (
       continue;
     }
 
-    const value = String(fields[fieldName]);
+    const value = fields[fieldName];
+    if (!value) {
+      continue;
+    }
+
     const textField = field as PDFTextField;
-    textField.setText(value);
+    textField.setText(String(value));
   }
 };
 

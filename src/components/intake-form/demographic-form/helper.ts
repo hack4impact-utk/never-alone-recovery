@@ -40,7 +40,9 @@ export const annotateDemographicPdf = (
 
   addFieldsToPdf(form, demographic);
 
-  addTextToPdf(form, "age", calculateAge(demographic.dateOfBirth));
+  if (demographic.dateOfBirth) {
+    addTextToPdf(form, "age", calculateAge(demographic.dateOfBirth));
+  }
 
   addYesNoCircleToPdf(pdf, 0, 362, 217, demographic.receiveBenefits);
   addYesNoCircleToPdf(pdf, 0, 327, 171, demographic.isDisabled);
@@ -68,6 +70,14 @@ export const annotateDemographicPdf = (
       form,
       "datesOfService",
       `${demographic.militaryStartDate} to ${demographic.militaryEndDate}`,
+    );
+  }
+
+  if (demographic.employmentStartDate && demographic.employmentEndDate) {
+    addTextToPdf(
+      form,
+      "datesOfEmployment",
+      `${demographic.employmentStartDate} to ${demographic.employmentEndDate}`,
     );
   }
 
