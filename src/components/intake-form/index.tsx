@@ -15,9 +15,9 @@ import { ReactNode, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import useFormPersist from "react-hook-form-persist";
 
+import BehavioralStandardsAgreementForm from "./behavioral-standards-agreement-form";
 import BehavioralStandardsForm from "./behavioral-standards-form";
 import ConfidentialityAgreementForm from "./confidentiality-agreement-form";
-import TemporaryResidencyForm from "./temporary-residency-form";
 import ConfirmationForm from "./confirmation-form";
 import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
@@ -31,6 +31,7 @@ import {
   IntakeFormValues,
 } from "./schema";
 import ServiceContractForm from "./service-contract-form";
+import TemporaryResidencyForm from "./temporary-residency-form";
 import TransportationReleaseForm from "./transportation-release-form";
 
 const INTAKE_FORM_STORAGE_KEY = "intakeForm";
@@ -71,6 +72,11 @@ export const intakeFormSteps: IntakeFormStep[] = [
     name: "behavioralStandards",
     label: "Behavioral Standards",
     form: <BehavioralStandardsForm />,
+  },
+  {
+    name: "behavioralStandardsAgreement",
+    label: "Behavioral Standards Agreement",
+    form: <BehavioralStandardsAgreementForm />,
   },
   {
     name: "confidentialityAgreement",

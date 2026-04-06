@@ -2,6 +2,10 @@ import { DefaultValues } from "react-hook-form";
 import { z } from "zod";
 
 import {
+  behavioralStandardsAgreementFormDefaultValues,
+  behavioralStandardsAgreementFormSchema,
+} from "./behavioral-standards-agreement-form/schema";
+import {
   behavioralStandardsFormDefaultValues,
   behavioralStandardsFormSchema,
 } from "./behavioral-standards-form/schema";
@@ -50,6 +54,7 @@ export const intakeFormSchema = z.object({
   financialResponsibility: financialResponsibilityFormSchema,
   releaseOfInformation: releaseOfInformationFormSchema,
   behavioralStandards: behavioralStandardsFormSchema,
+  behavioralStandardsAgreement: behavioralStandardsAgreementFormSchema,
   confidentialityAgreement: confidentialityAgreementFormSchema,
   temporaryResidency: temporaryResidencyFormSchema,
   confirmation: confirmationFormSchema,
@@ -65,6 +70,7 @@ export const intakeFormDefaultValues: DefaultValues<IntakeFormValues> = {
   financialResponsibility: financialResponsibilityFormDefaultValues,
   releaseOfInformation: releaseOfInformationFormDefaultValues,
   behavioralStandards: behavioralStandardsFormDefaultValues,
+  behavioralStandardsAgreement: behavioralStandardsAgreementFormDefaultValues,
   confidentialityAgreement: confidentialityAgreementFormDefaultValues,
   temporaryResidency: temporaryResidencyFormDefaultValues,
   confirmation: confirmationFormDefaultValues,
