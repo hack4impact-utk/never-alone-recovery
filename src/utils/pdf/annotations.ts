@@ -65,18 +65,14 @@ export const addFieldsToPdf = (
   }
 };
 
-type SignatureLocation = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
-
 export const addSignatureToPdf = async (
   pdf: PDFDocument,
   signatureData: string,
   pageNumber: number,
-  { x, y, width, height }: SignatureLocation,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
 ): Promise<void> => {
   if (!signatureData) {
     return;
@@ -95,15 +91,11 @@ export const addSignatureToPdf = async (
   });
 };
 
-type circleLocation = {
-  x: number;
-  y: number;
-};
-
 export const addCircleToPdf = (
   pdf: PDFDocument,
   pageNumber: number,
-  { x, y }: circleLocation,
+  x: number,
+  y: number,
 ): void => {
   const pages = pdf.getPages();
   const page = pages[pageNumber];
@@ -112,6 +104,27 @@ export const addCircleToPdf = (
     x,
     y,
     size: 8,
+    borderWidth: 2.5,
+    opacity: 0,
+  });
+};
+
+export const addBoxToPdf = (
+  pdf: PDFDocument,
+  pageNumber: number,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+): void => {
+  const pages = pdf.getPages();
+  const page = pages[pageNumber];
+
+  page.drawRectangle({
+    x,
+    y,
+    width,
+    height,
     borderWidth: 2.5,
     opacity: 0,
   });

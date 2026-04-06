@@ -125,7 +125,7 @@ export default function IntakeForm(): ReactNode {
         <ControlledSocialSecurityField
           name="demographic.socialSecurityNumber"
           control={control}
-          label="SSN"
+          label="Social Security Number"
           placeholder="123-45-6789"
         />
       </FormSection>
@@ -173,7 +173,7 @@ export default function IntakeForm(): ReactNode {
         <ControlledTextField
           name="demographic.cleanTime"
           control={control}
-          label="Clean Time"
+          label="How long have you maintained sobriety?"
         />
 
         <ControlledTextField
@@ -186,7 +186,7 @@ export default function IntakeForm(): ReactNode {
       <ControlledTextField
         name="demographic.priorRecoveryExperience"
         control={control}
-        label="Prior Recovery Experience"
+        label="Please describe any prior recovery experience"
         multiline
         minRows={3}
       />
@@ -198,25 +198,25 @@ export default function IntakeForm(): ReactNode {
       <ControlledTextField
         name="demographic.surgeries"
         control={control}
-        label="Surgeries"
+        label="Please list any past surgeries"
       />
 
       <ControlledTextField
         name="demographic.allergies"
         control={control}
-        label="Allergies"
+        label="Please list any allergies"
       />
 
       <ControlledTextField
         name="demographic.medications"
         control={control}
-        label="Medications"
+        label="Please list current medications"
       />
 
       <ControlledTextField
         name="demographic.insurance"
         control={control}
-        label="Insurance"
+        label="Insurance provider / coverage"
       />
 
       <Typography variant="body1" sx={{ fontWeight: "bold" }}>
@@ -226,35 +226,35 @@ export default function IntakeForm(): ReactNode {
       <ControlledRadioButton
         name="demographic.receiveBenefits"
         control={control}
-        label="Receive Benefits"
+        label="Do you currently receive any state or federal benefits?"
         options={yesNoOptions}
       />
 
       <ControlledTextField
         name="demographic.benefitsDesc"
         control={control}
-        label="Benefits Description"
+        label="What benefits do you currently receive?"
         showField={receiveBenefits === "Yes"}
       />
 
       <ControlledRadioButton
         name="demographic.isDisabled"
         control={control}
-        label="Disabled"
+        label="Do you have a mental or physical disability?"
         options={yesNoOptions}
       />
 
       <ControlledTextField
         name="demographic.disabilityDesc"
         control={control}
-        label="Disability Description"
+        label="Please describe your disability"
         showField={isDisabled === "Yes"}
       />
 
       <ControlledRadioButton
         name="demographic.receivesDisability"
         control={control}
-        label="Receives Disability"
+        label="Do you currently receive disability benefits?"
         options={yesNoOptions}
       />
 
@@ -275,21 +275,21 @@ export default function IntakeForm(): ReactNode {
       <ControlledRadioButton
         name="demographic.receivesFoodStamps"
         control={control}
-        label="Receives Food Stamps"
+        label="Do you currently receive SNAP/food stamp benefits?"
         options={yesNoOptions}
       />
 
       <ControlledRadioButton
         name="demographic.hasMentalHealthRecs"
         control={control}
-        label="Mental Health Recommendations"
+        label="Do you have any mental health diagnoses or recommendations?"
         options={yesNoOptions}
       />
 
       <ControlledTextField
         name="demographic.mentalHealthRecs"
         control={control}
-        label="Mental Health Recommendations Details"
+        label="Please describe the mental health diagnoses/recommendations"
         multiline
         minRows={3}
         showField={hasMentalHealthRecs === "Yes"}
@@ -302,7 +302,7 @@ export default function IntakeForm(): ReactNode {
       <ControlledRadioButton
         name="demographic.participatingInTreatment"
         control={control}
-        label="Participating in Treatment"
+        label="Are you currently participating in mental health treatment?"
         options={yesNoOptions}
       />
 
@@ -311,21 +311,21 @@ export default function IntakeForm(): ReactNode {
           name="demographic.typeOfTreatment"
           control={control}
           showField={participatingInTreatment === "Yes"}
-          label="Type of Treatment"
+          label="What type of treatment are you receiving?"
         />
 
         <ControlledTextField
           name="demographic.howOften"
           control={control}
           showField={participatingInTreatment === "Yes"}
-          label="How Often"
+          label="How often do you attend treatment?"
         />
 
         <ControlledTextField
           name="demographic.locationOfTreatment"
           control={control}
           showField={participatingInTreatment === "Yes"}
-          label="Location of Treatment"
+          label="Where do you receive treatment?"
         />
       </>
 
@@ -339,7 +339,7 @@ export default function IntakeForm(): ReactNode {
       <ControlledRadioButton
         name="demographic.hasChildren"
         control={control}
-        label="Has Children"
+        label="Do you have children?"
         options={yesNoOptions}
       />
 
@@ -353,7 +353,7 @@ export default function IntakeForm(): ReactNode {
       <ControlledRadioButton
         name="demographic.isPregnant"
         control={control}
-        label="Pregnant"
+        label="Are you currently pregnant?"
         options={yesNoOptions}
       />
 
@@ -364,13 +364,13 @@ export default function IntakeForm(): ReactNode {
       <ControlledTextField
         name="demographic.currentEmployment"
         control={control}
-        label="Current Employment"
+        label="Current employer / employment status"
       />
 
       <ControlledTextField
         name="demographic.employmentContactInfo"
         control={control}
-        label="Employment Contact Info"
+        label="Employment contact information"
       />
 
       <FormSection>
@@ -390,7 +390,7 @@ export default function IntakeForm(): ReactNode {
       <ControlledRadioButton
         name="demographic.servedInMilitary"
         control={control}
-        label="Served in Military"
+        label="Have you served in the military?"
         options={yesNoOptions}
       />
 
@@ -420,7 +420,7 @@ export default function IntakeForm(): ReactNode {
       <ControlledTextField
         name="demographic.militaryDischarge"
         control={control}
-        label="Military Discharge"
+        label="Discharge status / type"
         showField={servedInMilitary === "Yes"}
       />
 
@@ -431,28 +431,28 @@ export default function IntakeForm(): ReactNode {
       <ControlledRadioButton
         name="demographic.hasHighSchoolDiploma"
         control={control}
-        label="High School Diploma"
+        label="Do you have a high school diploma?"
         options={yesNoOptions}
       />
 
       <ControlledRadioButton
         name="demographic.hasGED"
         control={control}
-        label="GED"
+        label="Do you have a GED?"
         options={yesNoOptions}
       />
 
       <ControlledRadioButton
         name="demographic.hasCollegeDegree"
         control={control}
-        label="College Degree"
+        label="Do you have a college degree?"
         options={yesNoOptions}
       />
 
       <ControlledRadioButton
         name="demographic.hasDriversLicense"
         control={control}
-        label="Driver's License"
+        label="Do you currently have a driver's license?"
         options={yesNoOptions}
       />
 
@@ -481,84 +481,84 @@ export default function IntakeForm(): ReactNode {
       <ControlledRadioButton
         name="demographic.convictedOfDUI"
         control={control}
-        label="Convicted of DUI"
+        label="Have you ever been convicted of a DUI?"
         options={yesNoOptions}
       />
 
       <ControlledTextField
         name="demographic.duiYear"
         control={control}
-        label="DUI Year"
+        label="What year was the DUI conviction?"
         showField={convictedOfDUI === "Yes"}
       />
 
       <ControlledRadioButton
         name="demographic.convictedOfSexOffense"
         control={control}
-        label="Convicted of Sex Offense"
+        label="Have you ever been convicted of a sex offense?"
         options={yesNoOptions}
       />
 
       <ControlledRadioButton
         name="demographic.registeredSexOffender"
         control={control}
-        label="Registered Sex Offender"
+        label="Are you currently required to register as a sex offender?"
         options={yesNoOptions}
       />
 
       <ControlledTextField
         name="demographic.sexOffenseNature"
         control={control}
-        label="Sex Offense Nature"
+        label="Please describe the nature of the sex offense"
         showField={convictedOfSexOffense === "Yes"}
       />
 
       <ControlledRadioButton
         name="demographic.convictedOfFelony"
         control={control}
-        label="Convicted of Felony"
+        label="Have you ever been convicted of a felony?"
         options={yesNoOptions}
       />
 
       <ControlledTextField
         name="demographic.felonyCharges"
         control={control}
-        label="Felony Charges"
+        label="Please list felony charge(s)"
         showField={convictedOfFelony === "Yes"}
       />
 
       <ControlledRadioButton
         name="demographic.onProbationOrParole"
         control={control}
-        label="On Probation or Parole"
+        label="Are you currently on probation or parole?"
         options={yesNoOptions}
       />
 
       <ControlledTextField
         name="demographic.officerContactInfo"
         control={control}
-        label="Officer Contact Info"
+        label="Probation/parole officer contact information"
         showField={onProbationOrParole === "Yes"}
       />
 
       <ControlledRadioButton
         name="demographic.inRecoveryCourt"
         control={control}
-        label="In Recovery Court"
+        label="Are you currently participating in recovery court?"
         options={yesNoOptions}
       />
 
       <ControlledTextField
         name="demographic.caseManagerContactInfo"
         control={control}
-        label="Case Manager Contact Info"
+        label="Recovery court case manager contact information"
         showField={inRecoveryCourt === "Yes"}
       />
 
       <ControlledTextField
         name="demographic.ongoingLegalIssues"
         control={control}
-        label="Ongoing Legal Issues"
+        label="Please describe any ongoing legal issues"
         multiline
         minRows={3}
       />

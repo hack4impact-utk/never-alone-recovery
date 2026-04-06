@@ -10,17 +10,7 @@ export const annotateTransportationReleasePdf = async (
     transportationRelease: { residentSignature, staffSignature },
   }: IntakeFormValues,
 ): Promise<void> => {
-  await addSignatureToPdf(pdf, residentSignature, 0, {
-    x: 150,
-    y: 390,
-    width: 200,
-    height: 50,
-  });
+  await addSignatureToPdf(pdf, residentSignature, 0, 150, 390, 200, 50);
 
-  await addSignatureToPdf(pdf, staffSignature, 0, {
-    x: 150,
-    y: 325,
-    width: 200,
-    height: 50,
-  });
+  await addSignatureToPdf(pdf, staffSignature, 0, 150, 325, 200, 50);
 };

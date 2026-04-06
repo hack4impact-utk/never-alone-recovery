@@ -27,17 +27,7 @@ export const annotateServiceContractPdf = async (
     addTextToPdf(form, "entryYear", entryDateJs.format("YY"));
   }
 
-  await addSignatureToPdf(pdf, residentSignature, 6, {
-    x: 50,
-    y: 475,
-    width: 200,
-    height: 50,
-  });
+  await addSignatureToPdf(pdf, residentSignature, 6, 50, 475, 200, 50);
 
-  await addSignatureToPdf(pdf, staffSignature, 6, {
-    x: 50,
-    y: 390,
-    width: 200,
-    height: 50,
-  });
+  await addSignatureToPdf(pdf, staffSignature, 6, 50, 390, 200, 50);
 };
