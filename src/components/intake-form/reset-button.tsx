@@ -37,6 +37,7 @@ export default function ResetButton({
         variant="outlined"
         onClick={() => setIsOpen(true)}
         disabled={disabled}
+        fullWidth
       >
         Reset
       </Button>

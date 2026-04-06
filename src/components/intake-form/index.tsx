@@ -165,6 +165,9 @@ export default function IntakeForm(): ReactNode {
               <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
                 Step {currentIndex + 1} of {intakeFormSteps.length}
               </Typography>
+              <Box sx={{ mt: 3 }}>
+                <ResetButton onConfirmReset={handleReset} />
+              </Box>
             </Box>
 
             <Box
@@ -185,16 +188,13 @@ export default function IntakeForm(): ReactNode {
                   pt: 3,
                 }}
               >
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <Button
-                    variant="outlined"
-                    onClick={handleBack}
-                    disabled={!showBackButton}
-                  >
-                    Back
-                  </Button>
-                  <ResetButton onConfirmReset={handleReset} />
-                </Box>
+                <Button
+                  variant="outlined"
+                  onClick={handleBack}
+                  disabled={!showBackButton}
+                >
+                  Back
+                </Button>
 
                 {showNextButton ? (
                   <Button
