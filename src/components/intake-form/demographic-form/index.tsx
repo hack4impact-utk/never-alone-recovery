@@ -51,7 +51,7 @@ const ethnicityOptions = [
 ];
 
 export default function IntakeForm(): ReactNode {
-  const { control } = useFormContext<IntakeFormValues>();
+  const { control, resetField } = useFormContext<IntakeFormValues>();
   const [
     receiveBenefits,
     isDisabled,
@@ -228,6 +228,9 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Do you currently receive any state or federal benefits?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.benefitsDesc");
+        }}
       />
 
       <ControlledTextField
@@ -242,6 +245,9 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Do you have a mental or physical disability?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.disabilityDesc");
+        }}
       />
 
       <ControlledTextField
@@ -256,6 +262,10 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Do you currently receive disability benefits?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.receivesDisabilityReason");
+          resetField("demographic.receivedDisabilityAmount");
+        }}
       />
 
       <ControlledTextField
@@ -284,6 +294,9 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Do you have any mental health diagnoses or recommendations?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.mentalHealthRecs");
+        }}
       />
 
       <ControlledTextField
@@ -304,6 +317,11 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Are you currently participating in mental health treatment?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.typeOfTreatment");
+          resetField("demographic.howOften");
+          resetField("demographic.locationOfTreatment");
+        }}
       />
 
       <>
@@ -341,6 +359,9 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Do you have children?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.numberOfChildren");
+        }}
       />
 
       <ControlledTextField
@@ -392,30 +413,37 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Have you served in the military?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.militaryBranch");
+          resetField("demographic.militaryStartDate");
+          resetField("demographic.militaryEndDate");
+          resetField("demographic.militaryDischarge");
+        }}
       />
 
-      {servedInMilitary === "Yes" && (
-        <FormSection>
-          <ControlledDropdown
-            name="demographic.militaryBranch"
-            control={control}
-            label="Military Branch"
-            options={militaryBranchOptions}
-          />
+      <FormSection>
+        <ControlledDropdown
+          name="demographic.militaryBranch"
+          control={control}
+          label="Military Branch"
+          options={militaryBranchOptions}
+          showField={servedInMilitary === "Yes"}
+        />
 
-          <ControlledDateField
-            name="demographic.militaryStartDate"
-            control={control}
-            label="Military Start Date"
-          />
+        <ControlledDateField
+          name="demographic.militaryStartDate"
+          control={control}
+          label="Military Start Date"
+          showField={servedInMilitary === "Yes"}
+        />
 
-          <ControlledDateField
-            name="demographic.militaryEndDate"
-            control={control}
-            label="Military End Date"
-          />
-        </FormSection>
-      )}
+        <ControlledDateField
+          name="demographic.militaryEndDate"
+          control={control}
+          label="Military End Date"
+          showField={servedInMilitary === "Yes"}
+        />
+      </FormSection>
 
       <ControlledTextField
         name="demographic.militaryDischarge"
@@ -454,6 +482,11 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Do you currently have a driver's license?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.driversLicenseNumber");
+          resetField("demographic.dlIssueDate");
+          resetField("demographic.dlExpDate");
+        }}
       />
 
       {hasDriversLicense === "Yes" && (
@@ -483,6 +516,9 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Have you ever been convicted of a DUI?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.duiYear");
+        }}
       />
 
       <ControlledTextField
@@ -497,6 +533,9 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Have you ever been convicted of a sex offense?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.sexOffenseNature");
+        }}
       />
 
       <ControlledRadioButton
@@ -518,6 +557,9 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Have you ever been convicted of a felony?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.felonyCharges");
+        }}
       />
 
       <ControlledTextField
@@ -532,6 +574,9 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Are you currently on probation or parole?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.officerContactInfo");
+        }}
       />
 
       <ControlledTextField
@@ -546,6 +591,9 @@ export default function IntakeForm(): ReactNode {
         control={control}
         label="Are you currently participating in recovery court?"
         options={yesNoOptions}
+        onChange={() => {
+          resetField("demographic.caseManagerContactInfo");
+        }}
       />
 
       <ControlledTextField

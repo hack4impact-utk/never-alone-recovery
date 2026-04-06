@@ -28,6 +28,7 @@ type ControlledRadioButtonProps<T extends FieldValues> = {
   options: FormRadioOption[];
   row?: boolean;
   showField?: boolean;
+  onChange?: (value: string) => void;
 };
 
 export default function ControlledRadioButton<
@@ -39,6 +40,7 @@ export default function ControlledRadioButton<
   options,
   row = true,
   showField = true,
+  onChange,
 }: ControlledRadioButtonProps<TFieldValues>): ReactNode {
   return showField ? (
     <Controller
@@ -56,6 +58,7 @@ export default function ControlledRadioButton<
             value={field.value ?? ""}
             onChange={(event) => {
               field.onChange(event.target.value);
+              onChange?.(event.target.value);
             }}
           >
             {options.map((option) => (
