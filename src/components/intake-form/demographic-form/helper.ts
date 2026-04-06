@@ -116,4 +116,12 @@ export const annotateDemographicPdf = (
     demographic.onProbationOrParole,
   );
   addYesNoCircleToPdf(pdf, 2, { x: 290, y: 355 }, demographic.inRecoveryCourt);
+
+  if (demographic.militaryStartDate && demographic.militaryEndDate) {
+    addTextToPdf(
+      form,
+      "datesOfService",
+      `${demographic.militaryStartDate} to ${demographic.militaryEndDate}`,
+    );
+  }
 };
