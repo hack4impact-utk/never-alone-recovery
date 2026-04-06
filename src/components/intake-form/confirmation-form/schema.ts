@@ -5,7 +5,7 @@ import { requiredTrue } from "@/utils/form/validations";
 
 export const confirmationFormSchema = z.object({
   confirm: requiredTrue(
-    "You must confirm that the above emergency contact information is accurate.",
+    "You must confirm that all the information provided is accurate.",
   ),
 });
 

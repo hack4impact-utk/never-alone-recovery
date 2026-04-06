@@ -13,7 +13,6 @@ type ControlledPhoneNumberFieldProps<TFieldValues extends FieldValues> = {
   showField?: boolean;
   format?: string;
   mask?: string;
-  placeholder?: string;
   helperText?: TextFieldProps["helperText"];
 };
 
@@ -26,7 +25,6 @@ export default function ControlledPhoneNumberField<
   showField = true,
   format = "(###) ###-####",
   mask = "_",
-  placeholder,
   helperText,
 }: ControlledPhoneNumberFieldProps<TFieldValues>): ReactNode {
   return (
@@ -37,7 +35,7 @@ export default function ControlledPhoneNumberField<
       showField={showField}
       format={format}
       mask={mask}
-      placeholder={placeholder}
+      placeholder={"(123) 456-7890"}
       helperText={helperText}
       type="tel"
       inputMode="tel"
