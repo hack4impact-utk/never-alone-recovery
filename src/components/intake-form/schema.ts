@@ -6,6 +6,10 @@ import {
   confirmationFormSchema,
 } from "./confirmation-form/schema";
 import {
+  behavioralStandardsFormDefaultValues,
+  behavioralStandardsFormSchema,
+} from "./behavioral-standards-form/schema";
+import {
   demographicFormDefaultValues,
   demographicFormSchema,
 } from "./demographic-form/schema";
@@ -37,6 +41,7 @@ export const intakeFormSchema = z.object({
   serviceContract: serviceContractFormSchema,
   financialResponsibility: financialResponsibilityFormSchema,
   releaseOfInformation: releaseOfInformationFormSchema,
+  behavioralStandards: behavioralStandardsFormSchema,
   confirmation: confirmationFormSchema,
 });
 
@@ -49,6 +54,7 @@ export const intakeFormDefaultValues: DefaultValues<IntakeFormValues> = {
   serviceContract: serviceContractFormDefaultValues,
   financialResponsibility: financialResponsibilityFormDefaultValues,
   releaseOfInformation: releaseOfInformationFormDefaultValues,
+  behavioralStandards: behavioralStandardsFormDefaultValues,
   confirmation: confirmationFormDefaultValues,
 };
 

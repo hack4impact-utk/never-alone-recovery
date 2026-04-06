@@ -15,6 +15,7 @@ import { ReactNode, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import useFormPersist from "react-hook-form-persist";
 
+import BehavioralStandardsForm from "./behavioral-standards-form";
 import ConfirmationForm from "./confirmation-form";
 import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
@@ -63,6 +64,11 @@ export const intakeFormSteps: IntakeFormStep[] = [
     name: "releaseOfInformation",
     label: "Release of Information",
     form: <ReleaseOfInformationForm />,
+  },
+  {
+    name: "behavioralStandards",
+    label: "Behavioral Standards",
+    form: <BehavioralStandardsForm />,
   },
   {
     name: "emergencyContact",

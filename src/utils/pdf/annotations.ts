@@ -69,6 +69,23 @@ export const addFieldsToPdf = (
   }
 };
 
+export const addInitialsToPdf = (
+  form: PDFForm,
+  firstName: string,
+  lastName: string,
+): void => {
+  const fields = form.getFields();
+  const initials = `${firstName[0] ?? ""}${lastName[0] ?? ""}`.toUpperCase();
+
+  for (const field of fields) {
+    if (field.getName() === "initials") {
+      const textField = field as PDFTextField;
+
+      textField.setText(initials);
+    }
+  }
+};
+
 export const addSignatureToPdf = async (
   pdf: PDFDocument,
   signatureData: string,
