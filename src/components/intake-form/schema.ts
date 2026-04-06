@@ -2,13 +2,17 @@ import { DefaultValues } from "react-hook-form";
 import { z } from "zod";
 
 import {
-  confirmationFormDefaultValues,
-  confirmationFormSchema,
-} from "./confirmation-form/schema";
-import {
   behavioralStandardsFormDefaultValues,
   behavioralStandardsFormSchema,
 } from "./behavioral-standards-form/schema";
+import {
+  confidentialityAgreementFormDefaultValues,
+  confidentialityAgreementFormSchema,
+} from "./confidentiality-agreement-form/schema";
+import {
+  confirmationFormDefaultValues,
+  confirmationFormSchema,
+} from "./confirmation-form/schema";
 import {
   demographicFormDefaultValues,
   demographicFormSchema,
@@ -42,6 +46,7 @@ export const intakeFormSchema = z.object({
   financialResponsibility: financialResponsibilityFormSchema,
   releaseOfInformation: releaseOfInformationFormSchema,
   behavioralStandards: behavioralStandardsFormSchema,
+  confidentialityAgreement: confidentialityAgreementFormSchema,
   confirmation: confirmationFormSchema,
 });
 
@@ -55,6 +60,7 @@ export const intakeFormDefaultValues: DefaultValues<IntakeFormValues> = {
   financialResponsibility: financialResponsibilityFormDefaultValues,
   releaseOfInformation: releaseOfInformationFormDefaultValues,
   behavioralStandards: behavioralStandardsFormDefaultValues,
+  confidentialityAgreement: confidentialityAgreementFormDefaultValues,
   confirmation: confirmationFormDefaultValues,
 };
 
