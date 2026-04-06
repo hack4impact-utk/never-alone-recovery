@@ -4,6 +4,7 @@ import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
+import AddDonorForm from "@/components/donor/add-donor-form";
 import { Donor } from "@/types/schema";
 
 import BulkEmailButton from "./bulk-email-button";
@@ -109,8 +110,9 @@ export default function DonorTable({ donors }: DonorTableProps): ReactNode {
       >
         <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-        <Box>
+        <Box sx={{ display: "flex", gap: 1 }}>
           <BulkEmailButton donors={selectedDonors} />
+          <AddDonorForm />
         </Box>
       </Box>
 
