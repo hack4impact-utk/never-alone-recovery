@@ -19,6 +19,7 @@ import ConfirmationForm from "./confirmation-form";
 import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
 import FinancialResponsibilityForm from "./financial-responsibility-form";
+import ReleaseOfInformationForm from "./release-of-information-form";
 import ResetButton from "./reset-button";
 import {
   FormNames,
@@ -57,6 +58,11 @@ export const intakeFormSteps: IntakeFormStep[] = [
     name: "transportationRelease",
     label: "Transportation Release",
     form: <TransportationReleaseForm />,
+  },
+  {
+    name: "releaseOfInformation",
+    label: "Release of Information",
+    form: <ReleaseOfInformationForm />,
   },
   {
     name: "emergencyContact",

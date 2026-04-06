@@ -6,4 +6,5 @@ export const INTAKE_FORM_PDF_FILE_NAMES: Record<FormNames, string> = {
   transportationRelease: "neveralonerecovery.transportationreleaseform.pdf",
   emergencyContact: "neveralonerecovery.emergencycontactform.pdf",
   financialResponsibility: "neveralonerecovery.financialresponsibility.pdf",
+  releaseOfInformation: "neveralonerecovery.releaseofinformation.pdf",
 } as const;
