@@ -1,50 +1,74 @@
 "use client";
 
+import { Typography } from "@mui/material";
 import { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
 
-import DocumentSignature from "../document-signature";
+import ControlledPhoneNumberField from "@/components/common/forms/controlled-phone-number-field";
+import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
+import ControlledTextField from "@/components/common/forms/controlled-text-field";
+import FormContainer from "@/components/common/forms/form-container";
+import FormSection from "@/components/common/forms/form-section";
 
-const PDF_PATH = "neveralonerecovery.releaseofinformation.pdf";
+import { IntakeFormValues } from "../schema";
+import { annotateReleaseOfInformationPdf } from "./helper";
 
 export default function ReleaseOfInformationForm(): ReactNode {
+  const { control } = useFormContext<IntakeFormValues>();
+
   return (
-    <DocumentSignature
-      pdfPath={PDF_PATH}
+    <FormContainer
+      formName="releaseOfInformation"
       formTitle="Release of Information Form"
-      form="releaseOfInformation"
-      staffSignatureLocation={{
-        x: 150,
-        y: 90,
-        width: 200,
-        height: 50,
-      }}
-      residentSignatureLocation={{
-        x: 150,
-        y: 137,
-        width: 200,
-        height: 30,
-      }}
-      signaturePage={0}
-      annotations={[
-        {
-          type: "name",
-          pageNumber: 0,
-          location: {
-            x: 130,
-            y: 550,
-          },
-        },
-        {
-          type: "date",
-          pageNumber: 0,
-          location: { x: 370, y: 145 },
-        },
-        {
-          type: "date",
-          pageNumber: 0,
-          location: { x: 370, y: 101 },
-        },
-      ]}
-    />
+      annotatePdf={annotateReleaseOfInformationPdf}
+    >
+      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        Agency Information
+      </Typography>
+
+      <ControlledTextField
+        name="releaseOfInformation.holdingAgency"
+        control={control}
+        label="Holding Agency"
+      />
+
+      <ControlledTextField
+        name="releaseOfInformation.address"
+        control={control}
+        label="Address"
+      />
+
+      <FormSection>
+        <ControlledPhoneNumberField
+          name="releaseOfInformation.phoneNumber"
+          control={control}
+          label="Phone Number"
+        />
+
+        <ControlledTextField
+          name="releaseOfInformation.email"
+          control={control}
+          label="Email"
+        />
+      </FormSection>
+
+      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        Signatures
+      </Typography>
+
+      <FormSection>
+        <ControlledSignaturePad
+          name="releaseOfInformation.residentSignature"
+          control={control}
+          label="Resident Signature"
+        />
+
+        <ControlledSignaturePad
+          name="releaseOfInformation.staffSignature"
+          control={control}
+          label="Staff Signature"
+        />
+      </FormSection>
+    </FormContainer>
   );
 }

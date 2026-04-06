@@ -1,50 +1,42 @@
 "use client";
 
+import { Typography } from "@mui/material";
 import { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
 
-import DocumentSignature from "../document-signature";
+import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
+import FormContainer from "@/components/common/forms/form-container";
+import FormSection from "@/components/common/forms/form-section";
 
-const PDF_PATH = "neveralonerecovery.transportationreleaseform.pdf";
+import { IntakeFormValues } from "../schema";
+import { annotateTransportationReleasePdf } from "./helper";
 
 export default function TransportationReleaseForm(): ReactNode {
+  const { control } = useFormContext<IntakeFormValues>();
+
   return (
-    <DocumentSignature
-      pdfPath={PDF_PATH}
+    <FormContainer
+      formName="transportationRelease"
       formTitle="Transportation Release Form"
-      form="transportationRelease"
-      staffSignatureLocation={{
-        x: 150,
-        y: 325,
-        width: 200,
-        height: 50,
-      }}
-      residentSignatureLocation={{
-        x: 150,
-        y: 390,
-        width: 200,
-        height: 50,
-      }}
-      signaturePage={0}
-      annotations={[
-        {
-          type: "name",
-          pageNumber: 0,
-          location: {
-            x: 100,
-            y: 550,
-          },
-        },
-        {
-          type: "date",
-          pageNumber: 0,
-          location: { x: 400, y: 340 },
-        },
-        {
-          type: "date",
-          pageNumber: 0,
-          location: { x: 400, y: 410 },
-        },
-      ]}
-    />
+      annotatePdf={annotateTransportationReleasePdf}
+    >
+      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        Signatures
+      </Typography>
+
+      <FormSection>
+        <ControlledSignaturePad
+          name="transportationRelease.residentSignature"
+          control={control}
+          label="Resident Signature"
+        />
+
+        <ControlledSignaturePad
+          name="transportationRelease.staffSignature"
+          control={control}
+          label="Staff Signature"
+        />
+      </FormSection>
+    </FormContainer>
   );
 }

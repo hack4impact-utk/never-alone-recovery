@@ -1,50 +1,42 @@
 "use client";
 
+import { Typography } from "@mui/material";
 import { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
 
-import DocumentSignature from "../document-signature";
+import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
+import FormContainer from "@/components/common/forms/form-container";
+import FormSection from "@/components/common/forms/form-section";
 
-const PDF_PATH = "neveralonerecovery.confidentialityagreement.pdf";
+import { IntakeFormValues } from "../schema";
+import { annotateConfidentialityAgreementPdf } from "./helper";
 
 export default function ConfidentialityAgreementForm(): ReactNode {
+  const { control } = useFormContext<IntakeFormValues>();
+
   return (
-    <DocumentSignature
-      pdfPath={PDF_PATH}
+    <FormContainer
+      formName="confidentialityAgreement"
       formTitle="Confidentiality Agreement Form"
-      form="confidentialityAgreement"
-      staffSignatureLocation={{
-        x: 150,
-        y: 130,
-        width: 200,
-        height: 50,
-      }}
-      residentSignatureLocation={{
-        x: 150,
-        y: 180,
-        width: 200,
-        height: 50,
-      }}
-      signaturePage={0}
-      annotations={[
-        {
-          type: "name",
-          pageNumber: 0,
-          location: {
-            x: 100,
-            y: 315,
-          },
-        },
-        {
-          type: "date",
-          pageNumber: 0,
-          location: { x: 370, y: 195 },
-        },
-        {
-          type: "date",
-          pageNumber: 0,
-          location: { x: 370, y: 145 },
-        },
-      ]}
-    />
+      annotatePdf={annotateConfidentialityAgreementPdf}
+    >
+      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        Signatures
+      </Typography>
+
+      <FormSection>
+        <ControlledSignaturePad
+          name="confidentialityAgreement.residentSignature"
+          control={control}
+          label="Resident Signature"
+        />
+
+        <ControlledSignaturePad
+          name="confidentialityAgreement.staffSignature"
+          control={control}
+          label="Staff Signature"
+        />
+      </FormSection>
+    </FormContainer>
   );
 }

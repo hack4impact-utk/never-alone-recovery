@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "eslint.config.mjs"
-  ],
+, "src/components/intake-form/demographic-form/schema.ts"  ],
   "exclude": [
     "node_modules"
   ]

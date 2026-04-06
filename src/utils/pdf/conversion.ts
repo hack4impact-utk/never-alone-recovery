@@ -10,7 +10,7 @@ export const convertPdfToUrl = async (pdf: PDFDocument): Promise<string> => {
   return URL.createObjectURL(blob);
 };
 
-export const covertUrlToPdf = async (url: string): Promise<PDFDocument> => {
+export const convertUrlToPdf = async (url: string): Promise<PDFDocument> => {
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
   return await PDFDocument.load(arrayBuffer);

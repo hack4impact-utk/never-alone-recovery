@@ -1,188 +1,259 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button } from "@mui/material";
-import { useRouter } from "next/dist/client/components/navigation";
+import {
+  Box,
+  Button,
+  Paper,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
+} from "@mui/material";
 import { useSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
-import { FieldErrors, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
+import useFormPersist from "react-hook-form-persist";
 
-import { useIntakeFormContext } from "@/providers/intake-form-provider";
-
+import BehavioralStandardsAgreementForm from "./behavioral-standards-agreement-form";
 import BehavioralStandardsForm from "./behavioral-standards-form";
 import ConfidentialityAgreementForm from "./confidentiality-agreement-form";
 import ConfirmationForm from "./confirmation-form";
 import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
 import FinancialResponsibilityForm from "./financial-responsibility-form";
+import ReleaseOfInformationForm from "./release-of-information-form";
+import ResetButton from "./reset-button";
 import {
+  FormNames,
   intakeFormDefaultValues,
   intakeFormSchema,
   IntakeFormValues,
-} from "./intake-form-schema";
-import MedicalHistoryForm from "./medical-history-form";
-import ProbationAndParoleForm from "./probation-and-parole-form";
-import ReleaseOfInformationForm from "./release-of-information-form";
-import SearchConsentForm from "./search-consent-form";
+} from "./schema";
 import ServiceContractForm from "./service-contract-form";
 import TemporaryResidencyForm from "./temporary-residency-form";
 import TransportationReleaseForm from "./transportation-release-form";
 
-type FormNames = keyof IntakeFormValues;
+const INTAKE_FORM_STORAGE_KEY = "intakeForm";
 
 type IntakeFormStep = {
-  name: FormNames;
+  name: FormNames | "confirmation";
+  label: string;
   form: ReactNode;
 };
 
-const intakeFormSteps: IntakeFormStep[] = [
+export const intakeFormSteps: IntakeFormStep[] = [
   {
     name: "demographic",
+    label: "Demographic",
     form: <DemographicForm />,
   },
   {
-    name: "medicalHistory",
-    form: <MedicalHistoryForm />,
-  },
-  {
-    name: "transportationRelease",
-    form: <TransportationReleaseForm />,
-  },
-  {
-    name: "searchConsent",
-    form: <SearchConsentForm />,
-  },
-  {
-    name: "probationAndParole",
-    form: <ProbationAndParoleForm />,
-  },
-  {
-    name: "behavioralStandards",
-    form: <BehavioralStandardsForm />,
-  },
-  {
-    name: "confidentialityAgreement",
-    form: <ConfidentialityAgreementForm />,
-  },
-  {
-    name: "financialResponsibility",
-    form: <FinancialResponsibilityForm />,
-  },
-  {
-    name: "releaseOfInformation",
-    form: <ReleaseOfInformationForm />,
-  },
-  {
     name: "serviceContract",
+    label: "Service Contract",
     form: <ServiceContractForm />,
   },
   {
+    name: "financialResponsibility",
+    label: "Financial Responsibility",
+    form: <FinancialResponsibilityForm />,
+  },
+  {
+    name: "transportationRelease",
+    label: "Transportation Release",
+    form: <TransportationReleaseForm />,
+  },
+  {
+    name: "releaseOfInformation",
+    label: "Release of Information",
+    form: <ReleaseOfInformationForm />,
+  },
+  {
+    name: "behavioralStandards",
+    label: "Behavioral Standards",
+    form: <BehavioralStandardsForm />,
+  },
+  {
+    name: "behavioralStandardsAgreement",
+    label: "Behavioral Standards Agreement",
+    form: <BehavioralStandardsAgreementForm />,
+  },
+  {
+    name: "confidentialityAgreement",
+    label: "Confidentiality Agreement",
+    form: <ConfidentialityAgreementForm />,
+  },
+  {
     name: "temporaryResidency",
+    label: "Temporary Residency",
     form: <TemporaryResidencyForm />,
   },
   {
     name: "emergencyContact",
+    label: "Emergency Contact",
     form: <EmergencyContactForm />,
   },
   {
     name: "confirmation",
+    label: "Confirmation",
     form: <ConfirmationForm />,
   },
 ];
 
 export default function IntakeForm(): ReactNode {
-  const { getIntakeFormPdfUrl } = useIntakeFormContext();
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const [step, setStep] = useState(intakeFormSteps[0]);
+  const currentIndex = intakeFormSteps.findIndex((s) => s.name === step.name);
   const methods = useForm<IntakeFormValues>({
     resolver: zodResolver(intakeFormSchema),
     defaultValues: intakeFormDefaultValues,
     mode: "onChange",
   });
-  const { handleSubmit, trigger } = methods;
-  const [step, setStep] = useState(intakeFormSteps[0]);
-
-  const onSubmit = async (data: IntakeFormValues): Promise<void> => {
-    // eslint-disable-next-line no-console
-    console.log("Form Data:", data);
-
-    const successMessage = `Submitted successfully!`;
-    enqueueSnackbar(successMessage, {
-      variant: "success",
-    });
-
-    const pdfUrl = await getIntakeFormPdfUrl();
-
-    if (pdfUrl) {
-      const link = document.createElement("a");
-      link.href = pdfUrl;
-      link.download = "intake-form.pdf";
-      link.click();
-    }
-
-    router.push("/");
-  };
-
-  const onError = (errors: FieldErrors<IntakeFormValues>): void => {
-    // eslint-disable-next-line no-console
-    console.log("Validation Errors:", errors);
-    enqueueSnackbar("Please fix the errors in the form.", {
-      variant: "error",
-    });
-  };
+  const {
+    trigger,
+    watch,
+    setValue,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = methods;
 
   const showBackButton = step !== intakeFormSteps[0];
   const showNextButton = step !== intakeFormSteps.at(-1);
 
+  useFormPersist(INTAKE_FORM_STORAGE_KEY, {
+    watch,
+    setValue,
+    storage: globalThis.localStorage,
+  });
+
   const handleBack = (): void => {
-    const currentIndex = intakeFormSteps.findIndex((s) => s.name === step.name);
     setStep(intakeFormSteps[currentIndex - 1]);
   };
 
   const handleNext = async (): Promise<void> => {
     const isValid = await trigger(step.name);
 
-    if (!isValid) {
+    if (isValid) {
+      setStep(intakeFormSteps[currentIndex + 1]);
+      window.scrollTo(0, 0);
       return;
     }
 
-    const currentIndex = intakeFormSteps.findIndex((s) => s.name === step.name);
-    setStep(intakeFormSteps[currentIndex + 1]);
+    const errorCount = Object.keys(errors[step.name] || {}).length;
+    enqueueSnackbar(
+      `Please fix ${errorCount} validation error(s) before proceeding.`,
+      {
+        variant: "error",
+      },
+    );
+  };
+
+  const handleReset = (): void => {
+    reset();
+    globalThis.localStorage.removeItem(INTAKE_FORM_STORAGE_KEY);
+    setStep(intakeFormSteps[0]);
+  };
+
+  const onSubmit = (_data: IntakeFormValues): void => {
+    void _data;
+
+    enqueueSnackbar("Form submitted successfully!", {
+      variant: "success",
+    });
   };
 
   return (
-    <Box sx={{ width: "50%", padding: 4 }}>
-      <FormProvider {...methods}>
-        <Box sx={{ padding: 2 }}>{step.form}</Box>
-
-        <Box sx={{ display: "flex", width: "100%" }}>
-          {showBackButton && (
-            <Button type="button" variant="outlined" onClick={handleBack}>
-              Back
-            </Button>
-          )}
-
-          {showNextButton ? (
-            <Button
-              type="button"
-              variant="outlined"
-              onClick={handleNext}
-              sx={{ marginLeft: "auto" }}
+    <FormProvider {...methods}>
+      <Box component="form" sx={{ width: "100%", my: 4, mx: "auto" }}>
+        <Paper
+          elevation={2}
+          sx={{
+            width: "100%",
+            borderRadius: 3,
+            overflow: "hidden",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: "stretch",
+            }}
+          >
+            <Box
+              sx={{
+                width: { xs: "100%", sm: 225 },
+                px: { xs: 2, sm: 3 },
+                py: 3,
+              }}
             >
-              Next
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={handleSubmit(onSubmit, onError)}
-              sx={{ marginLeft: "auto" }}
+              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                Intake Form
+              </Typography>
+              <Stepper activeStep={currentIndex} orientation="vertical">
+                {intakeFormSteps.map((formStep) => (
+                  <Step key={formStep.name}>
+                    <StepLabel>{formStep.label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                Step {currentIndex + 1} of {intakeFormSteps.length}
+              </Typography>
+              <Box sx={{ mt: 3 }}>
+                <ResetButton onConfirmReset={handleReset} />
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                flexGrow: 1,
+                minWidth: 0,
+                p: 3,
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
-              Submit
-            </Button>
-          )}
-        </Box>
-      </FormProvider>
-    </Box>
+              <Box sx={{ width: "100%" }}>{step.form}</Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  pt: 3,
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  onClick={handleBack}
+                  disabled={!showBackButton}
+                >
+                  Back
+                </Button>
+
+                {showNextButton ? (
+                  <Button
+                    type="button"
+                    variant="contained"
+                    onClick={handleNext}
+                  >
+                    Next
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="contained"
+                    onClick={handleSubmit(onSubmit)}
+                  >
+                    Submit
+                  </Button>
+                )}
+              </Box>
+            </Box>
+          </Box>
+        </Paper>
+      </Box>
+    </FormProvider>
   );
 }

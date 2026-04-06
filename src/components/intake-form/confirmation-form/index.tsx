@@ -1,71 +1,45 @@
 "use client";
 
 import { Box, Typography } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { ReactNode, useEffect, useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
-import DocumentDisplay from "@/components/common/document-display";
+import DocumentDisplay from "@/components/common/document-display/document-display";
+import ControlledCheckbox from "@/components/common/forms/controlled-checkbox";
+import FormSection from "@/components/common/forms/form-section";
 import { useIntakeFormContext } from "@/providers/intake-form-provider";
 
-import { IntakeFormValues } from "../intake-form-schema";
+import { IntakeFormValues } from "../schema";
 
 export default function ConfirmationForm(): ReactNode {
-  const { getIntakeFormPdfUrl } = useIntakeFormContext();
-  const [confirmationPdfUrl, setConfirmationPdfUrl] = useState("");
-  useEffect(() => {
-    // const fetchPdf = async () => {
-    async function fetchPdf(): Promise<void> {
-      try {
-        const url = await getIntakeFormPdfUrl(); // The first promise
-        setConfirmationPdfUrl(url);
-      } catch (error) {
-        console.error("Failed to get PDF URL:", error);
-      }
-    }
+  const { control } = useFormContext<IntakeFormValues>();
+  const { getMergedPdfUrl } = useIntakeFormContext();
+  const [mergedPdfUrl, setMergedPdfUrl] = useState<string>("");
 
-    void fetchPdf();
-  }, [getIntakeFormPdfUrl]);
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext<IntakeFormValues>();
-  // const pdfUrl = getIntakeFormPdfUrl().then();
+  useEffect(() => {
+    const loadMergedPdf = async (): Promise<void> => {
+      const url = await getMergedPdfUrl();
+      setMergedPdfUrl(url);
+    };
+
+    void loadMergedPdf();
+  }, [getMergedPdfUrl]);
+
   return (
-    <Box sx={{ width: "100%" }}>
-      <Typography variant="h5" sx={{ mb: 2, textAlign: "center" }}>
-        Confirm Details
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+        Confirmation
       </Typography>
-      <DocumentDisplay pdfUrl={confirmationPdfUrl} />
-      <Controller
-        control={control}
-        name={"confirmation.residentConfirmation"}
-        render={({ field }) => (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={!!field.value}
-                  onChange={(e) => field.onChange(e.target.checked)}
-                />
-              }
-              label="I have reviewed the following document and I agree to all the information provided"
-            />
-            {errors["confirmation"]?.residentConfirmation && (
-              <Box sx={{ color: "error.main", mt: 1, fontSize: "0.875rem" }}>
-                {errors.confirmation?.residentConfirmation.message}
-              </Box>
-            )}
-          </Box>
-        )}
-      />
+
+      <DocumentDisplay pdfUrl={mergedPdfUrl} />
+
+      <FormSection>
+        <ControlledCheckbox
+          name="confirmation.confirm"
+          control={control}
+          label="I confirm that all the information above is correct."
+        />
+      </FormSection>
     </Box>
   );
 }

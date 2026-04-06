@@ -9,8 +9,10 @@ export default function IntakeFormPage(): ReactNode {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        width: "100%",
+        maxWidth: "1100px",
+        mx: "auto",
+        alignItems: "stretch",
       }}
     >
       <IntakeFormProvider>

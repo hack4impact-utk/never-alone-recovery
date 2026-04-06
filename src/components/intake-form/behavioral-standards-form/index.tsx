@@ -1,42 +1,42 @@
 "use client";
 
+import { Typography } from "@mui/material";
 import { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
 
-import DocumentSignature from "../document-signature";
+import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
+import FormContainer from "@/components/common/forms/form-container";
+import FormSection from "@/components/common/forms/form-section";
 
-const PDF_PATH = "neveralonerecovery.behavioralstandards.pdf";
+import { IntakeFormValues } from "../schema";
+import { annotateBehavioralStandardsPdf } from "./helper";
 
 export default function BehavioralStandardsForm(): ReactNode {
+  const { control } = useFormContext<IntakeFormValues>();
+
   return (
-    <DocumentSignature
-      pdfPath={PDF_PATH}
+    <FormContainer
+      formName="behavioralStandards"
       formTitle="Behavioral Standards Form"
-      form="behavioralStandards"
-      staffSignatureLocation={{
-        x: 150,
-        y: 115,
-        width: 200,
-        height: 50,
-      }}
-      residentSignatureLocation={{
-        x: 150,
-        y: 160,
-        width: 200,
-        height: 50,
-      }}
-      signaturePage={3}
-      annotations={[
-        {
-          type: "date",
-          pageNumber: 3,
-          location: { x: 450, y: 172 },
-        },
-        {
-          type: "date",
-          pageNumber: 3,
-          location: { x: 450, y: 127 },
-        },
-      ]}
-    />
+      annotatePdf={annotateBehavioralStandardsPdf}
+    >
+      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        Signatures
+      </Typography>
+
+      <FormSection>
+        <ControlledSignaturePad
+          name="behavioralStandards.residentSignature"
+          control={control}
+          label="Resident Signature"
+        />
+
+        <ControlledSignaturePad
+          name="behavioralStandards.staffSignature"
+          control={control}
+          label="Staff Signature"
+        />
+      </FormSection>
+    </FormContainer>
   );
 }

@@ -71,6 +71,12 @@ importers:
       react-hook-form:
         specifier: ^7.62.0
         version: 7.62.0(react@19.1.0)
+      react-hook-form-persist:
+        specifier: ^3.0.0
+        version: 3.0.0(react-hook-form@7.62.0(react@19.1.0))(react@19.1.0)
+      react-number-format:
+        specifier: ^5.4.5
+        version: 5.4.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-signature-canvas:
         specifier: 1.1.0-alpha.2
         version: 1.1.0-alpha.2(@types/prop-types@15.7.15)(@types/react@19.1.9)(prop-types@15.8.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -2632,6 +2638,12 @@ packages:
     peerDependencies:
       react: ^19.1.0
 
+  react-hook-form-persist@3.0.0:
+    resolution: {integrity: sha512-6nwW65JyFpBem9RjLYAWvIFxOLoCk0E13iB9e5yeF5jeHlwx1ua0M77FvwhPpD8eaCz7hG4ziCdOxRcnJVUSxQ==}
+    peerDependencies:
+      react: '>= 16.3'
+      react-hook-form: '>= 6'
+
   react-hook-form@7.62.0:
     resolution: {integrity: sha512-7KWFejc98xqG/F4bAxpL41NB3o1nnvQO1RWZT3TqRZYL8RryQETGfEdVnJN2fy1crCiBLLjkRBVK05j24FxJGA==}
     engines: {node: '>=18.0.0'}
@@ -2646,6 +2658,12 @@ packages:
 
   react-is@19.2.0:
     resolution: {integrity: sha512-x3Ax3kNSMIIkyVYhWPyO09bu0uttcAIoecO/um/rKGQ4EltYWVYtyiGkS/3xMynrbVQdS69Jhlv8FXUEZehlzA==}
+
+  react-number-format@5.4.5:
+    resolution: {integrity: sha512-y8O2yHHj3w0aE9XO8d2BCcUOOdQTRSVq+WIuMlLVucAm5XNjJAy+BoOJiuQMldVYVOKTMyvVNfnbl2Oqp+YxGw==}
+    peerDependencies:
+      react: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   react-signature-canvas@1.1.0-alpha.2:
     resolution: {integrity: sha512-tKUNk3Gmh04Ug4K8p5g8Is08BFUKvbXxi0PyetQ/f8OgCBzcx4vqNf9+OArY/TdNdfHtswXQNRwZD6tyELjkjQ==}
@@ -5506,6 +5524,11 @@ snapshots:
       react: 19.1.0
       scheduler: 0.26.0
 
+  react-hook-form-persist@3.0.0(react-hook-form@7.62.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-hook-form: 7.62.0(react@19.1.0)
+
   react-hook-form@7.62.0(react@19.1.0):
     dependencies:
       react: 19.1.0
@@ -5515,6 +5538,11 @@ snapshots:
   react-is@19.1.1: {}
 
   react-is@19.2.0: {}
+
+  react-number-format@5.4.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   react-signature-canvas@1.1.0-alpha.2(@types/prop-types@15.7.15)(@types/react@19.1.9)(prop-types@15.8.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:

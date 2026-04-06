@@ -1,50 +1,53 @@
 "use client";
 
+import { Typography } from "@mui/material";
 import { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
 
-import DocumentSignature from "../document-signature";
+import ControlledDateField from "@/components/common/forms/controlled-date-field";
+import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
+import FormContainer from "@/components/common/forms/form-container";
+import FormSection from "@/components/common/forms/form-section";
 
-const PDF_PATH = "neveralonerecovery.servicecontract.pdf";
+import { IntakeFormValues } from "../schema";
+import { annotateServiceContractPdf } from "./helper";
 
 export default function ServiceContractForm(): ReactNode {
+  const { control } = useFormContext<IntakeFormValues>();
+
   return (
-    <DocumentSignature
-      pdfPath={PDF_PATH}
+    <FormContainer
+      formName="serviceContract"
       formTitle="Service Contract Form"
-      form="serviceContract"
-      staffSignatureLocation={{
-        x: 150,
-        y: 387,
-        width: 200,
-        height: 50,
-      }}
-      residentSignatureLocation={{
-        x: 150,
-        y: 473,
-        width: 200,
-        height: 50,
-      }}
-      signaturePage={6}
-      annotations={[
-        {
-          type: "name",
-          pageNumber: 0,
-          location: {
-            x: 100,
-            y: 512,
-          },
-        },
-        {
-          type: "date",
-          pageNumber: 6,
-          location: { x: 410, y: 485 },
-        },
-        {
-          type: "date",
-          pageNumber: 6,
-          location: { x: 410, y: 400 },
-        },
-      ]}
-    />
+      annotatePdf={annotateServiceContractPdf}
+    >
+      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        Contract Details
+      </Typography>
+
+      <ControlledDateField
+        name="serviceContract.entryDate"
+        control={control}
+        label="Entry Date"
+      />
+
+      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        Signatures
+      </Typography>
+
+      <FormSection>
+        <ControlledSignaturePad
+          name="serviceContract.residentSignature"
+          control={control}
+          label="Resident Signature"
+        />
+
+        <ControlledSignaturePad
+          name="serviceContract.staffSignature"
+          control={control}
+          label="Staff Signature"
+        />
+      </FormSection>
+    </FormContainer>
   );
 }

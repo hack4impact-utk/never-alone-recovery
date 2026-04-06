@@ -1,50 +1,42 @@
 "use client";
 
+import { Typography } from "@mui/material";
 import { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
 
-import DocumentSignature from "../document-signature";
+import ControlledSignaturePad from "@/components/common/forms/controlled-signature-pad";
+import FormContainer from "@/components/common/forms/form-container";
+import FormSection from "@/components/common/forms/form-section";
 
-const PDF_PATH = "neveralonerecovery.temporaryresidencyform.pdf";
+import { IntakeFormValues } from "../schema";
+import { annotateTemporaryResidencyPdf } from "./helper";
 
 export default function TemporaryResidencyForm(): ReactNode {
+  const { control } = useFormContext<IntakeFormValues>();
+
   return (
-    <DocumentSignature
-      pdfPath={PDF_PATH}
+    <FormContainer
+      formName="temporaryResidency"
       formTitle="Temporary Residency Form"
-      form="temporaryResidency"
-      staffSignatureLocation={{
-        x: 150,
-        y: 90,
-        width: 200,
-        height: 47,
-      }}
-      residentSignatureLocation={{
-        x: 150,
-        y: 128,
-        width: 200,
-        height: 47,
-      }}
-      signaturePage={0}
-      annotations={[
-        {
-          type: "name",
-          pageNumber: 0,
-          location: {
-            x: 120,
-            y: 542,
-          },
-        },
-        {
-          type: "date",
-          pageNumber: 0,
-          location: { x: 460, y: 140 },
-        },
-        {
-          type: "date",
-          pageNumber: 0,
-          location: { x: 460, y: 101 },
-        },
-      ]}
-    />
+      annotatePdf={annotateTemporaryResidencyPdf}
+    >
+      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        Signatures
+      </Typography>
+
+      <FormSection>
+        <ControlledSignaturePad
+          name="temporaryResidency.residentSignature"
+          control={control}
+          label="Resident Signature"
+        />
+
+        <ControlledSignaturePad
+          name="temporaryResidency.staffSignature"
+          control={control}
+          label="Staff Signature"
+        />
+      </FormSection>
+    </FormContainer>
   );
 }
