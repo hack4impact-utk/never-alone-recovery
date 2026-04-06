@@ -34,6 +34,10 @@ import {
   serviceContractFormSchema,
 } from "./service-contract-form/schema";
 import {
+  temporaryResidencyFormDefaultValues,
+  temporaryResidencyFormSchema,
+} from "./temporary-residency-form/schema";
+import {
   transportationReleaseFormDefaultValues,
   transportationReleaseFormSchema,
 } from "./transportation-release-form/schema";
@@ -47,6 +51,7 @@ export const intakeFormSchema = z.object({
   releaseOfInformation: releaseOfInformationFormSchema,
   behavioralStandards: behavioralStandardsFormSchema,
   confidentialityAgreement: confidentialityAgreementFormSchema,
+  temporaryResidency: temporaryResidencyFormSchema,
   confirmation: confirmationFormSchema,
 });
 
@@ -61,6 +66,7 @@ export const intakeFormDefaultValues: DefaultValues<IntakeFormValues> = {
   releaseOfInformation: releaseOfInformationFormDefaultValues,
   behavioralStandards: behavioralStandardsFormDefaultValues,
   confidentialityAgreement: confidentialityAgreementFormDefaultValues,
+  temporaryResidency: temporaryResidencyFormDefaultValues,
   confirmation: confirmationFormDefaultValues,
 };
 

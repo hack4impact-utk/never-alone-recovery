@@ -53,6 +53,7 @@ export default function IntakeFormProvider({
     releaseOfInformation: "",
     behavioralStandards: "",
     confidentialityAgreement: "",
+    temporaryResidency: "",
   });
 
   const getOriginalPdf = async (
