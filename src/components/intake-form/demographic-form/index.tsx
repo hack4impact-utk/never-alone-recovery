@@ -90,6 +90,7 @@ export default function IntakeForm(): ReactNode {
       formName="demographic"
       formTitle="Demographic Information"
       annotatePdf={annotateDemographicPdf}
+      showPdf={false}
     >
       <Typography variant="body1" sx={{ fontWeight: "bold" }}>
         Personal Information
