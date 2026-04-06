@@ -21,7 +21,7 @@ const mergePdfs = async (pdfUrls: string[]): Promise<string> => {
   return await convertPdfToUrl(mergedPdf);
 };
 
-export type PdfUrls = Record<FormNames, string>;
+type PdfUrls = Record<FormNames, string>;
 
 type IntakeFormContextType = {
   getOriginalPdf: (formName: keyof PdfUrls) => Promise<PDFDocument>;
@@ -49,7 +49,7 @@ export default function IntakeFormProvider({
     emergencyContact: "",
     serviceContract: "",
     transportationRelease: "",
-    confirmation: "",
+    financialResponsibility: "",
   });
 
   const getOriginalPdf = async (
@@ -72,6 +72,7 @@ export default function IntakeFormProvider({
 
   const getMergedPdfUrl = async (): Promise<string> => {
     const pdfs = intakeFormSteps
+      .filter((step) => step.name !== "confirmation")
       .map((step) => pdfUrls[step.name as keyof PdfUrls])
       .filter((url) => url !== "") as string[];
 

@@ -18,6 +18,7 @@ import useFormPersist from "react-hook-form-persist";
 import ConfirmationForm from "./confirmation-form";
 import DemographicForm from "./demographic-form";
 import EmergencyContactForm from "./emergency-contact-form";
+import FinancialResponsibilityForm from "./financial-responsibility-form";
 import ResetButton from "./reset-button";
 import {
   FormNames,
@@ -46,6 +47,11 @@ export const intakeFormSteps: IntakeFormStep[] = [
     name: "serviceContract",
     label: "Service Contract",
     form: <ServiceContractForm />,
+  },
+  {
+    name: "financialResponsibility",
+    label: "Financial Responsibility",
+    form: <FinancialResponsibilityForm />,
   },
   {
     name: "transportationRelease",
