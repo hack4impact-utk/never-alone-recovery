@@ -1,11 +1,26 @@
+import { NextResponse } from "next/server";
 import { withAuth } from "next-auth/middleware";
 
-export default withAuth({
-  pages: {
-    signIn: "/login",
-    error: "/error",
+export default withAuth(
+  function middleware(req) {
+    const token = req.nextauth.token;
+    const pathname = req.nextUrl.pathname;
+
+    const isAskForAccessPage = pathname.startsWith("/ask-for-access");
+
+    if (token?.user?.role === "disabled" && !isAskForAccessPage) {
+      return NextResponse.redirect(new URL("/ask-for-access", req.url));
+    }
+
+    return NextResponse.next();
   },
-});
+  {
+    pages: {
+      signIn: "/login",
+      error: "/error",
+    },
+  },
+);
 
 export const config = {
   matcher: [
