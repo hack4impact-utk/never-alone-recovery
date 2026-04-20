@@ -1,6 +1,7 @@
 export * from "./accounts";
 export * from "./audit";
 export * from "./client";
+export * from "./donation";
 export * from "./donor";
 export * from "./enum";
 export * from "./intake-form";
