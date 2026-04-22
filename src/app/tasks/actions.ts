@@ -49,22 +49,11 @@ export async function auditIncompleteTasks(): Promise<
   [number, null] | [null, string]
 > {
   try {
+    // 1. QUERY THE DATABASE
     const incompleteResults = await db
       .select({
-        id: tasks.staffId,
-        _name: users.name,
-        get name_1() {
-          return this._name;
-        },
-        set name_1(value) {
-          this._name = value;
-        },
-        get name() {
-          return this._name;
-        },
-        set name(value) {
-          this._name = value;
-        },
+        staffId: tasks.staffId,
+        staffName: users.name,
         uncompletedCount: sql<number>`count(${tasks.id})`.mapWith(Number),
       })
       .from(tasks)
@@ -72,16 +61,19 @@ export async function auditIncompleteTasks(): Promise<
       .where(eq(tasks.completed, false))
       .groupBy(tasks.staffId, users.name);
 
+    // 2. CHECK IF DATA EXISTS
     if (incompleteResults.length === 0) {
       return [0, null];
     }
 
+    // 3. TRANSFORM DATA FOR AUDIT LOG
     const auditEntries = incompleteResults.map((res) => ({
-      staffId: res.id,
+      staffId: res.staffId,
       type: "incomplete_tasks" as const,
-      message: `${res.name} has not completed ${res.uncompletedCount} tasks this week.`,
+      message: `${res.staffName} has not completed ${res.uncompletedCount} tasks this week.`,
     }));
 
+    // 4. INSERT INTO AUDIT TABLE
     const result = await db.insert(audits).values(auditEntries).returning();
 
     return [result.length, null];
