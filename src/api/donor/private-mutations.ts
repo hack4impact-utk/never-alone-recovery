@@ -1,7 +1,8 @@
 import db from "@/db";
+import { donations } from "@/db/schema";
 import { donors } from "@/db/schema/donor";
 import { Result } from "@/types/result";
-import { Donor, NewDonor } from "@/types/schema";
+import { Donor, NewDonation, NewDonor } from "@/types/schema";
 import handleError from "@/utils/handle-error";
 
 export async function insertDonor(donor: NewDonor): Promise<Result<Donor>> {
@@ -14,6 +15,17 @@ export async function insertDonor(donor: NewDonor): Promise<Result<Donor>> {
     }
 
     return [newDonor, null];
+  } catch (error) {
+    return [null, handleError(error)];
+  }
+}
+
+export async function insertDonation(
+  donation: NewDonation[],
+): Promise<Result<null>> {
+  try {
+    await db.insert(donations).values(donation);
+    return [null, null];
   } catch (error) {
     return [null, handleError(error)];
   }

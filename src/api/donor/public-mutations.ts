@@ -1,10 +1,10 @@
 "use server";
 
 import { Result } from "@/types/result";
-import { Donor, NewDonor } from "@/types/schema";
+import { Donor, NewDonation, NewDonor } from "@/types/schema";
 import getUserSession from "@/utils/auth/get-user-session";
 
-import { insertDonor } from "./private-mutations";
+import { insertDonation, insertDonor } from "./private-mutations";
 
 export async function createDonor(donor: NewDonor): Promise<Result<Donor>> {
   const session = await getUserSession();
@@ -14,4 +14,22 @@ export async function createDonor(donor: NewDonor): Promise<Result<Donor>> {
   }
 
   return await insertDonor(donor);
+}
+
+export async function addDonation(
+  donation: NewDonation,
+): Promise<Result<null>> {
+  const session = await getUserSession();
+
+  if (!session) {
+    return [null, "Unauthorized"];
+  }
+
+  const [, donationError] = await insertDonation([donation]);
+
+  if (donationError) {
+    return [null, donationError];
+  }
+
+  return [null, null];
 }
