@@ -4,12 +4,12 @@ import { Box, Typography } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-import DocumentDisplay from "@/components/common/document-display/document-display";
 import ControlledCheckbox from "@/components/common/forms/controlled-checkbox";
 import FormSection from "@/components/common/forms/form-section";
 import { useIntakeFormContext } from "@/providers/intake-form-provider";
 
 import { IntakeFormValues } from "../schema";
+import PdfDisplayModal from "./pdf-display-modal";
 
 export default function ConfirmationForm(): ReactNode {
   const { control } = useFormContext<IntakeFormValues>();
@@ -31,7 +31,7 @@ export default function ConfirmationForm(): ReactNode {
         Confirmation
       </Typography>
 
-      <DocumentDisplay pdfUrl={mergedPdfUrl} />
+      <PdfDisplayModal pdfUrl={mergedPdfUrl} />
 
       <FormSection>
         <ControlledCheckbox
