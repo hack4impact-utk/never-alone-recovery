@@ -12,7 +12,7 @@ import {
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-import { auditIncompleteTasks, generateWeeklyTasks } from "../tasks/actions";
+import { generateWeeklyTasks } from "../tasks/actions";
 
 export default function QuickTestPage(): React.ReactNode {
   const { data: session, status: authStatus } = useSession();
