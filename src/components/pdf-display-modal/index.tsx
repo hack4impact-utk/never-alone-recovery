@@ -8,10 +8,14 @@ import ButtonModal from "@/components/common/modal";
 
 type PdfDisplayModalProps = {
   pdfUrl: string;
+  buttonTitle: string;
+  modalTitle: string;
 };
 
 export default function PdfDisplayModal({
   pdfUrl,
+  buttonTitle,
+  modalTitle,
 }: PdfDisplayModalProps): ReactNode {
   const handleDownload = (): void => {
     if (!pdfUrl) {
@@ -29,8 +33,8 @@ export default function PdfDisplayModal({
 
   return (
     <ButtonModal
-      buttonTitle="View Completed Form"
-      modalTitle="Completed Intake Form"
+      buttonTitle={buttonTitle}
+      modalTitle={modalTitle}
       hasCloseButton
     >
       <DocumentDisplay pdfUrl={pdfUrl} />
