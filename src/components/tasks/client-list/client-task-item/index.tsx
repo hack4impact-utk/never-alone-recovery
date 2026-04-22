@@ -55,9 +55,18 @@ export default function ClientTaskItem({
           width="100%"
           sx={{ mr: "0.5rem" }}
         >
-          <Typography>
-            {clientTask.firstName} {clientTask.lastName} - {clientTask.email}
-          </Typography>
+          <Stack direction="column" spacing={0}>
+            <Typography variant="body1">
+              {clientTask.firstName} {clientTask.lastName}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ wordBreak: "break-all" }}
+            >
+              {clientTask.email}
+            </Typography>
+          </Stack>
           <Chip label={getChipText(clientTask, completed)} />
         </Stack>
       </AccordionSummary>

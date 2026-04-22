@@ -64,14 +64,27 @@ export default function ClientTable({
   };
 
   const columns: GridColDef<Row>[] = [
-    { field: "firstName", headerName: "First Name", width: 50, flex: 1 },
-    { field: "lastName", headerName: "Last Name", width: 50, flex: 1 },
-    { field: "email", headerName: "Email", width: 200, flex: 1 },
+    {
+      field: "firstName",
+      headerName: "First Name",
+      width: 50,
+      flex: 1,
+      minWidth: 120,
+    },
+    {
+      field: "lastName",
+      headerName: "Last Name",
+      width: 50,
+      flex: 1,
+      minWidth: 120,
+    },
+    { field: "email", headerName: "Email", width: 200, flex: 1, minWidth: 200 },
     {
       field: "status",
       headerName: "Status",
       width: 150,
       flex: 1,
+      minWidth: 120,
       renderCell: (params): React.ReactNode => {
         const status = params.value;
         return <Chip label={status} size="small" />;
@@ -118,8 +131,9 @@ export default function ClientTable({
     <>
       <Box
         sx={{
-          height: "75vh",
-          width: "75vw",
+          flex: 1,
+          minHeight: 0,
+          width: "100%",
           display: "flex",
           flexDirection: "column",
         }}
@@ -136,6 +150,7 @@ export default function ClientTable({
 
         {displayDataGrid && (
           <DataGrid
+            sx={{ flex: 1, minHeight: 0 }}
             rows={filteredRows}
             columns={columns}
             disableRowSelectionOnClick

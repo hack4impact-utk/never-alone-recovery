@@ -23,7 +23,7 @@ export default function SearchBox({
         }}
         placeholder="Search..."
         size="small"
-        sx={{ width: "450px" }}
+        sx={{ width: { xs: "60vw", sm: "300px", md: "450px" } }}
         slotProps={{
           input: {
             endAdornment: (

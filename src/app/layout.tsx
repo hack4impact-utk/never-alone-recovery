@@ -1,4 +1,4 @@
-import { CssBaseline } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import type { Metadata } from "next";
@@ -37,15 +37,34 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={roboto.variable}>
-      <body>
-        <AppRouterCacheProvider>
+      <body
+        style={{ height: "100dvh", display: "flex", flexDirection: "column" }}
+      >
+        <AppRouterCacheProvider options={{ key: "mui" }}>
           <ThemeProvider theme={theme}>
             <NotistackProvider>
               <DateLocalizationProvider>
                 <NextAuthProvider>
                   <CssBaseline />
+                  <style>{`
+                      html, body, #__next, [data-nextjs-scroll-focus-boundary] { 
+                      height: 100%;
+                      display: flex;
+                      flex-direction: column;
+                      flex: 1;
+                    }
+                  `}</style>
                   {session && <Header />}
-                  {children}
+                  <Box
+                    sx={{
+                      flex: 1,
+                      minHeight: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    {children}
+                  </Box>
                 </NextAuthProvider>
               </DateLocalizationProvider>
             </NotistackProvider>

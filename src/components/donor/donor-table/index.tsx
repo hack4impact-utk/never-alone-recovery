@@ -40,6 +40,7 @@ function getRows(donors: Donor[], searchQuery: string): Row[] {
     );
   });
 }
+
 export default function DonorTable({ donors }: DonorTableProps): ReactNode {
   const [searchQuery, setSearchQuery] = useState("");
   const [rowSelectionModel, setRowSelectionModel] =
@@ -48,26 +49,15 @@ export default function DonorTable({ donors }: DonorTableProps): ReactNode {
   const rows = getRows(donors, searchQuery);
 
   const columns: GridColDef<Row>[] = [
-    {
-      field: "firstName",
-      headerName: "First Name",
-      flex: 1,
-    },
-    {
-      field: "lastName",
-      headerName: "Last Name",
-      flex: 1,
-    },
+    { field: "firstName", headerName: "First Name", flex: 1, minWidth: 100 },
+    { field: "lastName", headerName: "Last Name", flex: 1, minWidth: 100 },
     {
       field: "phoneNumber",
       headerName: "Phone Number",
       flex: 1,
+      minWidth: 120,
     },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 2,
-    },
+    { field: "email", headerName: "Email", flex: 2, minWidth: 150 },
   ];
 
   const [displayDataGrid, setDisplayDataGrid] = useState(false);
@@ -93,8 +83,9 @@ export default function DonorTable({ donors }: DonorTableProps): ReactNode {
   return (
     <Box
       sx={{
-        height: "75vh",
-        width: "75vw",
+        flex: 1,
+        minHeight: 0,
+        width: "100%",
         display: "flex",
         flexDirection: "column",
       }}
@@ -106,10 +97,9 @@ export default function DonorTable({ donors }: DonorTableProps): ReactNode {
         display="flex"
         alignItems="center"
         justifyContent="space-between"
-        sx={{ py: 2 }}
+        sx={{ py: 2, gap: 1, flexWrap: "wrap" }}
       >
         <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
         <Box sx={{ display: "flex", gap: 1 }}>
           <BulkEmailButton donors={selectedDonors} />
           <AddDonorForm />
@@ -117,22 +107,25 @@ export default function DonorTable({ donors }: DonorTableProps): ReactNode {
       </Box>
 
       {displayDataGrid && (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          disableRowSelectionOnClick
-          checkboxSelection
-          onRowSelectionModelChange={(newModel) =>
-            setRowSelectionModel(newModel)
-          }
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 8,
+        <Box sx={{ flex: 1, minHeight: 0, overflowX: "auto" }}>
+          <DataGrid
+            sx={{ flex: 1, minHeight: 0, minWidth: 400 }}
+            rows={rows}
+            columns={columns}
+            disableRowSelectionOnClick
+            checkboxSelection
+            onRowSelectionModelChange={(newModel) =>
+              setRowSelectionModel(newModel)
+            }
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 8,
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        </Box>
       )}
     </Box>
   );

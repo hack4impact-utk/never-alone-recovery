@@ -38,21 +38,23 @@ const columns: GridColDef<Row>[] = [
     field: "createdDate",
     headerName: "Date",
     flex: 1,
+    minWidth: 190,
     valueFormatter: (params): string => {
       return dayjs(params).format("MMMM D, YYYY h:mm A");
     },
   },
-  { field: "staffName", headerName: "Staff", flex: 1 },
-  { field: "clientName", headerName: "Client", flex: 1 },
+  { field: "staffName", headerName: "Staff", flex: 1, minWidth: 120 },
+  { field: "clientName", headerName: "Client", flex: 1, minWidth: 120 },
   {
     field: "type",
     headerName: "Type",
     flex: 1,
+    minWidth: 180,
     type: "singleSelect",
     valueOptions: Object.keys(typeColors),
     renderCell: getAuditTypeCell,
   },
-  { field: "message", headerName: "Message", flex: 2 },
+  { field: "message", headerName: "Message", flex: 2, minWidth: 200 },
 ];
 
 function getAuditTypeCell(
@@ -113,8 +115,9 @@ export default function AuditTable({ audits }: AuditTableProps): ReactNode {
   return (
     <Box
       sx={{
-        height: "75vh",
-        width: "75vw",
+        flex: 1,
+        minHeight: 0,
+        width: "100%",
         display: "flex",
         flexDirection: "column",
       }}
@@ -128,6 +131,7 @@ export default function AuditTable({ audits }: AuditTableProps): ReactNode {
 
       {displayDataGrid && (
         <DataGrid
+          sx={{ flex: 1, minHeight: 0 }}
           rows={filteredRows}
           columns={columns}
           disableRowSelectionOnClick

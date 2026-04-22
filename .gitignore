@@ -41,4 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.claude
+never-alone-recovery-1/
+never-alone-recovery/
+src/never-alone-recovery/
