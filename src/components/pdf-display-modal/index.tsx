@@ -10,12 +10,16 @@ type PdfDisplayModalProps = {
   pdfUrl: string;
   buttonTitle: string;
   modalTitle: string;
+  onOpen?: () => void;
+  onClose?: () => void;
 };
 
 export default function PdfDisplayModal({
   pdfUrl,
   buttonTitle,
   modalTitle,
+  onOpen,
+  onClose,
 }: PdfDisplayModalProps): ReactNode {
   const handleDownload = (): void => {
     if (!pdfUrl) {
@@ -35,6 +39,8 @@ export default function PdfDisplayModal({
     <ButtonModal
       buttonTitle={buttonTitle}
       modalTitle={modalTitle}
+      onOpen={onOpen}
+      onClose={onClose}
       hasCloseButton
     >
       <DocumentDisplay pdfUrl={pdfUrl} />
