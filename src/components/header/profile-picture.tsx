@@ -1,5 +1,6 @@
 "use client";
 
+import { Divider } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -46,6 +47,11 @@ export default function ProfilePicture(): ReactNode {
           horizontal: "right",
         }}
       >
+        <MenuItem sx={{ display: "block" }}>
+          <Typography>{session?.user?.name}</Typography>
+          <Typography>{session?.user?.email}</Typography>
+        </MenuItem>
+        <Divider />
         <MenuItem
           id="logout"
           onClick={() => {
