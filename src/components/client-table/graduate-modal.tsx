@@ -1,11 +1,13 @@
 "use client";
 
+import SchoolIcon from "@mui/icons-material/School";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  MenuItem,
   Typography,
 } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
@@ -19,7 +21,7 @@ type GraduateProps = {
   onGraduate: (client: Client) => void;
 };
 
-export default function Graduate({
+export default function GraduateModal({
   client,
   onGraduate,
 }: GraduateProps): ReactNode {
@@ -59,9 +61,10 @@ export default function Graduate({
 
   return (
     <>
-      <Button variant="outlined" onClick={handleOpen} sx={{ width: "100%" }}>
+      <MenuItem onClick={handleOpen} sx={{ width: "100%", gap: 1 }}>
+        <SchoolIcon fontSize="small" />
         Graduate
-      </Button>
+      </MenuItem>
       <Dialog open={isOpen} fullWidth maxWidth="sm">
         <DialogTitle variant="h5" sx={{ p: 2, textAlign: "center" }}>
           Client Graduation Form

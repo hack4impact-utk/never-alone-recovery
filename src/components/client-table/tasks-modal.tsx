@@ -1,8 +1,18 @@
 "use client";
 
 import AddIcon from "@mui/icons-material/Add";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Box, CircularProgress, IconButton } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  MenuItem,
+} from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useSnackbar } from "notistack";
 import React, { ReactNode, useState } from "react";
@@ -13,7 +23,6 @@ import {
   updateDescriptionOnTaskBlueprint,
 } from "@/api/tasks-blueprints/public-mutations";
 import { getClientTasksBlueprints } from "@/api/tasks-blueprints/queries";
-import ButtonModal from "@/components/common/modal";
 import { Client, TaskBlueprint } from "@/types/schema";
 
 export type TasksModalProps = {
@@ -22,11 +31,12 @@ export type TasksModalProps = {
 
 export default function TasksModal({ client }: TasksModalProps): ReactNode {
   const { enqueueSnackbar } = useSnackbar();
-
+  const [isOpen, setIsOpen] = useState(false);
   const [tasks, setTasks] = useState<TaskBlueprint[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleOpen = async (): Promise<void> => {
+    setIsOpen(true);
     setLoading(true);
 
     const [data, error] = await getClientTasksBlueprints(client.id);
@@ -42,6 +52,10 @@ export default function TasksModal({ client }: TasksModalProps): ReactNode {
     }
 
     setLoading(false);
+  };
+
+  const handleClose = (): void => {
+    setIsOpen(false);
   };
 
   const handleProcessRowUpdate = async (
@@ -141,47 +155,61 @@ export default function TasksModal({ client }: TasksModalProps): ReactNode {
 
   return (
     <>
-      <ButtonModal
-        buttonTitle="Tasks"
-        modalTitle={`${client.firstName} ${client.lastName}'s Weekly Tasks`}
-        hasCloseButton={true}
-        onOpen={handleOpen}
-      >
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {loading ? (
-            <CircularProgress />
-          ) : (
-            <Box style={{ width: "100%" }}>
-              <DataGrid
-                rows={tasks}
-                columns={columns}
-                disableRowSelectionOnClick
-                processRowUpdate={handleProcessRowUpdate}
-                onProcessRowUpdateError={(error) => console.error(error)}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 5,
+      <MenuItem onClick={handleOpen} sx={{ width: "100%", gap: 1 }}>
+        <AssignmentIcon fontSize="small" />
+        Tasks
+      </MenuItem>
+      <Dialog open={isOpen} fullWidth onClose={handleClose}>
+        <DialogTitle variant="h5" sx={{ p: 2, textAlign: "center" }}>
+          {client.firstName} {client.lastName}'s Weekly Tasks
+          <IconButton
+            onClick={handleClose}
+            sx={{ position: "absolute", right: 10, top: 10 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <Box style={{ width: "100%" }}>
+                <DataGrid
+                  rows={tasks}
+                  columns={columns}
+                  disableRowSelectionOnClick
+                  processRowUpdate={handleProcessRowUpdate}
+                  onProcessRowUpdateError={(error) => console.error(error)}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 5,
+                      },
                     },
-                  },
-                }}
-                slots={{
-                  toolbar: () => (
-                    <Box
-                      sx={{ p: 1, display: "flex", justifyContent: "flex-end" }}
-                    >
-                      <IconButton size="small" onClick={handleAdd}>
-                        <AddIcon />
-                      </IconButton>
-                    </Box>
-                  ),
-                }}
-                showToolbar={true}
-              />
-            </Box>
-          )}
-        </Box>
-      </ButtonModal>
+                  }}
+                  slots={{
+                    toolbar: () => (
+                      <Box
+                        sx={{
+                          p: 1,
+                          display: "flex",
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        <IconButton size="small" onClick={handleAdd}>
+                          <AddIcon />
+                        </IconButton>
+                      </Box>
+                    ),
+                  }}
+                  showToolbar={true}
+                />
+              </Box>
+            )}
+          </Box>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   Button,
   Dialog,
@@ -11,6 +12,7 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
+  MenuItem,
   Radio,
   RadioGroup,
   TextField,
@@ -39,7 +41,7 @@ const clientInfoSchema = z.object({
 
 type ClientInfoValues = z.infer<typeof clientInfoSchema>;
 
-export default function Discharge({
+export default function DischargeModal({
   client,
   onDischarge,
 }: DischargeProps): ReactNode {
@@ -99,9 +101,10 @@ export default function Discharge({
 
   return (
     <>
-      <Button variant="outlined" sx={{ width: "100%" }} onClick={handleOpen}>
+      <MenuItem onClick={handleOpen} sx={{ width: "100%", gap: 1 }}>
+        <LogoutIcon fontSize="small" />
         Discharge
-      </Button>
+      </MenuItem>
 
       <Dialog open={isOpen} fullWidth maxWidth="sm">
         <form onSubmit={handleSubmit(onSubmit, onError)}>

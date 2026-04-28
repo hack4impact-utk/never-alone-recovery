@@ -8,8 +8,7 @@ import type { HousingManager } from "@/types/housing-manager";
 import { Client } from "@/types/schema";
 
 import SearchBox from "../common/search-box";
-import ClientInfo from "./client-info";
-import TasksModal from "./tasks-modal";
+import ClientActionsMenu from "./client-actions-menu";
 
 type ClientTableProps = {
   initialClients: Client[];
@@ -64,9 +63,24 @@ export default function ClientTable({
   };
 
   const columns: GridColDef<Row>[] = [
-    { field: "firstName", headerName: "First Name", width: 50, flex: 1 },
-    { field: "lastName", headerName: "Last Name", width: 50, flex: 1 },
-    { field: "email", headerName: "Email", width: 200, flex: 1 },
+    {
+      field: "firstName",
+      headerName: "First Name",
+      width: 50,
+      flex: 1,
+    },
+    {
+      field: "lastName",
+      headerName: "Last Name",
+      width: 50,
+      flex: 1,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 200,
+      flex: 1,
+    },
     {
       field: "status",
       headerName: "Status",
@@ -78,30 +92,21 @@ export default function ClientTable({
       },
     },
     {
-      field: "action",
-      headerName: "Actions",
-      width: 180,
+      field: "",
+      headerName: "",
+      width: 20,
+      filterable: false,
+      sortable: false,
+      hideable: false,
+      disableColumnMenu: true,
       renderCell: (params) => (
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <TasksModal client={params.row} />
-
-          <ClientInfo
-            client={params.row}
-            housingManagers={housingManagers}
-            onDischarge={updateClients}
-            onGraduate={updateClients}
-            onUpdateHousingManager={updateClients}
-          />
-        </Box>
+        <ClientActionsMenu
+          client={params.row}
+          housingManagers={housingManagers}
+          onUpdateHousingManager={updateClients}
+          onGraduate={updateClients}
+          onDischarge={updateClients}
+        />
       ),
     },
   ];
@@ -139,6 +144,7 @@ export default function ClientTable({
             rows={filteredRows}
             columns={columns}
             disableRowSelectionOnClick
+            disableColumnSelector
             initialState={{
               pagination: {
                 paginationModel: {
