@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from "@mui/icons-material/Email";
 import {
   Box,
@@ -36,7 +37,7 @@ const housingManagerSchema = z.object({
 
 type HousingManagerValues = z.infer<typeof housingManagerSchema>;
 
-export default function ChangeHousingManger({
+export default function HousingManageModal({
   client,
   housingManagers,
   onUpdateHousingManager,
@@ -103,9 +104,10 @@ export default function ChangeHousingManger({
 
   return (
     <>
-      <Button variant="outlined" sx={{ width: "100%" }} onClick={handleOpen}>
+      <MenuItem onClick={handleOpen} sx={{ width: "100%", gap: 1 }}>
+        <BadgeIcon fontSize="small" />
         Change Housing Manager
-      </Button>
+      </MenuItem>
 
       <Dialog open={isOpen} fullWidth maxWidth="sm">
         <form onSubmit={handleSubmit(onSubmit, onError)}>
