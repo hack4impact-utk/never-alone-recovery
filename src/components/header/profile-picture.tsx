@@ -1,5 +1,6 @@
 "use client";
 
+import { Divider } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -11,7 +12,6 @@ import { useSession } from "next-auth/react";
 import { ReactNode, useState } from "react";
 
 import { handleLogout } from "@/utils/auth/handle-logout";
-import { Divider } from "@mui/material";
 
 export default function ProfilePicture(): ReactNode {
   const [userMenu, setUserMenu] = useState<boolean>(false);
