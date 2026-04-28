@@ -6,6 +6,8 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 import SearchBox from "@/components/common/search-box";
 import AddDonorForm from "@/components/donor/add-donor-form";
 import { DonorTotal } from "@/types/donor-total";
+import { currencyColor } from "@/utils/money/currency-color";
+import { formatCurrency } from "@/utils/money/format-currency";
 
 import BulkEmailButton from "./bulk-email-button";
 
@@ -58,8 +60,14 @@ export default function DonorTable({
     {
       field: "total",
       headerName: "Total Donated",
-      flex: 1,
-      valueFormatter: (value: number) => `$${Number(value).toFixed(2)}`,
+      flex: 0.5,
+      type: "number",
+      display: "flex",
+      renderCell: (params) => (
+        <Typography color={currencyColor(params.row.total)}>
+          {formatCurrency(params.row.total)}
+        </Typography>
+      ),
     },
   ];
 
