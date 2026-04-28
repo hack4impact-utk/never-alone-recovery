@@ -21,6 +21,7 @@ export const auditTypeEnum = pgEnum("audit_type", [
   "client_staff_changed",
   "client_task_completed",
   "staff_role_changed",
+  "incomplete_tasks",
 ]);
 
 export const transactionType = pgEnum("transaction_type", [
