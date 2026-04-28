@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
-import { getAllDonors } from "@/api/donor/queries";
+import { getAllDonorTotals } from "@/api/donor/queries";
 import DonorTable from "@/components/donor/donor-table";
 
 export default async function DonorDashboardPage(): Promise<ReactNode> {
-  const [donors, error] = await getAllDonors();
+  const [donorTotals, error] = await getAllDonorTotals();
 
   if (error !== null) {
     return (
@@ -29,7 +29,7 @@ export default async function DonorDashboardPage(): Promise<ReactNode> {
         alignItems: "center",
       }}
     >
-      <DonorTable donors={donors} />
+      <DonorTable donorTotals={donorTotals} />
     </Box>
   );
 }

@@ -2,6 +2,7 @@ import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 import {
   audits,
+  donations,
   donors,
   rentTransactions,
   taskBlueprints,
@@ -31,6 +32,9 @@ export type NewUser = InferInsertModel<typeof users>;
 
 export type TaskBlueprint = InferSelectModel<typeof taskBlueprints>;
 export type NewTaskBlueprint = InferInsertModel<typeof taskBlueprints>;
+
+export type Donation = InferSelectModel<typeof donations>;
+export type NewDonation = InferInsertModel<typeof donations>;
 
 export type Donor = InferSelectModel<typeof donors>;
 export type NewDonor = InferInsertModel<typeof donors>;

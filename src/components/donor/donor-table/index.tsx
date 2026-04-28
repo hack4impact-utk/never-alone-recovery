@@ -5,12 +5,14 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
 import AddDonorForm from "@/components/donor/add-donor-form";
-import { Donor } from "@/types/schema";
+import { DonorTotal } from "@/types/donor-total";
+import { currencyColor } from "@/utils/money/currency-color";
+import { formatCurrency } from "@/utils/money/format-currency";
 
 import BulkEmailButton from "./bulk-email-button";
 
 type DonorTableProps = {
-  donors: Donor[];
+  donorTotals: DonorTotal[];
 };
 
 type Row = {
@@ -19,18 +21,18 @@ type Row = {
   lastName: string;
   phoneNumber: string | null;
   email: string | null;
+  total: number;
 };
 
-function getRows(donors: Donor[], searchQuery: string): Row[] {
-  const rows = donors.map((donor) => {
-    return {
-      id: donor.id,
-      firstName: donor.firstName,
-      lastName: donor.lastName,
-      phoneNumber: donor.phoneNumber,
-      email: donor.email,
-    };
-  });
+function getRows(donorTotals: DonorTotal[], searchQuery: string): Row[] {
+  const rows = donorTotals.map(({ donor, total }) => ({
+    id: donor.id,
+    firstName: donor.firstName,
+    lastName: donor.lastName,
+    phoneNumber: donor.phoneNumber,
+    email: donor.email,
+    total,
+  }));
 
   return rows.filter((row) => {
     return (
@@ -40,33 +42,32 @@ function getRows(donors: Donor[], searchQuery: string): Row[] {
     );
   });
 }
-export default function DonorTable({ donors }: DonorTableProps): ReactNode {
+
+export default function DonorTable({
+  donorTotals,
+}: DonorTableProps): ReactNode {
   const [searchQuery, setSearchQuery] = useState("");
   const [rowSelectionModel, setRowSelectionModel] =
     useState<GridRowSelectionModel>();
 
-  const rows = getRows(donors, searchQuery);
+  const rows = getRows(donorTotals, searchQuery);
 
   const columns: GridColDef<Row>[] = [
+    { field: "firstName", headerName: "First Name", flex: 1 },
+    { field: "lastName", headerName: "Last Name", flex: 1 },
+    { field: "phoneNumber", headerName: "Phone Number", flex: 1 },
+    { field: "email", headerName: "Email", flex: 2 },
     {
-      field: "firstName",
-      headerName: "First Name",
-      flex: 1,
-    },
-    {
-      field: "lastName",
-      headerName: "Last Name",
-      flex: 1,
-    },
-    {
-      field: "phoneNumber",
-      headerName: "Phone Number",
-      flex: 1,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 2,
+      field: "total",
+      headerName: "Total Donated",
+      flex: 0.5,
+      type: "number",
+      display: "flex",
+      renderCell: (params) => (
+        <Typography color={currencyColor(params.row.total)}>
+          {formatCurrency(params.row.total)}
+        </Typography>
+      ),
     },
   ];
 
@@ -83,12 +84,14 @@ export default function DonorTable({ donors }: DonorTableProps): ReactNode {
       return [];
     }
 
+    const donors = donorTotals.map(({ donor }) => donor);
+
     if (rowSelectionModel.type === "include") {
       return donors.filter((donor) => rowSelectionModel.ids.has(donor.id));
     }
 
     return donors.filter((donor) => !rowSelectionModel.ids.has(donor.id));
-  }, [rowSelectionModel]);
+  }, [rowSelectionModel, donorTotals]);
 
   return (
     <Box
