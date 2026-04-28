@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import { ReactNode, useState } from "react";
 
 import { handleLogout } from "@/utils/auth/handle-logout";
+import { Divider } from "@mui/material";
 
 export default function ProfilePicture(): ReactNode {
   const [userMenu, setUserMenu] = useState<boolean>(false);
@@ -46,6 +47,11 @@ export default function ProfilePicture(): ReactNode {
           horizontal: "right",
         }}
       >
+        <MenuItem sx={{ display: "block" }}>
+          <Typography>{session?.user?.name}</Typography>
+          <Typography>{session?.user?.email}</Typography>
+        </MenuItem>
+        <Divider />
         <MenuItem
           id="logout"
           onClick={() => {
