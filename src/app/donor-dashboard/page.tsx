@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 
 import { getAllDonorTotals } from "@/api/donor/queries";
 import DonorTable from "@/components/donor/donor-table";
+import DonorProvider from "@/providers/donor-provider";
 
 export default async function DonorDashboardPage(): Promise<ReactNode> {
   const [donorTotals, error] = await getAllDonorTotals();
@@ -29,7 +30,9 @@ export default async function DonorDashboardPage(): Promise<ReactNode> {
         alignItems: "center",
       }}
     >
-      <DonorTable donorTotals={donorTotals} />
+      <DonorProvider initialDonorTotals={donorTotals}>
+        <DonorTable />
+      </DonorProvider>
     </Box>
   );
 }

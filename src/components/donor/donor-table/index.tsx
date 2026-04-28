@@ -5,15 +5,13 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 
 import SearchBox from "@/components/common/search-box";
 import AddDonorForm from "@/components/donor/add-donor-form";
+import { useDonorContext } from "@/providers/donor-provider";
 import { DonorTotal } from "@/types/donor-total";
 import { currencyColor } from "@/utils/money/currency-color";
 import { formatCurrency } from "@/utils/money/format-currency";
 
+import AddDonationForm from "./add-donations-form";
 import BulkEmailButton from "./bulk-email-button";
-
-type DonorTableProps = {
-  donorTotals: DonorTotal[];
-};
 
 type Row = {
   id: string;
@@ -22,6 +20,7 @@ type Row = {
   phoneNumber: string | null;
   email: string | null;
   total: number;
+  donorTotal: DonorTotal;
 };
 
 function getRows(donorTotals: DonorTotal[], searchQuery: string): Row[] {
@@ -32,6 +31,7 @@ function getRows(donorTotals: DonorTotal[], searchQuery: string): Row[] {
     phoneNumber: donor.phoneNumber,
     email: donor.email,
     total,
+    donorTotal: { donor, total },
   }));
 
   return rows.filter((row) => {
@@ -43,9 +43,8 @@ function getRows(donorTotals: DonorTotal[], searchQuery: string): Row[] {
   });
 }
 
-export default function DonorTable({
-  donorTotals,
-}: DonorTableProps): ReactNode {
+export default function DonorTable(): ReactNode {
+  const { donorTotals } = useDonorContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [rowSelectionModel, setRowSelectionModel] =
     useState<GridRowSelectionModel>();
@@ -68,6 +67,16 @@ export default function DonorTable({
           {formatCurrency(params.row.total)}
         </Typography>
       ),
+    },
+    {
+      field: "actions",
+      headerName: "",
+      sortable: false,
+      filterable: false,
+      width: 75,
+      align: "center",
+      display: "flex",
+      renderCell: (params) => <AddDonationForm total={params.row.donorTotal} />,
     },
   ];
 
