@@ -1,6 +1,7 @@
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import BadgeIcon from "@mui/icons-material/Badge";
+import BarChartIcon from "@mui/icons-material/BarChart";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import PeopleIcon from "@mui/icons-material/People";
 import SecurityIcon from "@mui/icons-material/Security";
@@ -43,6 +44,12 @@ const tiles: Tile[] = [
     title: "Audits",
     href: "/audit",
     icon: <SecurityIcon sx={{ fontSize: ICON_FONT_SIZE }} />,
+  },
+  {
+    id: "metrics",
+    title: "Metrics",
+    href: "/metrics",
+    icon: <BarChartIcon sx={{ fontSize: ICON_FONT_SIZE }} />,
   },
   {
     id: "client",
