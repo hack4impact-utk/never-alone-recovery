@@ -44,8 +44,7 @@ export default async function RootLayout({
               <DateLocalizationProvider>
                 <NextAuthProvider>
                   <CssBaseline />
-                  {session && <Header />}
-                  {children}
+                  {session ? <Header>{children}</Header> : children}
                 </NextAuthProvider>
               </DateLocalizationProvider>
             </NotistackProvider>

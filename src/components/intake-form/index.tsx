@@ -10,10 +10,13 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
+import dayjs from "dayjs";
 import { useSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import useFormPersist from "react-hook-form-persist";
+
+import { useIntakeFormContext } from "@/providers/intake-form-provider";
 
 import BehavioralStandardsAgreementForm from "./behavioral-standards-agreement-form";
 import BehavioralStandardsForm from "./behavioral-standards-form";
@@ -102,6 +105,7 @@ export const intakeFormSteps: IntakeFormStep[] = [
 
 export default function IntakeForm(): ReactNode {
   const { enqueueSnackbar } = useSnackbar();
+  const { getMergedPdfUrl } = useIntakeFormContext();
   const [step, setStep] = useState(intakeFormSteps[0]);
   const currentIndex = intakeFormSteps.findIndex((s) => s.name === step.name);
   const methods = useForm<IntakeFormValues>({
@@ -155,8 +159,18 @@ export default function IntakeForm(): ReactNode {
     setStep(intakeFormSteps[0]);
   };
 
-  const onSubmit = (_data: IntakeFormValues): void => {
-    void _data;
+  const onSubmit = async (_data: IntakeFormValues): Promise<void> => {
+    const pdfUrl = await getMergedPdfUrl();
+
+    const fileName = `${_data.demographic.firstName} ${_data.demographic.lastName} - Intake Form - ${dayjs().format("YYYY-MM-DD")}.pdf`;
+
+    const anchor = document.createElement("a");
+    anchor.href = pdfUrl;
+    anchor.download = fileName;
+    anchor.rel = "noopener noreferrer";
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
 
     enqueueSnackbar("Form submitted successfully!", {
       variant: "success",
