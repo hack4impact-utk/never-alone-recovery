@@ -151,7 +151,6 @@ export default function Header({ children }: HeaderProps): ReactNode {
               <ListItemIcon
                 sx={{
                   minWidth: 0,
-                  mr: 1.5,
                   justifyContent: "center",
                   flexShrink: 0,
                 }}
@@ -161,7 +160,7 @@ export default function Header({ children }: HeaderProps): ReactNode {
               <ListItemText
                 primary={item.label}
                 sx={{
-                  m: 0,
+                  ml: 1.5,
                   display: "hidden",
                   maxWidth: drawerCollapsed && isDesktop ? 0 : 220,
                   opacity: drawerCollapsed && isDesktop ? 0 : 1,
