@@ -206,8 +206,18 @@ export default function IntakeForm(): ReactNode {
                 Intake Form
               </Typography>
               <Stepper activeStep={currentIndex} orientation="vertical">
-                {intakeFormSteps.map((formStep) => (
-                  <Step key={formStep.name}>
+                {intakeFormSteps.map((formStep, index) => (
+                  <Step
+                    key={formStep.name}
+                    onClick={() => {
+                      if (index < currentIndex) {
+                        setStep(formStep);
+                      }
+                    }}
+                    sx={{
+                      cursor: index < currentIndex ? "pointer" : "default",
+                    }}
+                  >
                     <StepLabel>{formStep.label}</StepLabel>
                   </Step>
                 ))}
